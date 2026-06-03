@@ -209,3 +209,9 @@ documentées avec cause + solution, indépendamment du reste du tutoriel.
   pour TempsLectureService, balise HTML pour LiseuseManuscrit.
 - La branche `tuto-depart` ne contient pas la lib installée — c'est l'action demandée
   à l'utilisateur.
+- Les fichiers `specs/reference/quickstart-liseuse.md`, `quickstart-mots.md`,
+  `quickstart-temps-lecture.md` et `quickstart-isbn.md` sont les sources de référence
+  canoniques pour le contenu de chaque page de tuto (propriétés, usage, exemples). Le
+  planner DOIT les lire avant de concevoir les pages de composants.
+- `specs/reference/README-lib.md` est le README officiel de la librairie — source de
+  référence pour les noms d'API, la syntaxe d'import, et les exemples d'usage publiés.

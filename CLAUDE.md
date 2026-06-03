@@ -123,6 +123,7 @@ Angular **21.2.x** — standalone components par défaut (pas de NgModules). Voi
 <!-- SPECKIT START -->
 For additional context about technologies to be used, project structure,
 shell commands, and other important information, read the current plan
+at `specs/001-tuto-interactif/plan.md`.
 <!-- SPECKIT END -->
 
 ## Ajout de Maive
