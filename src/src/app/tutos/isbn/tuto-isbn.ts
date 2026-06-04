@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   inject,
   signal,
 } from '@angular/core';
@@ -10,6 +11,7 @@ import { isbnValidator } from 'ngx-parrecrivains';
 import { LangueService } from '../../shared/services/langue.service';
 import { SnippetComponent } from '../../shared/snippet/snippet';
 import { SlotComponent } from '../../shared/slot/slot';
+import corpus from '../../shared/mock/isbn-corpus.json';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // TUTO isbnValidator — version complétée (main)
@@ -17,9 +19,6 @@ import { SlotComponent } from '../../shared/slot/slot';
 // Diff avec tuto-depart :
 //   étape 2 → import { isbnValidator } from 'ngx-parrecrivains'  (ligne ci-dessus)
 //   étape 3 → isbnValidator() ajouté dans le tableau de validateurs (voir plus bas)
-//
-// Sans ces deux lignes, le formulaire accepte n'importe quelle valeur sans
-// valider le format ni le checksum ISBN.
 // ─────────────────────────────────────────────────────────────────────────────
 
 @Component({
@@ -37,6 +36,19 @@ export class TutoIsbnComponent {
   readonly isbn = new FormControl('', [Validators.required, isbnValidator()]);
 
   readonly dernierTest = signal<string>('');
+
+  // Détection automatique : isbnValidator est présent si une valeur de format
+  // invalide connu ('12345') déclenche l'erreur 'isbnFormat'
+  readonly isbnIntegre = (() => {
+    const fc = new FormControl('12345', this.isbn.validator);
+    return fc.errors?.['isbnFormat'] !== undefined;
+  })();
+
+  // Rotation sur le corpus d'ISBN valides
+  private indexValide = 0;
+  readonly codeValideActuel = signal(
+    `isbn.setValue('${corpus[0].isbn}')  // ${corpus[0].titre}`,
+  );
 
   readonly snippetImport = `import { isbnValidator } from 'ngx-parrecrivains';`;
 
@@ -59,6 +71,17 @@ isbn = new FormControl('', [isbnValidator({ annee: 2015 })]);`;
 @if (isbn.errors?.['isbnCoherence']) {
   <span class="erreur">Format incohérent avec l'année de publication</span>
 }`;
+
+  testerIsbnValide(): void {
+    const entree = corpus[this.indexValide % corpus.length];
+    this.indexValide++;
+    this.isbn.setValue(entree.isbn);
+    this.isbn.markAsDirty();
+    this.dernierTest.set(entree.isbn);
+    this.codeValideActuel.set(
+      `isbn.setValue('${entree.isbn}')  // ${entree.titre}`,
+    );
+  }
 
   testerIsbn(valeur: string): void {
     this.isbn.setValue(valeur);

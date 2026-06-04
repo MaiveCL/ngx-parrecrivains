@@ -38,6 +38,14 @@ export class TutoMotsComponent {
 
   readonly nombreMots = signal(1234);
 
+  // Détection automatique : MotsPipe transforme correctement la valeur
+  // si la lib est installée et le pipe importé
+  readonly motsIntegre = (() => {
+    try {
+      return new MotsPipe().transform(1, 'fr') === '1 mot';
+    } catch { return false; }
+  })();
+
   readonly estAnglais = computed(() => this.langue.langue() === 'en');
 
   readonly snippetImport = computed(() =>

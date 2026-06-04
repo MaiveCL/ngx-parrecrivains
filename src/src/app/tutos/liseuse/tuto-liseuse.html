@@ -101,11 +101,10 @@
   <section class="tuto-section" aria-labelledby="titre-slot">
     <h2 id="titre-slot">{{ langue.t('commun.slot.placeholder') }}</h2>
 
-    <app-slot [placeholder]="langue.t('commun.slot.placeholder')">
-      <!-- ✅ Tuto — étape 4 : balise ajoutée dans le slot -->
-      <!-- Dans tuto-depart, ce bloc était vide (juste un commentaire TODO) -->
-      <ngx-liseuse-manuscrit [contenu]="contenu()" />
-    </app-slot>
+    <!-- Liseuse affichée directement (sans app-slot) — même usage que le projet original -->
+    <!-- TODO fix lib : ajouter display:flex;flex-direction:column;min-height:0 à .zone-contenu -->
+    <!-- dans liseuse-manuscrit.scss pour réintégrer app-slot correctement -->
+    <ngx-liseuse-manuscrit [contenu]="contenu()" class="liseuse-demo" />
   </section>
 
   <section class="tuto-section" aria-labelledby="titre-tests">
@@ -119,17 +118,60 @@
         <app-snippet code="contenu.set('Il était une fois...')" [label]="langue.t('commun.tests.payload')" />
       </div>
       <div class="scenario">
+        <button class="btn-test" (click)="testerContenu('long')">
+          {{ langue.t('tuto.liseuse.test.long') }}
+        </button>
+        <app-snippet code="contenu.set('... (texte multi-chapitres)')" [label]="langue.t('commun.tests.payload')" />
+      </div>
+      <div class="scenario">
         <button class="btn-test" (click)="testerContenu('html')">
           {{ langue.t('tuto.liseuse.test.html') }}
         </button>
-        <app-snippet code="contenu.set('<h2>Chapitre 1</h2><p>...')" [label]="langue.t('commun.tests.payload')" />
+        <app-snippet code="contenu.set('<h2>Chapitre I</h2><p>...')" [label]="langue.t('commun.tests.payload')" />
       </div>
       <div class="scenario">
         <button class="btn-test" (click)="testerContenu('gdocs')">
           {{ langue.t('tuto.liseuse.test.gdocs') }}
         </button>
-        <app-snippet code="contenu.set('https://docs.google.com/...')" [label]="langue.t('commun.tests.payload')" />
+        <app-snippet code="contenu.set('https://docs.google.com/document/d/.../edit?usp=sharing')" [label]="langue.t('commun.tests.payload')" />
       </div>
+      <div class="scenario">
+        <button
+          class="btn-test"
+          (click)="testerPdf()"
+          [disabled]="chargementPdf()"
+          [attr.aria-busy]="chargementPdf()"
+        >
+          {{ chargementPdf() ? langue.t('tuto.liseuse.test.pdf.chargement') : langue.t('tuto.liseuse.test.pdf') }}
+        </button>
+        <app-snippet code="// PDF chargé depuis public/mock/manuscrit-exemple.pdf" [label]="langue.t('commun.tests.payload')" />
+      </div>
+    </div>
+
+    <!-- Champ URL personnalisée : OneDrive, ou toute autre URL supportée -->
+    <div class="url-saisie">
+      <label for="url-input" class="url-label">
+        {{ langue.t('tuto.liseuse.test.url.label') }}
+      </label>
+      <div class="url-input-groupe">
+        <input
+          id="url-input"
+          type="url"
+          class="url-input"
+          [placeholder]="langue.t('tuto.liseuse.test.url.placeholder')"
+          [value]="urlSaisie()"
+          (input)="urlSaisie.set($any($event.target).value)"
+          (keydown.enter)="appliquerUrl()"
+        />
+        <button
+          class="btn-test"
+          (click)="appliquerUrl()"
+          [disabled]="!urlSaisie().trim()"
+        >
+          {{ langue.t('tuto.liseuse.test.url.bouton') }}
+        </button>
+      </div>
+      <app-snippet [code]="codeUrlActuel()" [label]="langue.t('commun.tests.payload')" />
     </div>
 
     <div class="zone-resultat" aria-live="polite" role="status">
@@ -144,7 +186,7 @@
     <h2 id="titre-problemes">{{ langue.t('commun.problemes.titre') }}</h2>
 
     <dl class="problemes-liste">
-      @for (i of [1, 2, 3]; track i) {
+      @for (i of [1, 2, 3, 4]; track i) {
         <div class="probleme">
           <dt class="probleme-symptome">
             <span class="probleme-icone" aria-hidden="true">🔴</span>

@@ -45,6 +45,10 @@ export class TutoTempsLectureComponent {
     this.tl.formater(this.tl.estimer(this.nombreMots()))
   );
 
+  // Détection automatique : le service est injecté si tempsAffiche calcule
+  // un résultat réel plutôt que le placeholder '??'
+  readonly tempsIntegre = computed(() => this.tempsAffiche() !== '??');
+
   readonly snippetImport = `import { inject, computed } from '@angular/core';
 import { TempsLectureService } from 'ngx-parrecrivains';`;
 

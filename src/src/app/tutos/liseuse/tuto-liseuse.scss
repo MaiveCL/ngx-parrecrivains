@@ -1,5 +1,54 @@
 @use '../tuto-shared' as *;
 
+.url-saisie {
+  margin-top: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.url-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--couleur-texte-secondaire, #a6adc8);
+}
+
+.url-input-groupe {
+  display: flex;
+  gap: 0.5rem;
+  align-items: stretch;
+}
+
+.url-input {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  border: 1.5px solid var(--couleur-bordure, #313244);
+  border-radius: 6px;
+  background: var(--couleur-fond, #11111b);
+  color: var(--couleur-texte, #cdd6f4);
+  font-size: 0.875rem;
+  font-family: 'Fira Code', monospace;
+  transition: border-color 0.2s;
+
+  &:focus {
+    outline: 2px solid var(--couleur-accent, #cba6f7);
+    outline-offset: 2px;
+    border-color: var(--couleur-accent, #cba6f7);
+  }
+
+  &::placeholder {
+    color: var(--couleur-texte-secondaire, #6c7086);
+    font-size: 0.8rem;
+  }
+}
+
+// La liseuse occupe presque tout le viewport — on déduit navbar (~3.5rem)
+// + barre du slot (~2rem) + marges de page (~1.5rem)
+.liseuse-demo {
+  height: calc(100dvh - 7rem);
+  min-height: 400px;
+}
+
 .zone-resultat {
   margin-top: 1rem;
   padding: 0.75rem 1rem;
