@@ -72,11 +72,15 @@
   <section class="tuto-section" aria-labelledby="titre-slot">
     <h2 id="titre-slot">{{ langue.t('commun.slot.placeholder') }}</h2>
 
-    <app-slot [placeholder]="langue.t('commun.slot.placeholder')">
+    <app-slot [placeholder]="langue.t('commun.slot.placeholder')" [integre]="false">
       <div class="mots-demo">
-        <p class="mots-label">{{ langue.t('tuto.mots.test.resultat.avant') }} :</p>
-        <!-- TODO: Modifier cette ligne pour ajouter | mots (fr) ou | words (en) -->
-        <p class="mots-valeur">{{ nombreMots() }}</p>
+        <!-- ✅ Tuto — étape 4 : | mots (fr) ou | words (en) ajouté après le signal -->
+        <!-- Dans tuto-depart, cette ligne était : {{ nombreMots() }} -->
+        @if (estAnglais()) {
+          <p class="mots-valeur">{{ nombreMots() | words }}</p>
+        } @else {
+          <p class="mots-valeur">{{ nombreMots() | mots }}</p>
+        }
 
         <p class="mots-label mots-label--hint">
           ({{ langue.t('tuto.mots.test.resultat.apres') }} :

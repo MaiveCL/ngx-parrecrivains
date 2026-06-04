@@ -12,8 +12,18 @@ import { SlotComponent } from '../../shared/slot/slot';
 // ─────────────────────────────────────────────────────────────────────────────
 // TUTO MotsPipe — branche tuto-depart
 //
-// FR : L'élément manquant : | mots dans le template  (import MotsPipe)
-// EN : L'élément manquant : | words dans le template (import WordsPipe)
+// Ce composant scaffold l'intégration de MotsPipe dans un template Angular.
+// L'élément manquant intentionnellement : le pipe | mots dans le template.
+//
+// Pour intégrer :
+//   1. npm install ngx-parrecrivains
+//   2. Ajouter en haut du fichier :
+//        import { MotsPipe } from 'ngx-parrecrivains';  (ou WordsPipe en anglais)
+//   3. Ajouter MotsPipe dans imports: [MotsPipe]
+//   4. Dans le template, modifier :
+//        {{ nombreMots() }}
+//      en :
+//        {{ nombreMots() | mots }}
 // ─────────────────────────────────────────────────────────────────────────────
 
 @Component({
@@ -26,9 +36,9 @@ import { SlotComponent } from '../../shared/slot/slot';
 export class TutoMotsComponent {
   readonly langue = inject(LangueService);
 
+  // Signal pré-câblé — | mots manquant intentionnellement dans le template
   readonly nombreMots = signal(1234);
 
-  // Alias bilingue : MotsPipe (fr) / WordsPipe (en)
   readonly estAnglais = computed(() => this.langue.langue() === 'en');
 
   readonly snippetImport = computed(() =>

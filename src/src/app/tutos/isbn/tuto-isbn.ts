@@ -8,6 +8,7 @@ import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LangueService } from '../../shared/services/langue.service';
 import { SnippetComponent } from '../../shared/snippet/snippet';
 import { SlotComponent } from '../../shared/slot/slot';
+import corpus from '../../shared/mock/isbn-corpus.json';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // TUTO isbnValidator — branche tuto-depart
@@ -38,6 +39,12 @@ export class TutoIsbnComponent {
 
   readonly dernierTest = signal<string>('');
 
+  // Rotation sur le corpus d'ISBN valides
+  private indexValide = 0;
+  readonly codeValideActuel = signal(
+    `isbn.setValue('${corpus[0].isbn}')  // ${corpus[0].titre}`,
+  );
+
   readonly snippetImport = `import { isbnValidator } from 'ngx-parrecrivains';`;
 
   readonly snippetUsage = `// Dans votre composant TypeScript :
@@ -59,6 +66,17 @@ isbn = new FormControl('', [isbnValidator({ annee: 2015 })]);`;
 @if (isbn.errors?.['isbnCoherence']) {
   <span class="erreur">Format incohérent avec l'année de publication</span>
 }`;
+
+  testerIsbnValide(): void {
+    const entree = corpus[this.indexValide % corpus.length];
+    this.indexValide++;
+    this.isbn.setValue(entree.isbn);
+    this.isbn.markAsDirty();
+    this.dernierTest.set(entree.isbn);
+    this.codeValideActuel.set(
+      `isbn.setValue('${entree.isbn}')  // ${entree.titre}`,
+    );
+  }
 
   testerIsbn(valeur: string): void {
     this.isbn.setValue(valeur);

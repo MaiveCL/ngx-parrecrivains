@@ -75,7 +75,7 @@
   <section class="tuto-section" aria-labelledby="titre-slot">
     <h2 id="titre-slot">{{ langue.t('commun.slot.placeholder') }}</h2>
 
-    <app-slot [placeholder]="langue.t('commun.slot.placeholder')">
+    <app-slot [placeholder]="langue.t('commun.slot.placeholder')" [integre]="tempsIntegre()">
       <div class="temps-demo">
         <div class="temps-info">
           <span class="temps-label">{{ langue.t('tuto.temps.test.mots.label') }}</span>
@@ -87,9 +87,6 @@
             {{ tempsAffiche() }}
           </span>
         </div>
-        <p class="temps-hint">
-          {{ langue.t('tuto.temps.test.placeholder') }}
-        </p>
       </div>
     </app-slot>
   </section>
