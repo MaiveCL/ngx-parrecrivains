@@ -21,6 +21,8 @@
           "builder": "@angular/build:application",
           "options": {
             "browser": "src/main.ts",
+            "outputPath": { "base": "../docs", "browser": "" },
+            "baseHref": "/ngx-parrecrivains/",
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
