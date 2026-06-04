@@ -1,0 +1,28 @@
+@use '../tuto-shared' as *;
+
+.zone-resultat {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--couleur-surface, #181825);
+  border: 1px solid var(--couleur-bordure, #313244);
+  border-radius: 8px;
+}
+
+.resultat-label {
+  font-size: 0.875rem;
+  color: var(--couleur-texte-secondaire, #a6adc8);
+  margin: 0 0 0.25rem;
+
+  code {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.8rem;
+    color: var(--couleur-accent, #cba6f7);
+  }
+}
+
+.resultat-hint {
+  font-size: 0.8rem;
+  color: var(--couleur-texte-secondaire, #6c7086);
+  font-style: italic;
+  margin: 0;
+}

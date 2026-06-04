@@ -1,0 +1,154 @@
+<article class="tuto-page">
+
+  <header class="tuto-entete">
+    <div class="tuto-meta">
+      <span class="tuto-type">{{ langue.t('tuto.temps.type') }}</span>
+      <span class="tuto-version">{{ langue.t('tuto.temps.version') }}</span>
+    </div>
+    <h1>{{ langue.t('tuto.temps.titre') }}</h1>
+    <p class="tuto-description">{{ langue.t('tuto.temps.description') }}</p>
+  </header>
+
+  <section class="tuto-section" aria-labelledby="titre-info">
+    <h2 id="titre-info">{{ langue.t('commun.info.props') }}</h2>
+
+    <div class="table-conteneur" role="region" [attr.aria-label]="langue.t('tuto.temps.table.caption.methodes')">
+      <table>
+        <caption>{{ langue.t('tuto.temps.table.caption.methodes') }}</caption>
+        <thead>
+          <tr>
+            <th scope="col">{{ langue.t('commun.col.methode') }}</th>
+            <th scope="col">{{ langue.t('commun.col.signature') }}</th>
+            <th scope="col">{{ langue.t('commun.col.description') }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>estimer</code></td>
+            <td><code>(nombreMots, vitesseMots?) → number</code></td>
+            <td>{{ langue.t('tuto.temps.methode.estimer.desc') }}</td>
+          </tr>
+          <tr>
+            <td><code>formater</code></td>
+            <td><code>(secondes) → string</code></td>
+            <td>{{ langue.t('tuto.temps.methode.formater.desc') }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-conteneur" role="region" [attr.aria-label]="langue.t('tuto.temps.table.caption.constantes')" style="margin-top: 1rem">
+      <table>
+        <caption>{{ langue.t('tuto.temps.table.caption.constantes') }}</caption>
+        <thead>
+          <tr>
+            <th scope="col">{{ langue.t('commun.col.constante') }}</th>
+            <th scope="col">{{ langue.t('commun.col.valeur') }}</th>
+            <th scope="col">{{ langue.t('commun.col.description') }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>VITESSE_LECTURE_DEFAUT</code></td>
+            <td><code>200</code></td>
+            <td>{{ langue.t('tuto.temps.constante.vitesse.desc') }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="tuto-section" aria-labelledby="titre-integration">
+    <h2 id="titre-integration">{{ langue.t('commun.integration.titre') }}</h2>
+
+    <div class="element-manquant" role="note">
+      <span class="element-manquant-icone" aria-hidden="true">👆</span>
+      <strong>{{ langue.t('commun.integration.element.manquant') }} :</strong>
+      {{ langue.t('tuto.temps.element.manquant') }}
+    </div>
+
+    <app-snippet [code]="snippetImport" [label]="langue.t('tuto.temps.snippet.import')" />
+    <app-snippet [code]="snippetInjection" [label]="langue.t('tuto.temps.snippet.injection')" />
+    <app-snippet [code]="snippetUsage" [label]="langue.t('tuto.temps.snippet.usage')" />
+  </section>
+
+  <section class="tuto-section" aria-labelledby="titre-slot">
+    <h2 id="titre-slot">{{ langue.t('commun.slot.placeholder') }}</h2>
+
+    <app-slot [placeholder]="langue.t('commun.slot.placeholder')">
+      <div class="temps-demo">
+        <div class="temps-info">
+          <span class="temps-label">{{ langue.t('tuto.temps.test.mots.label') }}</span>
+          <span class="temps-mots">{{ nombreMots() }}</span>
+        </div>
+        <div class="temps-info">
+          <span class="temps-label">{{ langue.t('tuto.temps.test.resultat.label') }}</span>
+          <span class="temps-valeur temps-valeur--placeholder">
+            {{ tempsAffiche() }}
+          </span>
+        </div>
+        <p class="temps-hint">
+          {{ langue.t('tuto.temps.test.placeholder') }}
+        </p>
+      </div>
+    </app-slot>
+  </section>
+
+  <section class="tuto-section" aria-labelledby="titre-tests">
+    <h2 id="titre-tests">{{ langue.t('commun.tests.titre') }}</h2>
+
+    <div class="boutons-test" role="group" [attr.aria-label]="langue.t('tuto.temps.titre')">
+      <div class="scenario">
+        <button class="btn-test" (click)="testerTemps(600)">
+          {{ langue.t('tuto.temps.test.court') }}
+        </button>
+        <app-snippet code="nombreMots.set(600)" [label]="langue.t('commun.tests.payload')" />
+      </div>
+      <div class="scenario">
+        <button class="btn-test btn-test--valide" (click)="testerTemps(80000)">
+          {{ langue.t('tuto.temps.test.roman') }}
+        </button>
+        <app-snippet code="nombreMots.set(80000)" [label]="langue.t('commun.tests.payload')" />
+      </div>
+      <div class="scenario">
+        <button class="btn-test" (click)="testerTemps(15000)">
+          {{ langue.t('tuto.temps.test.essai') }}
+        </button>
+        <app-snippet code="nombreMots.set(15000)" [label]="langue.t('commun.tests.payload')" />
+      </div>
+    </div>
+
+    <div class="zone-resultat" aria-live="polite" role="status">
+      <p class="resultat-label">
+        {{ langue.t('tuto.temps.test.mots.label') }} : <code>{{ nombreMots() }}</code>
+      </p>
+      <p class="resultat-label">
+        {{ langue.t('tuto.temps.test.resultat.label') }} : <strong>{{ tempsAffiche() }}</strong>
+      </p>
+    </div>
+  </section>
+
+  <section class="tuto-section tuto-section--problemes" aria-labelledby="titre-problemes">
+    <h2 id="titre-problemes">{{ langue.t('commun.problemes.titre') }}</h2>
+
+    <dl class="problemes-liste">
+      @for (i of [1, 2, 3]; track i) {
+        <div class="probleme">
+          <dt class="probleme-symptome">
+            <span class="probleme-icone" aria-hidden="true">🔴</span>
+            {{ langue.t('tuto.temps.probleme.' + i + '.symptome') }}
+          </dt>
+          <dd class="probleme-cause">
+            <strong>{{ langue.t('commun.problemes.cause') }} :</strong>
+            {{ langue.t('tuto.temps.probleme.' + i + '.cause') }}
+          </dd>
+          <dd class="probleme-solution">
+            <strong>{{ langue.t('commun.problemes.solution') }} :</strong>
+            {{ langue.t('tuto.temps.probleme.' + i + '.solution') }}
+          </dd>
+        </div>
+      }
+    </dl>
+  </section>
+
+</article>

@@ -1,0 +1,165 @@
+<article class="tuto-page">
+
+  <header class="tuto-entete">
+    <div class="tuto-meta">
+      <span class="tuto-type">{{ langue.t('tuto.isbn.type') }}</span>
+      <span class="tuto-version">{{ langue.t('tuto.isbn.version') }}</span>
+    </div>
+    <h1>{{ langue.t('tuto.isbn.titre') }}</h1>
+    <p class="tuto-description">{{ langue.t('tuto.isbn.description') }}</p>
+  </header>
+
+  <section class="tuto-section" aria-labelledby="titre-info">
+    <h2 id="titre-info">{{ langue.t('commun.info.props') }}</h2>
+
+    <div class="table-conteneur" role="region" [attr.aria-label]="langue.t('tuto.isbn.info.erreurs')">
+      <table>
+        <caption>{{ langue.t('tuto.isbn.table.caption') }}</caption>
+        <thead>
+          <tr>
+            <th scope="col">{{ langue.t('commun.col.cle') }}</th>
+            <th scope="col">{{ langue.t('commun.col.valeur') }}</th>
+            <th scope="col">{{ langue.t('commun.col.quand') }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>FORMAT</code></td>
+            <td><code>'isbnFormat'</code></td>
+            <td>{{ langue.t('tuto.isbn.table.erreur.format.desc') }}</td>
+          </tr>
+          <tr>
+            <td><code>PREFIXE</code></td>
+            <td><code>'isbnPrefixe'</code></td>
+            <td>{{ langue.t('tuto.isbn.table.erreur.prefixe.desc') }}</td>
+          </tr>
+          <tr>
+            <td><code>CHECKSUM</code></td>
+            <td><code>'isbnChecksum'</code></td>
+            <td>{{ langue.t('tuto.isbn.table.erreur.checksum.desc') }}</td>
+          </tr>
+          <tr>
+            <td><code>COHERENCE</code></td>
+            <td><code>'isbnCoherence'</code></td>
+            <td>{{ langue.t('tuto.isbn.table.erreur.coherence.desc') }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="tuto-section" aria-labelledby="titre-integration">
+    <h2 id="titre-integration">{{ langue.t('commun.integration.titre') }}</h2>
+
+    <div class="element-manquant" role="note">
+      <span class="element-manquant-icone" aria-hidden="true">👆</span>
+      <strong>{{ langue.t('commun.integration.element.manquant') }} :</strong>
+      {{ langue.t('tuto.isbn.element.manquant') }}
+    </div>
+
+    <app-snippet [code]="snippetImport" [label]="langue.t('tuto.isbn.snippet.import')" />
+    <app-snippet [code]="snippetUsage" [label]="langue.t('tuto.isbn.snippet.usage')" />
+    <app-snippet [code]="snippetErreurs" [label]="langue.t('tuto.isbn.snippet.erreurs')" />
+  </section>
+
+  <section class="tuto-section" aria-labelledby="titre-slot">
+    <h2 id="titre-slot">{{ langue.t('commun.slot.placeholder') }}</h2>
+
+    <app-slot [placeholder]="langue.t('commun.slot.placeholder')">
+      <div class="isbn-form">
+        <label for="isbn-input" class="form-label">ISBN</label>
+        <input
+          id="isbn-input"
+          [formControl]="isbn"
+          class="form-input"
+          [class.erreur]="isbn.invalid && isbn.dirty"
+          placeholder="ex. 9782764633291"
+          autocomplete="off"
+          aria-describedby="isbn-erreurs"
+        />
+        <div id="isbn-erreurs" class="erreurs-zone" aria-live="polite">
+          @if (isbn.dirty && isbn.errors?.['required']) {
+            <p class="erreur">{{ langue.t('tuto.isbn.erreur.required') }}</p>
+          }
+          @if (isbn.dirty && isbn.errors?.['isbnFormat']) {
+            <p class="erreur">{{ langue.t('tuto.isbn.erreur.format') }}</p>
+          }
+          @if (isbn.dirty && isbn.errors?.['isbnPrefixe']) {
+            <p class="erreur">{{ langue.t('tuto.isbn.erreur.prefixe') }}</p>
+          }
+          @if (isbn.dirty && isbn.errors?.['isbnChecksum']) {
+            <p class="erreur">{{ langue.t('tuto.isbn.erreur.checksum') }}</p>
+          }
+          @if (isbn.dirty && isbn.errors?.['isbnCoherence']) {
+            <p class="erreur">{{ langue.t('tuto.isbn.erreur.coherence') }}</p>
+          }
+          @if (isbn.dirty && isbn.valid) {
+            <p class="succes">{{ langue.t('tuto.isbn.test.valide.msg') }}</p>
+          }
+        </div>
+      </div>
+    </app-slot>
+  </section>
+
+  <section class="tuto-section" aria-labelledby="titre-tests">
+    <h2 id="titre-tests">{{ langue.t('commun.tests.titre') }}</h2>
+
+    <div class="boutons-test" role="group" [attr.aria-label]="langue.t('tuto.isbn.titre')">
+      <div class="scenario">
+        <button class="btn-test btn-test--valide" (click)="testerIsbn('9782764633291')">
+          {{ langue.t('tuto.isbn.test.valide13') }}
+        </button>
+        <app-snippet code="isbn.setValue('9782764633291')" [label]="langue.t('commun.tests.payload')" />
+      </div>
+      <div class="scenario">
+        <button class="btn-test" (click)="testerIsbn('12345')">
+          {{ langue.t('tuto.isbn.test.invalide') }}
+        </button>
+        <app-snippet code="isbn.setValue('12345')" [label]="langue.t('commun.tests.payload')" />
+      </div>
+      <div class="scenario">
+        <button class="btn-test" (click)="testerIsbn('9782764633290')">
+          {{ langue.t('tuto.isbn.test.checksum') }}
+        </button>
+        <app-snippet code="isbn.setValue('9782764633290')" [label]="langue.t('commun.tests.payload')" />
+      </div>
+    </div>
+
+    @if (dernierTest()) {
+      <div class="zone-resultat" aria-live="polite" role="status">
+        <p class="resultat-label">{{ langue.t('tuto.isbn.test.champ.label') }} : <code>{{ dernierTest() }}</code></p>
+        <p class="resultat-label">{{ langue.t('tuto.isbn.test.erreurs.label') }} :</p>
+        @if (isbn.valid) {
+          <p class="succes">{{ langue.t('tuto.isbn.test.valide.msg') }}</p>
+        } @else {
+          <pre class="resultat-json">{{ erreursJson }}</pre>
+          <p class="resultat-hint">{{ langue.t('tuto.isbn.test.resultat.hint') }}</p>
+        }
+      </div>
+    }
+  </section>
+
+  <section class="tuto-section tuto-section--problemes" aria-labelledby="titre-problemes">
+    <h2 id="titre-problemes">{{ langue.t('commun.problemes.titre') }}</h2>
+
+    <dl class="problemes-liste">
+      @for (i of [1, 2, 3]; track i) {
+        <div class="probleme">
+          <dt class="probleme-symptome">
+            <span class="probleme-icone" aria-hidden="true">🔴</span>
+            {{ langue.t('tuto.isbn.probleme.' + i + '.symptome') }}
+          </dt>
+          <dd class="probleme-cause">
+            <strong>{{ langue.t('commun.problemes.cause') }} :</strong>
+            {{ langue.t('tuto.isbn.probleme.' + i + '.cause') }}
+          </dd>
+          <dd class="probleme-solution">
+            <strong>{{ langue.t('commun.problemes.solution') }} :</strong>
+            {{ langue.t('tuto.isbn.probleme.' + i + '.solution') }}
+          </dd>
+        </div>
+      }
+    </dl>
+  </section>
+
+</article>

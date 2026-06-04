@@ -1,0 +1,65 @@
+<nav class="nav" aria-label="Navigation principale">
+  <div class="nav-logo">
+    <a routerLink="/" aria-label="Accueil ngx-parrecrivains">
+      <span class="nav-logo-lib">ngx-parrecrivains</span>
+      <span class="nav-logo-tuto">tuto</span>
+    </a>
+  </div>
+
+  <ul class="nav-liens" role="list">
+    <li>
+      <a
+        routerLink="/"
+        routerLinkActive="actif"
+        [routerLinkActiveOptions]="{ exact: true }"
+        aria-label="{{ langue.t('nav.accueil') }}"
+      >
+        {{ langue.t('nav.accueil') }}
+      </a>
+    </li>
+    <li>
+      <a
+        routerLink="/tutos/isbn"
+        routerLinkActive="actif"
+        aria-label="{{ langue.t('nav.tuto.isbn') }}"
+      >
+        {{ langue.t('nav.tuto.isbn') }}
+      </a>
+    </li>
+    <li>
+      <a
+        routerLink="/tutos/mots"
+        routerLinkActive="actif"
+        aria-label="{{ langue.t('nav.tuto.mots') }}"
+      >
+        {{ langue.t('nav.tuto.mots') }}
+      </a>
+    </li>
+    <li>
+      <a
+        routerLink="/tutos/temps-lecture"
+        routerLinkActive="actif"
+        aria-label="{{ langue.t('nav.tuto.temps') }}"
+      >
+        {{ langue.t('nav.tuto.temps') }}
+      </a>
+    </li>
+    <li>
+      <a
+        routerLink="/tutos/liseuse"
+        routerLinkActive="actif"
+        aria-label="{{ langue.t('nav.tuto.liseuse') }}"
+      >
+        {{ langue.t('nav.tuto.liseuse') }}
+      </a>
+    </li>
+  </ul>
+
+  <button
+    class="nav-langue"
+    (click)="basculerLangue()"
+    [attr.aria-label]="'Changer la langue vers ' + langue.t('nav.langue')"
+  >
+    {{ langue.t('nav.langue') }}
+  </button>
+</nav>

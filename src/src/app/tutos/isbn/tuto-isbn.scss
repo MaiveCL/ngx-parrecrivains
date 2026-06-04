@@ -1,0 +1,92 @@
+@use '../tuto-shared' as *;
+
+.isbn-form {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.form-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--couleur-texte-secondaire, #a6adc8);
+  display: block;
+}
+
+.form-input {
+  padding: 0.6rem 0.875rem;
+  border: 1.5px solid var(--couleur-bordure, #313244);
+  border-radius: 6px;
+  background: var(--couleur-fond, #11111b);
+  color: var(--couleur-texte, #cdd6f4);
+  font-size: 1rem;
+  font-family: 'Fira Code', monospace;
+  width: 100%;
+  max-width: 320px;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+
+  &:focus {
+    outline: 2px solid var(--couleur-accent, #cba6f7);
+    outline-offset: 2px;
+    border-color: var(--couleur-accent, #cba6f7);
+  }
+
+  &.erreur {
+    border-color: #f38ba8;
+  }
+}
+
+.erreurs-zone {
+  min-height: 1.5rem;
+}
+
+.erreur {
+  color: #f38ba8;
+  font-size: 0.875rem;
+  margin: 0.25rem 0 0;
+}
+
+.succes {
+  color: #a6e3a1;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin: 0.25rem 0 0;
+}
+
+.zone-resultat {
+  margin-top: 1.25rem;
+  padding: 1rem 1.25rem;
+  background: var(--couleur-surface, #181825);
+  border: 1px solid var(--couleur-bordure, #313244);
+  border-radius: 8px;
+}
+
+.resultat-label {
+  font-size: 0.875rem;
+  color: var(--couleur-texte-secondaire, #a6adc8);
+  margin: 0 0 0.5rem;
+
+  code {
+    font-family: 'Fira Code', monospace;
+    color: var(--couleur-accent, #cba6f7);
+  }
+}
+
+.resultat-json {
+  background: var(--couleur-code-fond, #1e1e2e);
+  color: #a6e3a1;
+  padding: 0.75rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  margin: 0.5rem 0;
+  overflow-x: auto;
+}
+
+.resultat-hint {
+  font-size: 0.8rem;
+  color: var(--couleur-texte-secondaire, #6c7086);
+  font-style: italic;
+  margin: 0.5rem 0 0;
+}

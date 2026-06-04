@@ -1,0 +1,150 @@
+<article class="tuto-page">
+
+  <header class="tuto-entete">
+    <div class="tuto-meta">
+      <span class="tuto-type">{{ langue.t('tuto.mots.type') }}</span>
+      <span class="tuto-version">{{ langue.t('tuto.mots.version') }}</span>
+    </div>
+    <h1>{{ langue.t('tuto.mots.titre') }}</h1>
+    <p class="tuto-description">{{ langue.t('tuto.mots.description') }}</p>
+  </header>
+
+  <section class="tuto-section" aria-labelledby="titre-info">
+    <h2 id="titre-info">{{ langue.t('commun.info.props') }}</h2>
+
+    <div class="table-conteneur" role="region" [attr.aria-label]="langue.t('commun.info.props')">
+      <table>
+        <caption>{{ langue.t('tuto.mots.table.signature') }}</caption>
+        <thead>
+          <tr>
+            <th scope="col">{{ langue.t('commun.col.parametre') }}</th>
+            <th scope="col">{{ langue.t('commun.col.type') }}</th>
+            <th scope="col">{{ langue.t('commun.col.defaut') }}</th>
+            <th scope="col">{{ langue.t('commun.col.description') }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>{{ langue.t('tuto.mots.param.valeur.nom') }}</code></td>
+            <td><code>number | null</code></td>
+            <td>{{ langue.t('commun.optionnel') }}</td>
+            <td>{{ langue.t('tuto.mots.param.valeur.desc') }}</td>
+          </tr>
+          <tr>
+            <td><code>{{ langue.t('tuto.mots.param.langue.nom') }}</code></td>
+            <td><code>string</code></td>
+            <td><code>'fr'</code></td>
+            <td>
+              {{ langue.t('tuto.mots.param.langue.desc') }}
+            </td>
+          </tr>
+          <tr>
+            <td><code>{{ langue.t('tuto.mots.param.singulier.nom') }}</code></td>
+            <td><code>string</code></td>
+            <td>{{ langue.t('commun.optionnel') }}</td>
+            <td>{{ langue.t('tuto.mots.param.singulier.desc') }}</td>
+          </tr>
+          <tr>
+            <td><code>{{ langue.t('tuto.mots.param.pluriel.nom') }}</code></td>
+            <td><code>string</code></td>
+            <td>{{ langue.t('commun.optionnel') }}</td>
+            <td>{{ langue.t('tuto.mots.param.pluriel.desc') }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="tuto-section" aria-labelledby="titre-integration">
+    <h2 id="titre-integration">{{ langue.t('commun.integration.titre') }}</h2>
+
+    <div class="element-manquant" role="note">
+      <span class="element-manquant-icone" aria-hidden="true">👆</span>
+      <strong>{{ langue.t('commun.integration.element.manquant') }} :</strong>
+      {{ langue.t('tuto.mots.element.manquant') }}
+    </div>
+
+    <app-snippet [code]="snippetImport()" [label]="langue.t('tuto.mots.snippet.import')" />
+    <app-snippet [code]="snippetImportsArray()" [label]="langue.t('tuto.mots.snippet.imports.array')" />
+    <app-snippet [code]="snippetUsage()" [label]="langue.t('tuto.mots.snippet.usage')" />
+  </section>
+
+  <section class="tuto-section" aria-labelledby="titre-slot">
+    <h2 id="titre-slot">{{ langue.t('commun.slot.placeholder') }}</h2>
+
+    <app-slot [placeholder]="langue.t('commun.slot.placeholder')">
+      <div class="mots-demo">
+        <p class="mots-label">{{ langue.t('tuto.mots.test.resultat.avant') }} :</p>
+        <!-- TODO: Modifier cette ligne pour ajouter | mots (fr) ou | words (en) -->
+        <p class="mots-valeur">{{ nombreMots() }}</p>
+
+        <p class="mots-label mots-label--hint">
+          ({{ langue.t('tuto.mots.test.resultat.apres') }} :
+          <code>{{ '{{ nombreMots() | ' + pipeNom() + ' }}' }}</code>)
+        </p>
+      </div>
+    </app-slot>
+  </section>
+
+  <section class="tuto-section" aria-labelledby="titre-tests">
+    <h2 id="titre-tests">{{ langue.t('commun.tests.titre') }}</h2>
+
+    <div class="boutons-test" role="group" [attr.aria-label]="langue.t('tuto.mots.titre')">
+      <div class="scenario">
+        <button class="btn-test" (click)="testerMots(1)">
+          {{ langue.t('tuto.mots.test.court') }}
+        </button>
+        <app-snippet code="nombreMots.set(1)" [label]="langue.t('commun.tests.payload')" />
+      </div>
+      <div class="scenario">
+        <button class="btn-test btn-test--valide" (click)="testerMots(1234)">
+          {{ langue.t('tuto.mots.test.moyen') }}
+        </button>
+        <app-snippet code="nombreMots.set(1234)" [label]="langue.t('commun.tests.payload')" />
+      </div>
+      <div class="scenario">
+        <button class="btn-test" (click)="testerMots(45231)">
+          {{ langue.t('tuto.mots.test.long') }}
+        </button>
+        <app-snippet code="nombreMots.set(45231)" [label]="langue.t('commun.tests.payload')" />
+      </div>
+      <div class="scenario">
+        <button class="btn-test" (click)="testerMots(0)">
+          {{ langue.t('tuto.mots.test.zero') }}
+        </button>
+        <app-snippet code="nombreMots.set(0)" [label]="langue.t('commun.tests.payload')" />
+      </div>
+    </div>
+
+    <div class="zone-resultat" aria-live="polite" role="status">
+      <p class="resultat-label">
+        {{ langue.t('tuto.mots.test.valeur.label') }} :
+        <code>{{ nombreMots() }}</code>
+      </p>
+    </div>
+  </section>
+
+  <section class="tuto-section tuto-section--problemes" aria-labelledby="titre-problemes">
+    <h2 id="titre-problemes">{{ langue.t('commun.problemes.titre') }}</h2>
+
+    <dl class="problemes-liste">
+      @for (i of [1, 2, 3]; track i) {
+        <div class="probleme">
+          <dt class="probleme-symptome">
+            <span class="probleme-icone" aria-hidden="true">🔴</span>
+            {{ langue.t('tuto.mots.probleme.' + i + '.symptome') }}
+          </dt>
+          <dd class="probleme-cause">
+            <strong>{{ langue.t('commun.problemes.cause') }} :</strong>
+            {{ langue.t('tuto.mots.probleme.' + i + '.cause') }}
+          </dd>
+          <dd class="probleme-solution">
+            <strong>{{ langue.t('commun.problemes.solution') }} :</strong>
+            {{ langue.t('tuto.mots.probleme.' + i + '.solution') }}
+          </dd>
+        </div>
+      }
+    </dl>
+  </section>
+
+</article>

@@ -1,0 +1,210 @@
+.accueil {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.accueil-entete {
+  h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--couleur-texte, #cdd6f4);
+    margin: 0 0 0.5rem;
+  }
+}
+
+.accueil-description {
+  color: var(--couleur-texte-secondaire, #a6adc8);
+  font-size: 1rem;
+  margin: 0;
+}
+
+.accueil-sections {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.section-etapes {
+  background: var(--couleur-surface, #181825);
+  border: 1px solid var(--couleur-bordure, #313244);
+  border-radius: 10px;
+  padding: 1.5rem;
+}
+
+.section-titre {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 0 0 1.25rem;
+
+  &--fait { color: #a6e3a1; }
+  &--afaire { color: var(--couleur-texte-secondaire, #a6adc8); }
+}
+
+.etapes-liste {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.etape {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.etape-ligne {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  cursor: pointer;
+}
+
+/* Case à cocher personnalisée */
+.etape-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 1.1rem;
+  height: 1.1rem;
+  border-radius: 4px;
+  border: 2px solid var(--couleur-bordure, #585b70);
+  background: transparent;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  position: relative;
+
+  &:checked {
+    background: #a6e3a1;
+    border-color: #a6e3a1;
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0.18rem;
+      top: 0.02rem;
+      width: 0.35rem;
+      height: 0.6rem;
+      border: 2px solid #1e1e2e;
+      border-top: none;
+      border-left: none;
+      transform: rotate(45deg);
+    }
+  }
+
+  &:disabled {
+    opacity: 0.9;
+    cursor: default;
+  }
+
+  &:not(:disabled):focus-visible {
+    outline: 2px solid var(--couleur-accent, #cba6f7);
+    outline-offset: 2px;
+  }
+
+  &:not(:disabled):not(:checked):hover {
+    border-color: var(--couleur-accent, #cba6f7);
+  }
+}
+
+.etape-label {
+  font-size: 0.9rem;
+  color: var(--couleur-texte, #cdd6f4);
+  line-height: 1.4;
+}
+
+.etape--faite .etape-label {
+  color: #a6e3a1;
+}
+
+.etape--cochee .etape-label {
+  color: var(--couleur-texte-secondaire, #6c7086);
+  text-decoration: line-through;
+  text-decoration-color: #6c7086;
+}
+
+/* Navigation cartes */
+.section-navigation {
+  h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--couleur-texte, #cdd6f4);
+    margin: 0 0 0.5rem;
+  }
+}
+
+.navigation-description {
+  color: var(--couleur-texte-secondaire, #a6adc8);
+  font-size: 0.9rem;
+  margin: 0 0 1.25rem;
+}
+
+.cartes-composants {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.carte {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1.25rem;
+  background: var(--couleur-surface, #181825);
+  border: 1px solid var(--couleur-bordure, #313244);
+  border-radius: 10px;
+  text-decoration: none;
+  transition: border-color 0.2s, background 0.2s;
+  position: relative;
+
+  &:hover {
+    border-color: var(--couleur-accent, #cba6f7);
+    background: var(--couleur-accent-fond, rgba(203, 166, 247, 0.08));
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--couleur-accent, #cba6f7);
+    outline-offset: 3px;
+  }
+}
+
+.carte-type {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--couleur-accent, #cba6f7);
+}
+
+.carte-nom {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--couleur-texte, #cdd6f4);
+  font-family: 'Fira Code', monospace;
+}
+
+.carte-version {
+  font-size: 0.75rem;
+  color: var(--couleur-texte-secondaire, #6c7086);
+}
+
+.carte-fleche {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  font-size: 1.1rem;
+  color: var(--couleur-accent, #cba6f7);
+  transition: transform 0.2s;
+}
+
+.carte:hover .carte-fleche {
+  transform: translateX(3px);
+}

@@ -1,0 +1,84 @@
+<article class="accueil">
+  <header class="accueil-entete">
+    <h1>{{ langue.t('accueil.titre') }}</h1>
+    <p class="accueil-description">{{ langue.t('accueil.description') }}</p>
+  </header>
+
+  <div class="accueil-sections">
+
+    <!-- Section : Ce qui est déjà fait -->
+    <section class="section-etapes" aria-labelledby="titre-fait">
+      <h2 id="titre-fait" class="section-titre section-titre--fait">
+        {{ langue.t('accueil.fait.titre') }}
+      </h2>
+      <ol class="etapes-liste" role="list">
+        @for (etape of etapesFaites; track etape.id) {
+          <li class="etape etape--faite">
+            <label class="etape-ligne">
+              <input
+                type="checkbox"
+                class="etape-checkbox"
+                checked
+                disabled
+                [attr.aria-label]="langue.t(etape.labelKey)"
+              />
+              <span class="etape-label">{{ langue.t(etape.labelKey) }}</span>
+            </label>
+            @if (etape.commande) {
+              <app-snippet [code]="etape.commande" />
+            }
+          </li>
+        }
+      </ol>
+    </section>
+
+    <!-- Section : À faire -->
+    <section class="section-etapes" aria-labelledby="titre-afaire">
+      <h2 id="titre-afaire" class="section-titre section-titre--afaire">
+        {{ langue.t('accueil.afaire.titre') }}
+      </h2>
+      <ol class="etapes-liste" role="list">
+        @for (etape of etapesAfaire; track etape.id) {
+          <li class="etape" [class.etape--cochee]="estCochee(etape.id)">
+            <label class="etape-ligne">
+              <input
+                type="checkbox"
+                class="etape-checkbox"
+                [checked]="estCochee(etape.id)"
+                (change)="toggleEtape(etape.id)"
+                [attr.aria-label]="langue.t(etape.labelKey)"
+              />
+              <span class="etape-label">{{ langue.t(etape.labelKey) }}</span>
+            </label>
+            @if (etape.commande) {
+              <app-snippet [code]="etape.commande" />
+            }
+          </li>
+        }
+      </ol>
+    </section>
+
+  </div>
+
+  <!-- Section : Navigation vers les composants -->
+  <section class="section-navigation" aria-labelledby="titre-navigation">
+    <h2 id="titre-navigation">{{ langue.t('accueil.navigation.titre') }}</h2>
+    <p class="navigation-description">{{ langue.t('accueil.navigation.description') }}</p>
+
+    <div class="cartes-composants" role="list">
+      @for (composant of composants; track composant.routerLink) {
+        <a
+          [routerLink]="composant.routerLink"
+          class="carte"
+          role="listitem"
+          [attr.aria-label]="composant.ariaLabel"
+        >
+          <div class="carte-type">{{ composant.type }}</div>
+          <div class="carte-nom">{{ composant.nom }}</div>
+          <div class="carte-version">{{ composant.version }}</div>
+          <div class="carte-fleche" aria-hidden="true">→</div>
+        </a>
+      }
+    </div>
+  </section>
+</article>

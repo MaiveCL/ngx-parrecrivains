@@ -1,0 +1,164 @@
+<article class="tuto-page">
+
+  <header class="tuto-entete">
+    <div class="tuto-meta">
+      <span class="tuto-type">{{ langue.t('tuto.liseuse.type') }}</span>
+      <span class="tuto-version">{{ langue.t('tuto.liseuse.version') }}</span>
+    </div>
+    <h1>{{ langue.t('tuto.liseuse.titre') }}</h1>
+    <p class="tuto-description">{{ langue.t('tuto.liseuse.description') }}</p>
+  </header>
+
+  <section class="tuto-section" aria-labelledby="titre-info">
+    <h2 id="titre-info">{{ langue.t('commun.info.props') }}</h2>
+
+    <div class="table-conteneur" role="region" [attr.aria-label]="langue.t('tuto.liseuse.table.caption.inputs')">
+      <table>
+        <caption>{{ langue.t('tuto.liseuse.table.caption.inputs') }}</caption>
+        <thead>
+          <tr>
+            <th scope="col">{{ langue.t('commun.col.input') }}</th>
+            <th scope="col">{{ langue.t('commun.col.type') }}</th>
+            <th scope="col">{{ langue.t('commun.col.requis') }}</th>
+            <th scope="col">{{ langue.t('commun.col.description') }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>[contenu]</code></td>
+            <td><code>string | File | null</code></td>
+            <td>✅</td>
+            <td>{{ langue.t('tuto.liseuse.input.contenu.desc') }}</td>
+          </tr>
+          <tr>
+            <td><code>[titre]</code></td>
+            <td><code>string</code></td>
+            <td>{{ langue.t('commun.optionnel') }}</td>
+            <td>{{ langue.t('tuto.liseuse.input.titre.desc') }}</td>
+          </tr>
+          <tr>
+            <td><code>[auteur]</code></td>
+            <td><code>string</code></td>
+            <td>{{ langue.t('commun.optionnel') }}</td>
+            <td>{{ langue.t('tuto.liseuse.input.auteur.desc') }}</td>
+          </tr>
+          <tr>
+            <td><code>[langue]</code></td>
+            <td><code>'fr' | 'en' | 'cr'</code></td>
+            <td>{{ langue.t('commun.optionnel') }}</td>
+            <td>{{ langue.t('tuto.liseuse.input.langue.desc') }}</td>
+          </tr>
+          <tr>
+            <td><code>[config]</code></td>
+            <td><code>Partial&lt;ConfigLecture&gt;</code></td>
+            <td>{{ langue.t('commun.optionnel') }}</td>
+            <td>{{ langue.t('tuto.liseuse.input.config.desc') }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-conteneur" role="region" [attr.aria-label]="langue.t('tuto.liseuse.table.caption.outputs')" style="margin-top: 1rem">
+      <table>
+        <caption>{{ langue.t('tuto.liseuse.table.caption.outputs') }}</caption>
+        <thead>
+          <tr>
+            <th scope="col">{{ langue.t('commun.col.output') }}</th>
+            <th scope="col">{{ langue.t('commun.col.payload') }}</th>
+            <th scope="col">{{ langue.t('commun.col.description') }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>(progressionLecture)</code></td>
+            <td><code>number</code></td>
+            <td>{{ langue.t('tuto.liseuse.output.progression.desc') }}</td>
+          </tr>
+          <tr>
+            <td><code>(readingTime)</code></td>
+            <td><code>number</code></td>
+            <td>{{ langue.t('tuto.liseuse.output.readingtime.desc') }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="tuto-section" aria-labelledby="titre-integration">
+    <h2 id="titre-integration">{{ langue.t('commun.integration.titre') }}</h2>
+
+    <div class="element-manquant" role="note">
+      <span class="element-manquant-icone" aria-hidden="true">👆</span>
+      <strong>{{ langue.t('commun.integration.element.manquant') }} :</strong>
+      {{ langue.t('tuto.liseuse.element.manquant') }}
+    </div>
+
+    <app-snippet [code]="snippetImport" [label]="langue.t('tuto.liseuse.snippet.import')" />
+    <app-snippet [code]="snippetImportsArray" [label]="langue.t('tuto.liseuse.snippet.imports.array')" />
+    <app-snippet [code]="snippetUsage" [label]="langue.t('tuto.liseuse.snippet.usage')" />
+  </section>
+
+  <section class="tuto-section" aria-labelledby="titre-slot">
+    <h2 id="titre-slot">{{ langue.t('commun.slot.placeholder') }}</h2>
+
+    <app-slot [placeholder]="langue.t('commun.slot.placeholder')">
+      <!-- TODO: Ajouter ici la balise <ngx-liseuse-manuscrit [contenu]="contenu()" /> -->
+    </app-slot>
+  </section>
+
+  <section class="tuto-section" aria-labelledby="titre-tests">
+    <h2 id="titre-tests">{{ langue.t('commun.tests.titre') }}</h2>
+
+    <div class="boutons-test" role="group" [attr.aria-label]="langue.t('tuto.liseuse.titre')">
+      <div class="scenario">
+        <button class="btn-test btn-test--valide" (click)="testerContenu('texte')">
+          {{ langue.t('tuto.liseuse.test.texte') }}
+        </button>
+        <app-snippet code="contenu.set('Il était une fois...')" [label]="langue.t('commun.tests.payload')" />
+      </div>
+      <div class="scenario">
+        <button class="btn-test" (click)="testerContenu('html')">
+          {{ langue.t('tuto.liseuse.test.html') }}
+        </button>
+        <app-snippet code="contenu.set('<h2>Chapitre 1</h2><p>...')" [label]="langue.t('commun.tests.payload')" />
+      </div>
+      <div class="scenario">
+        <button class="btn-test" (click)="testerContenu('gdocs')">
+          {{ langue.t('tuto.liseuse.test.gdocs') }}
+        </button>
+        <app-snippet code="contenu.set('https://docs.google.com/...')" [label]="langue.t('commun.tests.payload')" />
+      </div>
+    </div>
+
+    <div class="zone-resultat" aria-live="polite" role="status">
+      <p class="resultat-label">
+        {{ langue.t('tuto.liseuse.test.contenu.label') }} :
+        <code>{{ contenuApercu }}</code>
+      </p>
+    </div>
+  </section>
+
+  <section class="tuto-section tuto-section--problemes" aria-labelledby="titre-problemes">
+    <h2 id="titre-problemes">{{ langue.t('commun.problemes.titre') }}</h2>
+
+    <dl class="problemes-liste">
+      @for (i of [1, 2, 3]; track i) {
+        <div class="probleme">
+          <dt class="probleme-symptome">
+            <span class="probleme-icone" aria-hidden="true">🔴</span>
+            {{ langue.t('tuto.liseuse.probleme.' + i + '.symptome') }}
+          </dt>
+          <dd class="probleme-cause">
+            <strong>{{ langue.t('commun.problemes.cause') }} :</strong>
+            {{ langue.t('tuto.liseuse.probleme.' + i + '.cause') }}
+          </dd>
+          <dd class="probleme-solution">
+            <strong>{{ langue.t('commun.problemes.solution') }} :</strong>
+            {{ langue.t('tuto.liseuse.probleme.' + i + '.solution') }}
+          </dd>
+        </div>
+      }
+    </dl>
+  </section>
+
+</article>

@@ -1,0 +1,72 @@
+@use '../tuto-shared' as *;
+
+.temps-demo {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.temps-info {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+
+.temps-label {
+  font-size: 0.8rem;
+  color: var(--couleur-texte-secondaire, #a6adc8);
+  min-width: 11rem;
+}
+
+.temps-mots {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--couleur-texte, #cdd6f4);
+  font-family: 'Fira Code', monospace;
+}
+
+.temps-valeur {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--couleur-accent, #cba6f7);
+  font-family: 'Fira Code', monospace;
+
+  &--placeholder {
+    color: var(--couleur-texte-secondaire, #6c7086);
+    font-style: italic;
+  }
+}
+
+.temps-hint {
+  font-size: 0.8rem;
+  color: var(--couleur-texte-secondaire, #6c7086);
+  font-style: italic;
+  margin: 0.25rem 0 0;
+}
+
+.zone-resultat {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--couleur-surface, #181825);
+  border: 1px solid var(--couleur-bordure, #313244);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.resultat-label {
+  font-size: 0.875rem;
+  color: var(--couleur-texte-secondaire, #a6adc8);
+  margin: 0;
+
+  code {
+    font-family: 'Fira Code', monospace;
+    color: var(--couleur-accent, #cba6f7);
+  }
+
+  strong {
+    color: var(--couleur-texte, #cdd6f4);
+  }
+}
