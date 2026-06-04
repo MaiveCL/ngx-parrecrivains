@@ -5,22 +5,21 @@ import {
   signal,
 } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+// ✅ Tuto — étape 2 : import ajouté après npm install ngx-parrecrivains
+import { isbnValidator } from 'ngx-parrecrivains';
 import { LangueService } from '../../shared/services/langue.service';
 import { SnippetComponent } from '../../shared/snippet/snippet';
 import { SlotComponent } from '../../shared/slot/slot';
 
 // ─────────────────────────────────────────────────────────────────────────────
-// TUTO isbnValidator — branche tuto-depart
+// TUTO isbnValidator — version complétée (main)
 //
-// Ce composant scaffold l'intégration de isbnValidator dans un formulaire réactif.
-// L'élément manquant intentionnellement : isbnValidator() dans le FormControl.
+// Diff avec tuto-depart :
+//   étape 2 → import { isbnValidator } from 'ngx-parrecrivains'  (ligne ci-dessus)
+//   étape 3 → isbnValidator() ajouté dans le tableau de validateurs (voir plus bas)
 //
-// Pour intégrer :
-//   1. npm install ngx-parrecrivains
-//   2. Ajouter en haut du fichier :
-//        import { isbnValidator } from 'ngx-parrecrivains';
-//   3. Modifier la ligne isbn = new FormControl(...) :
-//        isbn = new FormControl('', [Validators.required, isbnValidator()]);
+// Sans ces deux lignes, le formulaire accepte n'importe quelle valeur sans
+// valider le format ni le checksum ISBN.
 // ─────────────────────────────────────────────────────────────────────────────
 
 @Component({
@@ -33,8 +32,9 @@ import { SlotComponent } from '../../shared/slot/slot';
 export class TutoIsbnComponent {
   readonly langue = inject(LangueService);
 
-  // Formulaire pré-câblé — isbnValidator() manquant intentionnellement
-  readonly isbn = new FormControl('', [Validators.required]);
+  // ✅ Tuto — étape 3 : isbnValidator() ajouté dans le tableau de validateurs
+  // Dans tuto-depart, cette ligne était : new FormControl('', [Validators.required])
+  readonly isbn = new FormControl('', [Validators.required, isbnValidator()]);
 
   readonly dernierTest = signal<string>('');
 

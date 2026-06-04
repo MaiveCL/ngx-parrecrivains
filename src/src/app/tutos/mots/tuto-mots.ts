@@ -5,21 +5,31 @@ import {
   inject,
   signal,
 } from '@angular/core';
+// ✅ Tuto — étape 2 : imports ajoutés après npm install ngx-parrecrivains
+// FR → MotsPipe  (pipe | mots)
+// EN → WordsPipe (pipe | words, alias anglophone)
+import { MotsPipe, WordsPipe } from 'ngx-parrecrivains';
 import { LangueService } from '../../shared/services/langue.service';
 import { SnippetComponent } from '../../shared/snippet/snippet';
 import { SlotComponent } from '../../shared/slot/slot';
 
 // ─────────────────────────────────────────────────────────────────────────────
-// TUTO MotsPipe — branche tuto-depart
+// TUTO MotsPipe — version complétée (main)
 //
-// FR : L'élément manquant : | mots dans le template  (import MotsPipe)
-// EN : L'élément manquant : | words dans le template (import WordsPipe)
+// Diff avec tuto-depart :
+//   étape 2 → import { MotsPipe, WordsPipe }  (lignes ci-dessus)
+//   étape 3 → ajout dans imports[]            (voir @Component ci-dessous)
+//   étape 4 → | mots (ou | words) dans le template (voir tuto-mots.html)
+//
+// Sans le pipe dans le template, le nombre s'affiche brut : "1234"
+// Avec le pipe : "1 234 mots" (fr) ou "1,234 words" (en)
 // ─────────────────────────────────────────────────────────────────────────────
 
 @Component({
   selector: 'app-tuto-mots',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [SnippetComponent, SlotComponent],
+  // ✅ Tuto — étape 3 : MotsPipe et WordsPipe ajoutés dans imports[]
+  imports: [MotsPipe, WordsPipe, SnippetComponent, SlotComponent],
   templateUrl: './tuto-mots.html',
   styleUrl: './tuto-mots.scss',
 })
@@ -28,7 +38,6 @@ export class TutoMotsComponent {
 
   readonly nombreMots = signal(1234);
 
-  // Alias bilingue : MotsPipe (fr) / WordsPipe (en)
   readonly estAnglais = computed(() => this.langue.langue() === 'en');
 
   readonly snippetImport = computed(() =>

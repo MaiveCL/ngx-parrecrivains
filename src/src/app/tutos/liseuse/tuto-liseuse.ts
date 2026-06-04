@@ -4,23 +4,22 @@ import {
   inject,
   signal,
 } from '@angular/core';
+// ✅ Tuto — étape 2 : import ajouté après npm install ngx-parrecrivains
+import { LiseuseManuscritComponent } from 'ngx-parrecrivains';
 import { LangueService } from '../../shared/services/langue.service';
 import { SnippetComponent } from '../../shared/snippet/snippet';
 import { SlotComponent } from '../../shared/slot/slot';
 
 // ─────────────────────────────────────────────────────────────────────────────
-// TUTO LiseuseManuscritComponent — branche tuto-depart
+// TUTO LiseuseManuscritComponent — version complétée (main)
 //
-// Ce composant scaffold l'intégration de LiseuseManuscritComponent.
-// L'élément manquant intentionnellement : la balise HTML dans le slot.
+// Diff avec tuto-depart :
+//   étape 2 → import { LiseuseManuscritComponent }  (ligne ci-dessus)
+//   étape 3 → LiseuseManuscritComponent dans imports[] (voir @Component)
+//   étape 4 → <ngx-liseuse-manuscrit> dans le template (voir tuto-liseuse.html)
 //
-// Pour intégrer :
-//   1. npm install ngx-parrecrivains
-//   2. Ajouter en haut du fichier :
-//        import { LiseuseManuscritComponent } from 'ngx-parrecrivains';
-//   3. Ajouter dans imports: [LiseuseManuscritComponent]
-//   4. Dans tuto-liseuse.html, dans la zone <!-- SLOT -->, ajouter :
-//        <ngx-liseuse-manuscrit [contenu]="contenu()" />
+// Sans la balise dans le template, le slot restait vide.
+// Avec la balise : la liseuse s'affiche et réagit aux boutons de test.
 // ─────────────────────────────────────────────────────────────────────────────
 
 const TEXTE_DEFAUT = `Il était une fois, dans une bibliothèque sans fin, une bibliothécaire nommée Élara qui passait ses journées à cataloguer des livres oubliés. Chaque matin, elle ouvrait les grandes portes de bois et laissait entrer la lumière dorée du soleil sur les rangées d'ouvrages poussiéreux.
@@ -40,14 +39,15 @@ const URL_GDOCS = 'https://docs.google.com/document/d/1BxiMVs0XRA5nFMdKvBdBZjgmU
 @Component({
   selector: 'app-tuto-liseuse',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [SnippetComponent, SlotComponent],
+  // ✅ Tuto — étape 3 : LiseuseManuscritComponent ajouté dans imports[]
+  // Dans tuto-depart, imports[] ne contenait que SnippetComponent et SlotComponent
+  imports: [LiseuseManuscritComponent, SnippetComponent, SlotComponent],
   templateUrl: './tuto-liseuse.html',
   styleUrl: './tuto-liseuse.scss',
 })
 export class TutoLiseuseComponent {
   readonly langue = inject(LangueService);
 
-  // Signal pré-câblé — balise <ngx-liseuse-manuscrit> manquante intentionnellement
   readonly contenu = signal<string>(TEXTE_DEFAUT);
 
   readonly snippetImport = `import { LiseuseManuscritComponent } from 'ngx-parrecrivains';`;

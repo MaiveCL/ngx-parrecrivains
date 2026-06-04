@@ -1,29 +1,26 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   inject,
   signal,
 } from '@angular/core';
+// ✅ Tuto — étape 2 : imports ajoutés après npm install ngx-parrecrivains
+import { TempsLectureService } from 'ngx-parrecrivains';
 import { LangueService } from '../../shared/services/langue.service';
 import { SnippetComponent } from '../../shared/snippet/snippet';
 import { SlotComponent } from '../../shared/slot/slot';
 
 // ─────────────────────────────────────────────────────────────────────────────
-// TUTO TempsLectureService — branche tuto-depart
+// TUTO TempsLectureService — version complétée (main)
 //
-// Ce composant scaffold l'intégration de TempsLectureService.
-// L'élément manquant intentionnellement : l'injection du service + computed().
+// Diff avec tuto-depart :
+//   étape 2 → import { TempsLectureService }      (ligne ci-dessus)
+//   étape 3 → inject(TempsLectureService)          (voir ci-dessous)
+//   étape 3 → computed() remplace signal('??')    (voir ci-dessous)
 //
-// Pour intégrer :
-//   1. npm install ngx-parrecrivains
-//   2. Ajouter en haut du fichier :
-//        import { inject } from '@angular/core';
-//        import { TempsLectureService } from 'ngx-parrecrivains';
-//   3. Dans la classe, ajouter :
-//        private readonly tl = inject(TempsLectureService);
-//        readonly tempsAffiche = computed(() =>
-//          this.tl.formater(this.tl.estimer(this.nombreMots()))
-//        );
+// Sans le service injecté, tempsAffiche restait figé à '??'.
+// Avec le service : "5 min" pour 1000 mots, "3 h 45 min" pour 45000 mots.
 // ─────────────────────────────────────────────────────────────────────────────
 
 @Component({
@@ -36,11 +33,17 @@ import { SlotComponent } from '../../shared/slot/slot';
 export class TutoTempsLectureComponent {
   readonly langue = inject(LangueService);
 
-  // Signals pré-câblés
+  // ✅ Tuto — étape 3a : injection du service
+  // Dans tuto-depart, cette ligne n'existait pas
+  private readonly tl = inject(TempsLectureService);
+
   readonly nombreMots = signal(1000);
 
-  // Placeholder — sera remplacé par un computed() quand le service est injecté
-  readonly tempsAffiche = signal('??');
+  // ✅ Tuto — étape 3b : computed() remplace signal('??')
+  // Dans tuto-depart, cette ligne était : readonly tempsAffiche = signal('??');
+  readonly tempsAffiche = computed(() =>
+    this.tl.formater(this.tl.estimer(this.nombreMots()))
+  );
 
   readonly snippetImport = `import { inject, computed } from '@angular/core';
 import { TempsLectureService } from 'ngx-parrecrivains';`;
