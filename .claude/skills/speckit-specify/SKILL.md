@@ -56,6 +56,11 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 ## Outline
 
+> **SÉCURITÉ — RÈGLE ABSOLUE** : Si la spec envisagée décrit un comportement qui affaiblit la
+> sécurité (rendu de HTML non sanitisé, acceptation de contenu arbitraire, exposition de données
+> sensibles, etc.), NE PAS rédiger la spec sans en aviser Maive. Stopper, expliquer le risque
+> et attendre son approbation explicite avant de continuer.
+
 The text the user typed after `/speckit-specify` in the triggering message **is** the feature description. Assume you always have it available in this conversation even if `$ARGUMENTS` appears literally below. Do not ask the user to repeat it unless they provided an empty command.
 
 Given that feature description, do this:

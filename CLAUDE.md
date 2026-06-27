@@ -1,5 +1,19 @@
 # ngx-parrecrivains — Constitution du projet
 
+## Identité de ce Claude — lire en début de conversation
+
+**Je suis le Claude du repo `ngx-parrecrivains`** (`/home/maiveBOX/ngx-parrecrivains`).
+
+Ce repo est le **site de démonstration et documentation** de la lib — pas la lib elle-même.
+
+Il existe un **deuxième repo séparé** : `/home/maiveBOX/parrecrivains` — c'est là que la librairie est développée et publiée sur npm, et que l'application principale Angular + Rails vit. Il a son propre Claude distinct.
+
+En début de conversation, me présenter ainsi :
+> "Je suis le Claude de **ngx-parrecrivains** (site de démo/doc). Le développement de la lib est dans le repo `parrecrivains`."
+
+---
+
+
 ## Ce que ce repo EST
 
 Ce repository est le **site de démonstration officiel** et la **documentation interactive** de la librairie Angular npm `ngx-parrecrivains`.
@@ -50,7 +64,7 @@ ngx-parrecrivains/          ← racine du repo Git
             └── mock/           ← fichiers JSON simulant des données de test
 ```
 
-> **Note :** Le projet Angular CLI réside dans `src/`. Pour toute commande Angular (`ng`, `npm`), se placer dans `/home/etd/ngx-parrecrivains/src/`.
+> **Note :** Le projet Angular CLI réside dans `src/`. Pour toute commande Angular (`ng`, `npm`), se placer dans `/home/maiveBOX/ngx-parrecrivains/src/`.
 
 ---
 
@@ -126,22 +140,3 @@ shell commands, and other important information, read the current plan
 at `specs/001-tuto-interactif/plan.md`.
 <!-- SPECKIT END -->
 
-## Ajout de Maive
-voici la stratégie claire avant de toucher à quoi que ce soit.
-
----
-Structure git proposée
-
-main          → démo complète, lib installée, composant(s) fonctionnels
-tuto-depart   → scaffold pédagogique : Angular vide + instructions d'installation
-
-Ordre des opérations :
-
-1. Premier commit sur main — le projet Angular tel qu'il est maintenant (vide, propre)
-2. Créer tuto-depart depuis ce point — les deux branches partagent la même base propre
-3. Travailler tuto-depart d'abord — ajouter les instructions/placeholder
-4. Revenir sur main — installer la lib, tout faire fonctionner
-
-Pourquoi dans cet ordre : tuto-depart doit rester en arrière de main, jamais mergée dedans. Si tu crées main complet en premier, tu ne peux plus créer un point de départ propre sans rewriter l'historique.
-
-Autre : On pourrait mettre un pied de page qui invite les gens à me contacter s'ils ont des soucis ou commentaires. Et que ce pied de page soit bot proof pour pas que je recoive du spam parce que j'ai exposé mon courriel...

@@ -131,6 +131,12 @@ The tasks.md should be immediately executable - each task must be specific enoug
 
 ## Task Generation Rules
 
+**SÉCURITÉ — RÈGLE ABSOLUE** : Si une tâche implique un mécanisme qui affaiblit la sécurité
+(`bypassSecurityTrustHtml`, `dangerouslySetInnerHTML`, `eval`, désactivation de CORS, skip de
+validation, etc.), NE PAS générer cette tâche. Stopper, expliquer le problème de sécurité à
+Maive et attendre son approbation explicite avant de continuer. Le LLM ne décide jamais seul
+d'un compromis sécuritaire.
+
 **CRITICAL**: Tasks MUST be organized by user story to enable independent implementation and testing.
 
 **Tests are OPTIONAL**: Only generate test tasks if explicitly requested in the feature specification or if user requests TDD approach.
