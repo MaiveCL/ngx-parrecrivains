@@ -1,9 +1,5 @@
 # Commandes rapides — ngx-parrecrivains
 
-Toutes les commandes Angular se lancent depuis `/home/maiveBOX/ngx-parrecrivains/src/`
-
----
-
 ## Test local — lib locale (avant publication npm)
 
 Résout `ngx-parrecrivains` via path alias → `dist/ngx-parrecrivains/` (build local)
@@ -15,8 +11,7 @@ cd /home/maiveBOX/ngx-parrecrivains/src && clear && npx ng build ngx-parrecrivai
 cd /home/maiveBOX/ngx-parrecrivains/src && clear && npx ng serve
 
 <!-- Visiter : http://localhost:4200/ngx-parrecrivains/ -->
-<!-- Pages de test : /tests/isbn · /tests/liseuse · /tests/pipe-mots · /tests/temps-lecture -->
-<!-- Tutos (lib locale) : /tutos/isbn · /tutos/liseuse · /tutos/mots · /tutos/temps-lecture -->
+<!-- Pages de test : http://localhost:4200/ngx-parrecrivains/tests/ -->
 
 <!-- NGROK — exposer le test local au public pour valider en communauté avant de publier -->
 clear && npx ngrok http 4200
@@ -34,10 +29,8 @@ cd /home/maiveBOX/ngx-parrecrivains/src && npm show ngx-parrecrivains version
 <!-- 2. Mettre à jour si besoin -->
 npm install ngx-parrecrivains@latest
 
-<!-- 3. Builder pour GitHub Pages -->
+###### Build GitHub Pages -->
 cd /home/maiveBOX/ngx-parrecrivains/src && clear && npx ng build --ts-config=tsconfig.demo.json && cp ../docs/index.html ../docs/404.html
-
-<!-- 4. Déployer sur GitHub Pages (depuis main uniquement) -->
 <!-- git add ../docs && git commit -m "..." && git push -->
 
 <!-- Visiter : https://MaiveCL.github.io/ngx-parrecrivains/ -->
