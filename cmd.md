@@ -35,7 +35,7 @@ cd /home/maiveBOX/ngx-parrecrivains/src && npm show ngx-parrecrivains version
 npm install ngx-parrecrivains@latest
 
 <!-- 3. Builder pour GitHub Pages -->
-cd /home/maiveBOX/ngx-parrecrivains/src && clear && npx ng build --ts-config=tsconfig.demo.json
+cd /home/maiveBOX/ngx-parrecrivains/src && clear && npx ng build --ts-config=tsconfig.demo.json && cp ../docs/index.html ../docs/404.html
 
 <!-- 4. Déployer sur GitHub Pages (depuis main uniquement) -->
 <!-- git add ../docs && git commit -m "..." && git push -->
