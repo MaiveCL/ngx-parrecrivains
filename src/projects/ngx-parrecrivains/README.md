@@ -23,6 +23,7 @@
 | `\| mots` · `\| words` | Pipe | `MotsPipe` · `WordsPipe` | 0.2.0 |
 | `TempsLectureService` | Service | `TempsLectureService` | 0.3.0 |
 | `isbnValidator` · `validerIsbn` | Validateur / Validator | `isbnValidator`, `validerIsbn`, `ISBN_ERREURS` | 0.4.0 |
+| `VERSION` | Constante / Constant | `VERSION` | 0.4.2 |
 
 ### Améliorations prévues / Planned additions
 
