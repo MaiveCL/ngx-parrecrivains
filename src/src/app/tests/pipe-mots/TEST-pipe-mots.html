@@ -1,0 +1,71 @@
+<!-- FICHIER TEMPORAIRE — SUPPRIMER AVANT PUBLICATION -->
+
+<div class="test-banniere">
+  <strong>⚠ PAGE DE TEST</strong> — <code>MotsPipe / WordsPipe</code> · À supprimer avant publication
+</div>
+
+<div class="test-grille">
+
+  <!-- ── Navigation gauche ───────────────────────────────────────────────── -->
+
+  <nav class="test-nav">
+    @for (groupe of groupes; track groupe) {
+      <p class="test-nav__groupe">{{ groupe }}</p>
+      @for (cas of casParGroupe(groupe); track cas.id) {
+        <button
+          class="test-btn"
+          [class.actif]="casCourant() === cas.id"
+          (click)="selectionner(cas.id)"
+          [title]="cas.description"
+        >
+          <span class="test-btn__num">{{ cas.id + 1 }}</span>{{ cas.label }}
+        </button>
+      }
+    }
+  </nav>
+
+  <!-- ── Zone de résultat ────────────────────────────────────────────────── -->
+
+  <section class="test-zone">
+
+    <div class="test-entete">
+      <span class="test-entete__label">{{ casList[casCourant()].label }}</span>
+      <code class="test-entete__desc">{{ casList[casCourant()].description }}</code>
+    </div>
+
+    <div class="test-resultat">
+
+      @switch (casCourant()) {
+
+        @case (0)  { <span class="test-valeur">{{ 1234 | mots }}</span>                              <code class="test-attendu">→ "1 234 mots"</code> }
+        @case (1)  { <span class="test-valeur">{{ 1 | mots }}</span>                                 <code class="test-attendu">→ "1 mot"</code> }
+        @case (2)  { <span class="test-valeur">{{ 0 | mots }}</span>                                 <code class="test-attendu">→ "0 mot"</code> }
+        @case (3)  { <span class="test-valeur">{{ 1000000 | mots }}</span>                           <code class="test-attendu">→ "1 000 000 mots"</code> }
+
+        @case (4)  { <span class="test-valeur">{{ 1234 | mots:'en' }}</span>                         <code class="test-attendu">→ "1,234 words"</code> }
+        @case (5)  { <span class="test-valeur">{{ 1 | mots:'en' }}</span>                            <code class="test-attendu">→ "1 word"</code> }
+        @case (6)  { <span class="test-valeur">{{ 0 | mots:'en' }}</span>                            <code class="test-attendu">→ "0 words"</code> }
+
+        @case (7)  { <span class="test-valeur">{{ 1234 | mots:'cr' }}</span>                         <code class="test-attendu">→ "1 234 nêhiyaw-pîkiskwêwina"</code> }
+        @case (8)  { <span class="test-valeur">{{ 1 | mots:'cr' }}</span>                            <code class="test-attendu">→ "1 nêhiyaw-pîkiskwêwin"</code> }
+        @case (9)  { <span class="test-valeur">{{ 0 | mots:'cr' }}</span>                            <code class="test-attendu">→ "0 nêhiyaw-pîkiskwêwin"</code> }
+
+        @case (10) { <span class="test-valeur">{{ 1234 | words:'en' }}</span>                        <code class="test-attendu">→ "1,234 words"</code> }
+        @case (11) { <span class="test-valeur">{{ 1234 | words }}</span>                             <code class="test-attendu">→ "1 234 mots"</code> }
+
+        @case (12) { <span class="test-valeur">{{ null | mots }}</span>                              <code class="test-attendu">→ "0 mot"</code> }
+        @case (13) { <span class="test-valeur">{{ -5 | mots }}</span>                               <code class="test-attendu">→ "0 mot"</code> }
+        @case (14) { <span class="test-valeur">{{ 1.7 | mots }}</span>                              <code class="test-attendu">→ "1 mot"</code> }
+
+        @case (15) { <span class="test-valeur">{{ 1234 | mots:'pt':'palavra':'palavras' }}</span>    <code class="test-attendu">→ "1 234 palavras"</code> }
+        @case (16) { <span class="test-valeur">{{ 1 | mots:'pt':'palavra':'palavras' }}</span>       <code class="test-attendu">→ "1 palavra"</code> }
+        @case (17) { <span class="test-valeur">{{ 0 | mots:'pt':'palavra':'palavras':true }}</span>  <code class="test-attendu">→ "0 palavras"</code> }
+        @case (18) { <span class="test-valeur">{{ 1234 | mots:'xx' }}</span>                        <code class="test-attendu">→ contient "mots" (fallback fr)</code> }
+
+      }
+
+    </div>
+
+  </section>
+
+</div>

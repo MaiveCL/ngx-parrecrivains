@@ -1,0 +1,17 @@
+<main class="test-menu">
+
+  <h1 class="test-menu__titre">Tests visuels — ngx-parrecrivains</h1>
+  <p class="test-menu__sous-titre">{{ liens.length }} composant{{ liens.length > 1 ? 's' : '' }} disponible{{ liens.length > 1 ? 's' : '' }}</p>
+
+  <ul class="test-menu__liste">
+    @for (lien of liens; track lien.path) {
+      <li>
+        <a [routerLink]="lien.path" class="test-menu__lien">
+          <span class="test-menu__lien-label">{{ lien.label }}</span>
+          <span class="test-menu__lien-path">{{ lien.path }}</span>
+        </a>
+      </li>
+    }
+  </ul>
+
+</main>

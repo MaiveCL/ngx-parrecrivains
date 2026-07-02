@@ -1,0 +1,82 @@
+<!-- FICHIER TEMPORAIRE — SUPPRIMER AVANT PUBLICATION -->
+
+<div class="test-banniere">
+  <strong>⚠ PAGE DE TEST</strong> — <code>ngx-liseuse-manuscrit</code> · À supprimer avant publication
+</div>
+
+<section class="test-controles">
+
+  <div class="test-boutons">
+    @for (cas of casList; track cas.id) {
+      <button
+        class="test-btn"
+        [class.actif]="casCourant() === cas.id"
+        (click)="selectionner(cas.id)"
+        [title]="cas.description"
+      >
+        <span class="test-btn__num">{{ cas.id + 1 }}</span>{{ cas.label }}
+      </button>
+    }
+  </div>
+
+  @if (casCourant() === 3) {
+    <div class="test-champ">
+      <label for="pdf-input">Fichier PDF :</label>
+      <input
+        id="pdf-input"
+        type="file"
+        accept=".pdf,application/pdf"
+        (change)="onPdfChoisi($event)"
+      />
+      @if (!fichierPdf()) {
+        <span class="test-hint">Sélectionnez un .pdf local pour tester ce cas.</span>
+      } @else {
+        <span class="test-hint test-hint--ok">{{ fichierPdf()!.name }}</span>
+      }
+    </div>
+  }
+
+  @if (casCourant() === 4) {
+    <div class="test-champ">
+      <label for="url-input">URL Google Docs (publique) :</label>
+      <input
+        id="url-input"
+        type="url"
+        placeholder="https://docs.google.com/document/d/…"
+        [value]="urlGoogleDocs()"
+        (input)="onUrlChange($event)"
+      />
+      @if (!urlGoogleDocs()) {
+        <span class="test-hint">Entrez une URL Google Docs publique (mode partage « Tout le monde peut lire »).</span>
+      }
+    </div>
+  }
+
+  <div class="test-statut">
+    <span class="test-statut__cas">{{ casCourantInfo().label }}</span>
+    <span class="test-statut__sep">·</span>
+    <span class="test-statut__desc">{{ casCourantInfo().description }}</span>
+    <span class="test-statut__sep">|</span>
+    <span class="test-statut__stat">Progression : {{ progression() }}%</span>
+    <span class="test-statut__sep">·</span>
+    <span class="test-statut__stat">Temps actif : {{ formaterTemps(tempsActif()) }}</span>
+  </div>
+
+</section>
+
+<section class="test-liseuse">
+  <!--
+    [style.height]="'100%'" : définit une hauteur explicite sur le host.
+    Sans ça, flex: 1 sur .zone-contenu s'effondre à 0 px (parent sans hauteur fixe)
+    et ngx-zone-lecture (height: 100%) devient invisible.
+  -->
+  <ngx-liseuse-manuscrit
+    [style.height]="'100%'"
+    [contenu]="contenuActif()"
+    [titre]="titreActif()"
+    [auteur]="auteurActif()"
+    [config]="configActif()"
+    (progressionLecture)="progression.set($event)"
+    (readingTime)="tempsActif.set($event)"
+  />
+</section>

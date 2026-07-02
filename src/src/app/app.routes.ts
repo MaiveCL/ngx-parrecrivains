@@ -30,5 +30,35 @@ export const routes: Routes = [
         (m) => m.TutoLiseuseComponent,
       ),
   },
+  // ── Pages de test (lib locale — ng serve uniquement) ──────────────────────
+  {
+    path: 'tests',
+    loadComponent: () =>
+      import('./tests/menu/TEST-menu').then((m) => m.TESTMenuComponent),
+  },
+  {
+    path: 'tests/isbn',
+    title: 'isbnValidator / validerIsbn',
+    loadComponent: () =>
+      import('./tests/isbn/TEST-isbn').then((m) => m.TESTIsbnComponent),
+  },
+  {
+    path: 'tests/liseuse',
+    title: 'LiseuseManuscritComponent',
+    loadComponent: () =>
+      import('./tests/liseuse/TEST-liseuse').then((m) => m.TESTLiseuseComponent),
+  },
+  {
+    path: 'tests/pipe-mots',
+    title: 'MotsPipe / WordsPipe',
+    loadComponent: () =>
+      import('./tests/pipe-mots/TEST-pipe-mots').then((m) => m.TESTpipeMotsComponent),
+  },
+  {
+    path: 'tests/temps-lecture',
+    title: 'TempsLectureService',
+    loadComponent: () =>
+      import('./tests/temps-lecture/TEST-temps-lecture').then((m) => m.TESTTempsLectureComponent),
+  },
   { path: '**', redirectTo: '' },
 ];
