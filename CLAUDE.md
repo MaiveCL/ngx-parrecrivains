@@ -27,10 +27,10 @@ La solution : deux tsconfig, deux usages.
 ### Mode test local (`ng serve`)
 - `tsconfig.json` contient le path alias : `"ngx-parrecrivains": ["./dist/ngx-parrecrivains"]`
 - TOUTES les pages (test + tutoriel) utilisent la lib locale buildée
-- Workflow : `ng build ngx-parrecrivains --watch` dans un terminal, `ng serve` dans un autre
+- Workflow : `npx ng build ngx-parrecrivains --watch` dans un terminal, `npx ng serve` dans un autre
 - Ngrok peut exposer ce serveur au public pour valider avant de publier
 
-### Mode démo déployée (`ng build --ts-config=tsconfig.demo.json`)
+### Mode démo déployée (`npx ng build --ts-config=tsconfig.demo.json`)
 - `tsconfig.demo.json` n'a pas de path alias → résolution depuis `node_modules` (npm publié)
 - TOUTES les pages utilisent la lib publiée
 - Résultat déployé sur GitHub Pages
@@ -59,7 +59,7 @@ ngx-parrecrivains/                ← racine du repo Git
             └── demos/            ← pages tutoriel (fonctionnent dans les 2 modes)
 ```
 
-> **Note :** Pour toute commande Angular (`ng`, `npm`), se placer dans `/home/maiveBOX/ngx-parrecrivains/src/`.
+> **Note :** Pour toute commande Angular, se placer dans `/home/maiveBOX/ngx-parrecrivains/src/`. `ng` n'est **pas** installé globalement — utiliser `npx ng` à la place de `ng`.
 
 ---
 
@@ -102,11 +102,23 @@ Toutes les données sont simulées côté frontend. Approches autorisées :
 ## Déploiement — GitHub Pages
 
 ```bash
-# Build production avec base-href pour GitHub Pages
-ng build --base-href /ngx-parrecrivains/
+# Build pour GitHub Pages (lib publiée via tsconfig.demo.json, pas de path alias)
+npx ng build --ts-config=tsconfig.demo.json
+# Puis commiter docs/ et pousser sur main
 ```
 
 Le résultat du build est placé dans `docs/` (configuré dans `angular.json` → `outputPath`).
+GitHub Pages sert ce dossier directement depuis la branche `main`.
+
+### Pourquoi `docs/` commitée plutôt que GitHub Actions
+
+Ce repo utilise le mode **fichiers statiques** (branch `main`, dossier `docs/`) plutôt que GitHub Actions. Raisons :
+
+- **Aucune limite** — GitHub Actions consomme des minutes CI (quota mensuel sur les comptes gratuits). Avec `docs/` commitée, un `git push` suffit, sans aucune limite de déploiements par jour.
+- **Zéro configuration** — pas de workflow `.github/workflows/`, pas de permissions à configurer, pas de `GITHUB_TOKEN` à gérer.
+- **Adapté au projet solo** — la complexité de GitHub Actions n'apporte rien ici.
+
+⚠️ Conséquence : `docs/` contient des fichiers générés dans git. C'est voulu et assumé.
 
 ---
 

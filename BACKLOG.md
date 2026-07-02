@@ -36,6 +36,19 @@ Conventions à appliquer (cf. `src/.claude/CLAUDE.md` après mise à jour) :
 
 ---
 
+## Pages de test — corrections post-transfert
+
+Copiées depuis `parrecrivains` dans `src/src/app/tests/`. Fonctionnent avec `ng serve` (path alias).
+À corriger avant que les pages de test soient considérées comme "propres" :
+
+- [ ] Supprimer les commentaires "FICHIER TEMPORAIRE — SUPPRIMER AVANT PUBLICATION" — ces pages sont permanentes dans ce repo
+- [ ] Supprimer les bannières rouges "⚠ PAGE DE TEST… À supprimer avant publication" dans les HTML — même raison
+- [ ] `TEST-temps-lecture.ts` : `new TempsLectureService()` bypass Angular DI — remplacer par `inject(TempsLectureService)` (vérifier d'abord si le service a `providedIn: 'root'`)
+- [ ] Ajouter les pages de test incomplètes manquantes (cas d'utilisation supplémentaires — voir BACKLOG parrecrivains)
+- [ ] Ajouter un lien vers les pages de test depuis la nav de l'app (visible seulement en mode dev ? ou toujours visible ?)
+
+---
+
 ## UX — Pied de page contact anti-spam
 
 Ajouter un pied de page invitant les visiteurs à contacter Maive pour des commentaires ou problèmes.
