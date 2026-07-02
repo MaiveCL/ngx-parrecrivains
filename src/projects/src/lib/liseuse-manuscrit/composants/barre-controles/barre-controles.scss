@@ -1,0 +1,255 @@
+:host {
+  display: block;
+}
+
+// ─── Barre principale ───────────────────────────────────────────────────────
+
+.barre {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.375rem;
+  border-block-end: 1px solid currentColor;
+  // z-index > panneau (101) pour rester au-dessus quand le panneau est ouvert
+  position: relative;
+  z-index: 102;
+}
+
+.barre__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  background: transparent;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  cursor: pointer;
+  color: inherit;
+  flex-shrink: 0;
+
+  &.actif {
+    background-color: var(--barre-btn-actif-fond, currentColor);
+    color: var(--barre-btn-actif-texte, Canvas);
+  }
+
+  &:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
+
+  svg {
+    display: block;
+  }
+}
+
+// ─── Backdrop ───────────────────────────────────────────────────────────────
+// position: absolute relatif au :host liseuse-manuscrit (position: relative)
+// → couvre exactement la surface de la liseuse, pas le viewport
+
+.panneau__backdrop {
+  position: absolute;
+  top: var(--liseuse-barre-h, calc(2.5rem + 1px));
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  // Pas de fond : on ne veut pas fausser la perception des filtres (luminosité, contraste…)
+  // pendant les ajustements. Le div reste présent pour capter le clic et fermer le panneau.
+}
+
+// ─── Panneau latéral ────────────────────────────────────────────────────────
+// position: absolute relatif au :host liseuse-manuscrit
+// → suit la taille de la liseuse (y compris en plein-écran)
+
+.panneau {
+  position: absolute;
+  top: var(--liseuse-barre-h, calc(2.5rem + 1px));
+  left: 0;
+  bottom: 0;
+  width: min(300px, 88%);
+  z-index: 101;
+  overflow-y: auto;
+  overflow-x: hidden;
+  // inherit : reprend le background-color calculé du :host liseuse-manuscrit,
+  // ce qui inclut le mode nuit sans avoir besoin de répliquer les variables.
+  background-color: inherit;
+  color: inherit;
+  border-inline-end: 1px solid currentColor;
+  box-shadow: 4px 0 20px rgb(0 0 0 / 20%);
+  padding: 0.75rem 0.75rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+// ─── Grille de cellules (onglet Contrôles) ───────────────────────────────────
+
+.controles__grille {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+
+// ─── Cellule (label ou button) ───────────────────────────────────────────────
+
+.cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.5rem 0.25rem 0.375rem;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  cursor: pointer;
+
+  &:focus-within {
+    border-color: currentColor;
+  }
+}
+
+// Cellule toggle : le <button> ENTIER est la cellule cliquable
+.cell--toggle {
+  background: transparent;
+  font: inherit;
+  color: inherit;
+
+  &.actif {
+    background-color: var(--barre-btn-actif-fond, currentColor);
+    color: var(--barre-btn-actif-texte, Canvas);
+    border-color: transparent;
+  }
+
+  &:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+    border-color: transparent;
+  }
+}
+
+// ─── Zone icône : hauteur fixe → toutes les cellules alignées ────────────────
+
+.cell__icone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 28px;
+  flex-shrink: 0;
+
+  svg {
+    display: block;
+  }
+}
+
+// aA : petit a + grand A côte à côte
+.cell__icone--aa {
+  gap: 0.5rem;
+}
+
+.aa-petit {
+  font-size: 0.8em;
+  line-height: 1;
+}
+
+.aa-grand {
+  font-size: 1.25em;
+  font-weight: 700;
+  line-height: 1;
+}
+
+// ─── Slider ─────────────────────────────────────────────────────────────────
+
+.cell__slider {
+  width: 100%;
+  min-width: 0;
+  cursor: pointer;
+  accent-color: currentColor;
+}
+
+// ─── Valeur numérique (CSS pur : visible uniquement au focus) ────────────────
+
+.cell__valeur {
+  font-size: 0.625rem;
+  font-variant-numeric: tabular-nums;
+  opacity: 0;
+  transition: opacity 0.15s;
+  pointer-events: none;
+  min-height: 1em;
+  line-height: 1;
+}
+
+.cell:focus-within .cell__valeur {
+  opacity: 1;
+}
+
+// ─── Select couleur (remplace l'icône dans la zone icône) ───────────────────
+
+.cell__select-couleur {
+  width: 100%;
+  height: 100%;
+  padding: 0.1rem 0.25rem;
+  background: transparent;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  color: inherit;
+}
+
+// ─── Navigation pagination (hors grille) ─────────────────────────────────────
+
+.controles__nav-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding-block: 0.375rem;
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+  border-block-start: 1px solid currentColor;
+}
+
+.nav__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  background: transparent;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  cursor: pointer;
+  color: inherit;
+  font-size: 1.1rem;
+
+  &:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+
+  &:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
+}
+
+// ─── Icônes CSS ─────────────────────────────────────────────────────────────
+
+.icone-luminosite {
+  display: block;
+  width: 40px;
+  height: 12px;
+  background: linear-gradient(to right, white, black);
+  border: 1px solid currentColor;
+  border-radius: 2px;
+}
+
+.icone-sepia {
+  display: block;
+  width: 22px;
+  height: 22px;
+  background: radial-gradient(circle, #d4a76a, #7a5230);
+  border-radius: 50%;
+}

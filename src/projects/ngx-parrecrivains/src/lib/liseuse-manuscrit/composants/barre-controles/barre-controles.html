@@ -1,0 +1,330 @@
+<!-- ═══ BARRE PRINCIPALE : toujours visible ════════════════════════════════ -->
+<div class="barre">
+
+  <button
+    class="barre__btn"
+    type="button"
+    data-testid="btn-parametres"
+    [class.actif]="panneauActif() === 'controles'"
+    [attr.aria-expanded]="panneauActif() === 'controles'"
+    [attr.aria-label]="t('liseuse.controles.parametres')"
+    (click)="basculerControles()"
+  >
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" aria-hidden="true">
+      <circle cx="12" cy="12" r="3"/>
+      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+    </svg>
+  </button>
+
+  <button
+    class="barre__btn"
+    type="button"
+    data-testid="btn-infos"
+    [class.actif]="panneauActif() === 'infos'"
+    [attr.aria-expanded]="panneauActif() === 'infos'"
+    [attr.aria-label]="t('liseuse.panneau.infos')"
+    (click)="basculerInfos()"
+  >
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" aria-hidden="true">
+      <circle cx="12" cy="12" r="10"/>
+      <line x1="12" y1="16" x2="12" y2="12"/>
+      <line x1="12" y1="8" x2="12.01" y2="8"/>
+    </svg>
+  </button>
+
+</div>
+
+<!-- ═══ PANNEAU LATÉRAL ════════════════════════════════════════════════════ -->
+
+@if (panneauActif()) {
+
+  <!-- Backdrop couvrant la liseuse (position: absolute relatif au :host liseuse) -->
+  <div class="panneau__backdrop" aria-hidden="true" (click)="fermerPanneau()"></div>
+
+  <div class="panneau" role="dialog" [attr.aria-label]="panneauActif() === 'controles' ? t('liseuse.controles.parametres') : t('liseuse.panneau.infos')">
+
+    <!-- ─── Onglet CONTRÔLES ──────────────────────────────────────────────── -->
+
+    @if (panneauActif() === 'controles') {
+
+      <div class="controles__grille">
+
+        <!-- Mode nuit : icône = bouton toggle entier -->
+        <button
+          class="cell cell--toggle"
+          type="button"
+          data-testid="toggle-mode-nuit"
+          [class.actif]="config().modeNuit"
+          [attr.aria-pressed]="config().modeNuit"
+          [attr.aria-label]="t('liseuse.controles.mode_nuit')"
+          (click)="toggleModeNuit()"
+        >
+          <span class="cell__icone">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22" aria-hidden="true">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+          </span>
+        </button>
+
+        <!-- Plein écran : icône = bouton toggle entier -->
+        <button
+          class="cell cell--toggle"
+          type="button"
+          data-testid="toggle-plein-ecran"
+          [class.actif]="config().pleinEcran"
+          [attr.aria-pressed]="config().pleinEcran"
+          [attr.aria-label]="config().pleinEcran ? t('liseuse.controles.quitter_plein_ecran') : t('liseuse.controles.plein_ecran')"
+          (click)="togglePleinEcran()"
+        >
+          <span class="cell__icone">
+            @if (config().pleinEcran) {
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22" aria-hidden="true">
+                <polyline points="4 14 10 14 10 20"/>
+                <polyline points="20 10 14 10 14 4"/>
+                <line x1="10" y1="14" x2="3" y2="21"/>
+                <line x1="21" y1="3" x2="14" y2="10"/>
+              </svg>
+            } @else {
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22" aria-hidden="true">
+                <polyline points="15 3 21 3 21 9"/>
+                <polyline points="9 21 3 21 3 15"/>
+                <line x1="21" y1="3" x2="14" y2="10"/>
+                <line x1="3" y1="21" x2="10" y2="14"/>
+              </svg>
+            }
+          </span>
+        </button>
+
+        @if (modeOptimise()) {
+
+          <!-- Pagination : icône = bouton toggle entier -->
+          <button
+            class="cell cell--toggle"
+            type="button"
+            [class.actif]="config().modePagination"
+            [attr.aria-pressed]="config().modePagination"
+            [attr.aria-label]="t('liseuse.controles.pagination')"
+            (click)="togglePagination()"
+          >
+            <span class="cell__icone">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22" aria-hidden="true">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+              </svg>
+            </span>
+          </button>
+
+          <!-- Taille de police : a / A -->
+          <label class="cell">
+            <span class="cell__icone cell__icone--aa" aria-hidden="true">
+              <span class="aa-petit">a</span>
+              <span class="aa-grand">A</span>
+            </span>
+            <input
+              class="cell__slider"
+              type="range"
+              min="16"
+              max="24"
+              step="1"
+              data-testid="slider-taille-police"
+              [value]="config().taillePolicePx"
+              [attr.aria-label]="t('liseuse.controles.taille_police')"
+              (input)="onTaillePolice($event)"
+            />
+            <span class="cell__valeur" aria-hidden="true">{{ config().taillePolicePx }}px</span>
+          </label>
+
+          <!-- Interligne -->
+          <label class="cell">
+            <span class="cell__icone">
+              <svg viewBox="0 0 16 22" fill="none" stroke="currentColor" stroke-width="2" width="16" height="22" aria-hidden="true">
+                <line x1="8" y1="3" x2="8" y2="19"/>
+                <polyline points="4,7 8,2 12,7"/>
+                <polyline points="4,15 8,20 12,15"/>
+              </svg>
+            </span>
+            <input
+              class="cell__slider"
+              type="range"
+              min="1.4"
+              max="1.8"
+              step="0.1"
+              [value]="config().interligne"
+              [attr.aria-label]="t('liseuse.controles.interligne')"
+              (input)="onInterligne($event)"
+            />
+            <span class="cell__valeur" aria-hidden="true">{{ config().interligne }}</span>
+          </label>
+
+          <!-- Largeur de colonne -->
+          <label class="cell">
+            <span class="cell__icone">
+              <svg viewBox="0 0 22 16" fill="none" stroke="currentColor" stroke-width="2" width="22" height="16" aria-hidden="true">
+                <line x1="3" y1="8" x2="19" y2="8"/>
+                <polyline points="7,4 2,8 7,12"/>
+                <polyline points="15,4 20,8 15,12"/>
+              </svg>
+            </span>
+            <input
+              class="cell__slider"
+              type="range"
+              min="45"
+              max="90"
+              step="1"
+              [value]="config().largeurColonneCh"
+              [attr.aria-label]="t('liseuse.controles.largeur_colonne')"
+              (input)="onLargeurColonne($event)"
+            />
+            <span class="cell__valeur" aria-hidden="true">{{ config().largeurColonneCh }}ch</span>
+          </label>
+
+          <!-- Zoom -->
+          <label class="cell">
+            <span class="cell__icone">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22" aria-hidden="true">
+                <circle cx="10" cy="10" r="7"/>
+                <line x1="21" y1="21" x2="15" y2="15"/>
+              </svg>
+            </span>
+            <input
+              class="cell__slider"
+              type="range"
+              min="0.5"
+              max="2.0"
+              step="0.1"
+              [value]="config().niveauZoom"
+              [attr.aria-label]="t('liseuse.controles.zoom')"
+              (input)="onZoom($event)"
+            />
+            <span class="cell__valeur" aria-hidden="true">{{ config().niveauZoom }}×</span>
+          </label>
+
+        }
+
+        <!-- Luminosité -->
+        <label class="cell">
+          <span class="cell__icone">
+            <span class="icone-luminosite" aria-hidden="true"></span>
+          </span>
+          <input
+            class="cell__slider"
+            type="range"
+            min="0"
+            max="200"
+            step="1"
+            data-testid="slider-brightness"
+            [value]="config().brightness"
+            [attr.aria-label]="t('liseuse.controles.luminosite')"
+            (input)="onBrightness($event)"
+          />
+          <span class="cell__valeur" aria-hidden="true">{{ config().brightness }}%</span>
+        </label>
+
+        <!-- Contraste -->
+        <label class="cell">
+          <span class="cell__icone">
+            <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+              <circle cx="12" cy="12" r="10" fill="white" stroke="currentColor" stroke-width="2"/>
+              <path d="M12 2a10 10 0 0 1 0 20z" fill="currentColor"/>
+            </svg>
+          </span>
+          <input
+            class="cell__slider"
+            type="range"
+            min="0"
+            max="200"
+            step="1"
+            [value]="config().contrast"
+            [attr.aria-label]="t('liseuse.controles.contraste')"
+            (input)="onContrast($event)"
+          />
+          <span class="cell__valeur" aria-hidden="true">{{ config().contrast }}%</span>
+        </label>
+
+        <!-- Sépia -->
+        <label class="cell">
+          <span class="cell__icone">
+            <span class="icone-sepia" aria-hidden="true"></span>
+          </span>
+          <input
+            class="cell__slider"
+            type="range"
+            min="0"
+            max="100"
+            step="1"
+            [value]="config().sepia"
+            [attr.aria-label]="t('liseuse.controles.sepia')"
+            (input)="onSepia($event)"
+          />
+          <span class="cell__valeur" aria-hidden="true">{{ config().sepia }}%</span>
+        </label>
+
+        <!-- Superposition : select couleur EN HAUT (remplace l'icône) + slider opacité EN DESSOUS -->
+        <label class="cell">
+          <span class="cell__icone">
+            <select
+              class="cell__select-couleur"
+              [value]="config().superpositionCouleur"
+              [attr.aria-label]="t('liseuse.controles.couleur_superposition')"
+              (change)="onSuperpositionCouleur($event)"
+            >
+              <option value="noir">{{ t('liseuse.controles.noir') }}</option>
+              <option value="blanc">{{ t('liseuse.controles.blanc') }}</option>
+            </select>
+          </span>
+          <input
+            class="cell__slider"
+            type="range"
+            min="0"
+            max="1"
+            step="0.05"
+            [value]="config().superpositionOpacite"
+            [attr.aria-label]="t('liseuse.controles.superposition')"
+            (input)="onSuperpositionOpacite($event)"
+          />
+          <span class="cell__valeur" aria-hidden="true">{{ config().superpositionOpacite }}</span>
+        </label>
+
+      </div>
+
+      <!-- Navigation pagination (hors grille, si active) -->
+      @if (modeOptimise() && config().modePagination) {
+        <nav class="controles__nav-pagination" [attr.aria-label]="t('liseuse.controles.pagination')">
+          <button
+            class="nav__btn"
+            type="button"
+            data-testid="btn-precedent"
+            [disabled]="pageActuelle() === 1"
+            [attr.aria-label]="t('liseuse.controles.precedent')"
+            (click)="paginePrecedente()"
+          >‹</button>
+          <span aria-live="polite">{{ pageActuelle() }}&thinsp;/&thinsp;{{ totalPages() }}</span>
+          <button
+            class="nav__btn"
+            type="button"
+            data-testid="btn-suivant"
+            [disabled]="pageActuelle() === totalPages()"
+            [attr.aria-label]="t('liseuse.controles.suivant')"
+            (click)="pagineSuivante()"
+          >›</button>
+        </nav>
+      }
+
+    }
+
+    <!-- ─── Onglet INFOS ───────────────────────────────────────────────────── -->
+
+    @if (panneauActif() === 'infos') {
+      <ngx-panneau-info
+        [titre]="titre()"
+        [auteur]="auteur()"
+        [totalMots]="totalMots()"
+        [progressionPourcent]="progressionPourcent()"
+        [tempsLectureActif]="tempsLectureActif()"
+        [langue]="langue()"
+        [estimatedReadingTime]="estimatedReadingTime()"
+      />
+    }
+
+  </div>
+}

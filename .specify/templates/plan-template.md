@@ -10,37 +10,38 @@
 
 [Extract from feature spec: primary requirement + technical approach from research]
 
-## Technical Context
+## Contexte technique
 
-<!--
-  ACTION REQUIRED: Replace the content in this section with the technical details
-  for the project. The structure here is presented in advisory capacity to guide
-  the iteration process.
--->
+**Langage/Version** : TypeScript 5.x, Angular 21+ (workspace `src/frontend`)
 
-**Language/Version**: [e.g., Python 3.11, Swift 5.9, Rust 1.75 or NEEDS CLARIFICATION]
+**Dépendances** : Angular 21 (`peerDependency`), `@ngx-translate/core ^17` (`peerDependency`), `tslib ^2.3.0` (seule dépendance directe) — aucune autre dep directe sans justification explicite
 
-**Primary Dependencies**: [e.g., FastAPI, UIKit, LLVM or NEEDS CLARIFICATION]
+**Stockage** : N/A — la lib ne persiste rien. État géré par Signals Angular, émis vers l'app hôte via outputs si nécessaire.
 
-**Storage**: [if applicable, e.g., PostgreSQL, CoreData, files or N/A]
+**Tests** : Vitest (JAMAIS Karma — retiré Angular v21)
 
-**Testing**: [e.g., pytest, XCTest, cargo test or NEEDS CLARIFICATION]
+**Plateforme cible** : Navigateur web (Chrome 120+, Firefox 121+, Safari 17+) — 320px / 768px / 1024px / 1920px
 
-**Target Platform**: [e.g., Linux server, iOS 15+, WASM or NEEDS CLARIFICATION]
+**Type de projet** : Bibliothèque Angular publiable sur npm (`ngx-parrecrivains`)
 
-**Project Type**: [e.g., library/cli/web-service/mobile-app/compiler/desktop-app or NEEDS CLARIFICATION]
+**Objectifs de performance** : [décrire les contraintes spécifiques à cet élément, ou N/A]
 
-**Performance Goals**: [domain-specific, e.g., 1000 req/s, 10k lines/sec, 60 fps or NEEDS CLARIFICATION]
+**Contraintes** : Standalone, `ChangeDetectionStrategy.OnPush`, `inject()`, signals — voir tableau Conventions Angular 21 dans la constitution
 
-**Constraints**: [domain-specific, e.g., <200ms p95, <100MB memory, offline-capable or NEEDS CLARIFICATION]
-
-**Scale/Scope**: [domain-specific, e.g., 10k users, 1M LOC, 50 screens or NEEDS CLARIFICATION]
+**Périmètre** : [décrire : X composant(s) + Y service(s) + Z type(s) exportés, ou pipe seul, etc.]
 
 ## Constitution Check
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+| Principe | Question | Statut |
+|---|---|---|
+| I. Réutilisabilité | L'élément fonctionne-t-il indépendamment dans un projet Angular vierge ? | ☐ |
+| II. i18n | Toutes les chaînes visibles sont-elles dans `public/i18n/*.json` ? | ☐ |
+| III. Tree-shaking | L'export est-il isolé dans `public-api.ts` ? Standalone component ? | ☐ |
+| IV. Versionnage | La version dans `package.json` est-elle correcte (0.x.x) ? CHANGELOG à jour ? | ☐ |
+| V. Qualité de la spec | La spec est-elle révisée et validée avant d'ouvrir ce plan ? | ☐ |
+| Contraintes | Aucune dépendance externe ajoutée ? Responsive testé sur 4 formats ? | ☐ |
 
 ## Project Structure
 
@@ -56,52 +57,35 @@ specs/[###-feature]/
 └── tasks.md             # Phase 2 output (/speckit-tasks command - NOT created by /speckit-plan)
 ```
 
-### Source Code (repository root)
+### Code source (bibliothèque)
+
 <!--
-  ACTION REQUIRED: Replace the placeholder tree below with the concrete layout
-  for this feature. Delete unused options and expand the chosen structure with
-  real paths (e.g., apps/admin, packages/something). The delivered plan must
-  not include Option labels.
+  ACTION REQUIRED: Remplacer les placeholders par les chemins réels de cet élément.
+  Supprimer les lignes qui ne s'appliquent pas (ex. : un pipe n'a pas de .html ni de sous-composants).
 -->
 
 ```text
-# [REMOVE IF UNUSED] Option 1: Single project (DEFAULT)
-src/
-├── models/
-├── services/
-├── cli/
+src/frontend/projects/ngx-parrecrivains/src/
+├── public-api.ts                              ← export * de l'élément + ses types
 └── lib/
+    └── [nom-element]/
+        ├── [nom-element].ts                   ← composant / pipe / service / validator
+        ├── [nom-element].html                 ← (composants uniquement)
+        ├── [nom-element].scss                 ← (composants visuels uniquement)
+        ├── [nom-element].spec.ts              ← (si tests demandés)
+        ├── types/
+        │   └── [nom-element].types.ts         ← interfaces, types, constantes exportés
+        ├── composants/                        ← (sous-composants internes, si nécessaire)
+        │   └── [sous-composant]/
+        └── services/                          ← (services internes, si nécessaire)
+            └── [service].ts
 
-tests/
-├── contract/
-├── integration/
-└── unit/
-
-# [REMOVE IF UNUSED] Option 2: Web application (when "frontend" + "backend" detected)
-backend/
-├── src/
-│   ├── models/
-│   ├── services/
-│   └── api/
-└── tests/
-
-frontend/
-├── src/
-│   ├── components/
-│   ├── pages/
-│   └── services/
-└── tests/
-
-# [REMOVE IF UNUSED] Option 3: Mobile + API (when "iOS/Android" detected)
-api/
-└── [same as backend above]
-
-ios/ or android/
-└── [platform-specific structure: feature modules, UI flows, platform tests]
+src/frontend/projects/ngx-parrecrivains/public/
+└── i18n/
+    ├── fr.json                                ← clés i18n de cet élément (si texte visible)
+    ├── en.json
+    └── cr.json
 ```
-
-**Structure Decision**: [Document the selected structure and reference the real
-directories captured above]
 
 ## Complexity Tracking
 

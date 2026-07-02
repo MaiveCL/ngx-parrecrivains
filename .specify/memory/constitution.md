@@ -1,159 +1,224 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 1.0.0 → 1.1.0
+Version change: 1.1.0 → 2.0.0
 
-Principes modifiés :
-  Aucun principe existant modifié.
+Restructuration majeure :
+  Fusion de la constitution du site de démo (ngx-parrecrivains v1.1.0)
+  et de la constitution de la lib (parrecrivains v1.5.0).
+  Constitution restructurée en 3 parties : Globale / Lib / Tutoriel.
+  La lib source a été migrée dans ce repo depuis parrecrivains (branche transfertLib).
 
-Principes ajoutés :
-  VI. Documentation Multilingue — nouveau
-
-Sections modifiées :
-  - Contraintes Techniques : ajout ligne i18n
-
-Templates vérifiés :
-  ✅ plan-template.md — compatible sans modification
-  ✅ spec-template.md — compatible sans modification
-  ✅ tasks-template.md — compatible sans modification
-  ⚠ Aucun répertoire commands/ présent — aucune vérification nécessaire
-
-Placeholders intentionnellement reportés :
-  Aucun — tous les champs sont renseignés.
+Amendment: 2026-07-02
 -->
 
-# ngx-parrecrivains — Constitution du site de démo
+# ngx-parrecrivains — Constitution du projet
 
-## Principes fondamentaux
+---
 
-### I. Démo Vivante
+## Partie I — Principes globaux
 
-Chaque composant ou fonctionnalité de la librairie `ngx-parrecrivains` DOIT avoir une page de
-démonstration interactive dans ce site. Une page de démo DOIT comporter exactement ces cinq
-éléments :
+Ces principes s'appliquent à TOUT le contenu de ce repo : lib source ET app tutoriel/test.
 
-1. **Live demo** — composant interactif directement utilisable dans la page
+### G-I. Langue du code
+
+Tout ce qui est créé dans ce repo utilise le **français** : noms de composants, variables,
+méthodes, classes, interfaces, types, fichiers, commentaires.
+Ce qui vient de l'extérieur (APIs Angular, npm) reste en anglais tel quel.
+
+### G-II. Sécurité — non-négociable
+
+La sécurité des utilisateurs ne peut JAMAIS être sacrifiée pour la commodité ou la performance.
+La lib étant utilisée par des projets tiers, on ne peut pas se fier au backend des utilisateurs.
+
+- **Aucun bypass sans approbation explicite de Maive** : `bypassSecurityTrustHtml()`,
+  `bypassSecurityTrustResourceUrl()`, `bypassSecurityTrustScript()`, `bypassSecurityTrustStyle()`,
+  `dangerouslySetInnerHTML`, `eval()` et équivalents sont INTERDITS sauf validation explicite.
+- **Le LLM ne prend pas de décision de sécurité de façon autonome** : s'arrêter, expliquer,
+  attendre une décision de Maive avant de continuer.
+- **Sanitisation par défaut** : utiliser les mécanismes de sécurité du framework.
+
+*Origine : incident bypassSecurityTrustHtml() dans ZoneLectureComponent, 2026-06-01.*
+
+### G-III. Flux SpecKit — ordre obligatoire
+
+```
+/speckit-constitution   → une seule fois, ou à chaque amendement majeur
+/speckit-specify        → specs/NNN-feature/spec.md
+/speckit-clarify        → résolution des ambiguïtés avant planification
+/speckit-checklist      → validation de la qualité de la spec
+/speckit-plan           → specs/NNN-feature/plan.md
+/speckit-tasks          → specs/NNN-feature/tasks.md
+/speckit-analyze        → vérification de cohérence globale avant implémentation
+/speckit-implement      → code source
+```
+
+La correction manuelle des specs générées par le LLM est OBLIGATOIRE avant de passer à
+l'étape suivante (hallucinations, biais, date limite de connaissance août 2025).
+
+### G-IV. Gouvernance
+
+- Cette constitution PRIME sur toutes les autres pratiques et conventions du projet.
+- Tout amendement DOIT incrémenter la version selon semver.
+- MAJOR : suppression ou redéfinition incompatible d'un principe existant.
+- MINOR : ajout d'un principe ou d'une section.
+- PATCH : clarification, reformulation, correction typographique.
+- Les templates (plan, spec, tasks) DOIVENT être mis à jour si un principe change.
+- La constitution DOIT être commitée séparément du code source.
+- **Maive est la seule décideuse finale** — le LLM propose, Maive décide.
+
+---
+
+## Partie II — Lib ngx-parrecrivains
+
+Ces principes s'appliquent à la lib source (`src/projects/ngx-parrecrivains/`).
+
+### L-I. Réutilisabilité
+
+Chaque élément (composant, pipe, service, validator) DOIT fonctionner indépendamment
+dans tout projet Angular, sans couplage à `parrecrivains` ni à aucun autre élément de la lib.
+
+- Aucune dépendance croisée entre éléments de la lib
+- API publique stable et documentée avant implémentation
+- Testable de manière isolée depuis un projet Angular vierge
+
+**Rationale** : `ngx-parrecrivains` est publiée sur npm pour toute l'industrie littéraire.
+`parrecrivains` est le client principal mais pas le seul. Un couplage interne rendrait la lib
+inutilisable pour des tiers.
+
+### L-II. i18n obligatoire
+
+Tout texte visible par l'utilisateur DOIT être externalisé dans les fichiers de traduction.
+Aucune chaîne de caractères hardcodée dans les composants.
+
+- Langues supportées : français (défaut), anglais, cri (`cr`) — dans cet ordre de priorité
+- Fichiers : `public/i18n/fr.json`, `public/i18n/en.json`, `public/i18n/cr.json`
+- Librairie : `@ngx-translate/core` + `@ngx-translate/http-loader`
+- Le composant DOIT fonctionner sans configuration i18n (fallback français intégré)
+
+### L-III. Tree-shaking
+
+Chaque élément DOIT être exporté séparément dans `public-api.ts`.
+Aucun module barrel qui force le chargement de toute la lib.
+
+- Composants Angular Standalone UNIQUEMENT (jamais NgModule)
+- `sideEffects: false` dans `package.json`
+- `public-api.ts` : `export *` exclusivement — JAMAIS exports nommés explicites
+- Un import d'un pipe ne DOIT PAS forcer le chargement d'un composant, et vice versa
+
+### L-IV. Versionnage sémantique
+
+- `0.x.x` — développement initial, API instable
+- `1.0.0` — uniquement quand l'API est stable et utilisée en production
+- Toute rupture d'API = incrément MAJEUR
+- `CHANGELOG.md` obligatoire à chaque publication
+
+### L-V. Qualité de la spec
+
+Chaque élément DOIT avoir sa propre spec SpecKit complète et révisée AVANT implémentation.
+Tout écart entre spec et implémentation DOIT déclencher une mise à jour des specs.
+
+### L-VI. Contraintes techniques
+
+| Contrainte | Valeur |
+|---|---|
+| Angular | 21+, Standalone uniquement, `ChangeDetectionStrategy.OnPush` |
+| TypeScript | Mode strict, aucun `any`, inférence de type préférée |
+| Dépendances directes | `tslib` uniquement — Angular et `@ngx-translate/core` sont `peerDependency` |
+| Formats d'écran | 320px+ / 768px+ / 1024px+ / 1920px+ (éléments visuels seulement) |
+| Accessibilité | WCAG AA minimum sur tous les composants visuels |
+| Licence | MIT — fichier `LICENSE` inclus dans `dist/` via `ng-package.json` |
+| Publication | Non-scopé (`ngx-parrecrivains`), accès public, registre npm officiel |
+
+### L-VII. Conventions Angular 21 — non-négociables
+
+| Sujet | À FAIRE | INTERDIT |
+|---|---|---|
+| Injection | `inject()` dans le corps de la classe | Injection par paramètre constructeur |
+| Inputs/Outputs | `input()`, `output()`, `model()`, `input.required()` | `@Input()`, `@Output()` décorateurs |
+| Queries DOM | `viewChild()`, `viewChildren()`, `contentChild()`, `contentChildren()` | `@ViewChild`, `@ViewChildren`, `@ContentChild`, `@ContentChildren` |
+| Lifecycle DOM — une fois | `afterNextRender()` dans le constructeur | `implements AfterViewInit` + `ngAfterViewInit()` |
+| Lifecycle DOM — chaque rendu | `afterEveryRender()` dans le constructeur | `implements AfterViewChecked` + `ngAfterViewChecked()` |
+| Cleanup abonnements | `DestroyRef` + `takeUntilDestroyed()` | `ngOnDestroy()` pour désabonnements RxJS |
+| Host events | `host: { '(event)': 'handler($event)' }` dans `@Component` | `@HostListener`, `@HostBinding` |
+| Templates | `@if`, `@for`, `@switch` | `*ngIf`, `*ngFor`, `*ngSwitch` |
+| Liaisons CSS/Style | Binding `[class]` / `[style]` | `ngClass`, `ngStyle` |
+| Fichiers | `.ts` + `.html` + `.scss` séparés | Template ou styles inline dans `@Component` |
+| Réactivité | `signal()`, `computed()`, `effect()`, `linkedSignal()` | Dupliquer l'état ; `mutate()` |
+| Zoneless | Aucun import `zone.js`, aucun `NgZone` | `NgZone`, `ApplicationRef.tick()`, `zone.js` |
+| Standalone | Ne PAS écrire `standalone: true` (défaut v20+) | `NgModule`, `HttpClientModule` |
+| Nommage | Français pour tout ce qu'on crée | Anglais pour les APIs externes |
+| Gestures mobiles | CSS `touch-action` | `preventDefault()` sur touch/wheel |
+| Blob URLs | `effect()` avec variable dédiée par type de blob | `computed()` pour créer des Blob URLs |
+| Services injectés | `private readonly` | Public ou sans `readonly` sauf besoin template |
+
+> **Imports** : vérifier systématiquement les imports inutilisés après génération de code.
+
+Ces conventions s'appliquent AUSSI à l'app tutoriel (Partie III) — le code exemple doit
+être irréprochable puisque les visiteurs s'en inspirent.
+
+---
+
+## Partie III — App tutoriel/test
+
+Ces principes s'appliquent à l'app Angular (`src/src/`) qui sert à la fois de test local
+et de site tutoriel/démo.
+
+### T-I. Deux modes de build — même app
+
+Il est impossible dans un seul build Angular d'avoir certaines pages qui utilisent la lib
+locale et d'autres qui utilisent la lib npm. Toutes les pages utilisent la même résolution.
+
+| Mode | Commande | Résolution | Usage |
+|---|---|---|---|
+| Test local | `ng serve` | Path alias → `dist/ngx-parrecrivains/` | Valider avant publication |
+| Démo déployée | `ng build --ts-config=tsconfig.demo.json` | npm publié | GitHub Pages |
+
+⚠️ Ne jamais déployer sur GitHub Pages avec le `tsconfig.json` par défaut (path alias actif).
+
+### T-II. Démo vivante
+
+Chaque composant ou fonctionnalité de la lib DOIT avoir une page de démo comportant :
+
+1. **Live demo** — composant interactif directement utilisable
 2. **Snippet minimal** — code copy-paste fonctionnel, prêt à l'emploi
 3. **Cas d'erreur volontaire** — illustration des messages de validation
-4. **Données mockées** — utilisation de fichiers `assets/mock/` ou services in-memory
+4. **Données mockées** — fichiers `assets/mock/` ou services in-memory
 5. **Explication textuelle** — intégrée dans la page, jamais dans un fichier séparé
 
-**Rationale** : L'objectif principal est qu'un·e développeur·e externe puisse voir, copier, et
-exécuter immédiatement un exemple après `npm install ngx-parrecrivains`. Une démo incomplète
-est aussi nuisible qu'une absence de démo.
+### T-III. Frontend pur
 
-### II. Frontend Pur
+Ce repo DOIT rester une SPA Angular statique. Aucun backend réel n'est autorisé.
 
-Ce repo DOIT rester une SPA Angular statique. Aucun backend réel n'est autorisé. Le déploiement
-DOIT se faire via GitHub Pages avec le build :
-`ng build --base-href /ngx-parrecrivains/` — output vers `docs/`.
+**Interdits absolus** : backend réel, SSR, SSG, base de données persistante.
 
-**Interdits absolus** :
-- Backend réel (serveur, API, base de données persistante)
-- SSR (Server-Side Rendering)
-- SSG (Static Site Generation)
+### T-IV. Exemples copy-paste
 
-**Rationale** : Un site statique sur GitHub Pages est sans coût d'hébergement, toujours
-disponible, et ne crée aucune dépendance d'infrastructure pour un projet pédagogique.
+Tout snippet publié DOIT être reproductible immédiatement dans un projet Angular vierge
+après `npm install ngx-parrecrivains`. Aucune dépendance sur des fichiers internes au repo.
 
-### III. Exemples Copy-Paste
+### T-V. Simulation de données
 
-Tout snippet de code publié dans ce site DOIT être reproductible immédiatement dans un projet
-Angular vierge après installation de `ngx-parrecrivains`. Les snippets NE DOIVENT PAS dépendre
-de fichiers internes à ce repo ou d'imports non documentés.
-
-**Rationale** : L'utilisateur final arrive sur ce site pour copier du code. Un exemple qui ne
-fonctionne pas hors contexte est un échec de la démo.
-
-### IV. Simulation de Données
-
-Toutes les données utilisées dans les démos DOIVENT être simulées côté frontend via :
+Toutes les données DOIVENT être simulées côté frontend :
 - Fichiers JSON dans `src/src/assets/mock/`
 - Services Angular (`providedIn: 'root'`)
 - `HttpInterceptor` Angular simulant des réponses HTTP
 
-Aucune donnée réelle ou persistante n'est autorisée.
-
-**Rationale** : Garantit que le site fonctionne sans réseau, sans serveur, et sans configuration
-préalable — indispensable pour un usage en classe.
-
-### V. Usage Pédagogique
+### T-VI. Usage pédagogique — branches git
 
 Deux branches coexistent et NE DOIVENT JAMAIS être mergées l'une dans l'autre :
 
-- **`main`** : démo complète, librairie installée, tous les composants fonctionnels
-- **`tuto-depart`** : scaffold pédagogique pour classe — instructions d'installation,
-  placeholders, librairie PAS encore installée
+- **`main`** : démo complète, lib installée, tous les composants fonctionnels
+- **`tuto-depart`** : scaffold pédagogique — instructions d'installation, placeholders,
+  lib PAS encore installée
 
-`tuto-depart` DOIT rester en arrière de `main`. Elle représente le point de départ d'un
-exercice guidé, pas un état de développement intermédiaire.
+`tuto-depart` DOIT rester en arrière de `main`.
 
-**Rationale** : Les deux branches servent des audiences distinctes. Les fusionner détruirait la
-valeur pédagogique du scaffold.
+### T-VII. Documentation multilingue
 
-### VI. Documentation Multilingue
+Le site DOIT proposer un sélecteur de langue. Français par défaut, anglais obligatoire en v1,
+langues autochtones par contribution externe. Textes externalisés dans `assets/i18n/`.
 
-Le site de démo DOIT proposer un sélecteur de langue. Le français est la langue par défaut et
-la langue de création. L'anglais DOIT être supporté dès la v1. Les langues autochtones PEUVENT
-être ajoutées par contribution externe au projet.
+---
 
-Les textes de l'interface et de la documentation DOIVENT être externalisés dans des fichiers de
-traduction (ex. `assets/i18n/fr.json`, `assets/i18n/en.json`) — jamais codés en dur dans les
-templates. Le code lui-même (noms de variables, commentaires) reste en français conformément
-au Principe de langue du projet.
-
-**Rationale** : La librairie `ngx-parrecrivains` vise une accessibilité universelle, notamment
-pour les communautés littéraires autochtones. La documentation unilingue contredit cet objectif.
-Un sélecteur de langue sans backend est réalisable avec `@ngx-translate/core` ou l'i18n natif
-Angular chargé depuis `assets/`.
-
-## Contraintes Techniques
-
-| Contrainte | Valeur |
-|---|---|
-| Framework | Angular **21.2.x** — standalone components (pas de NgModules) |
-| Déploiement | GitHub Pages — build statique |
-| Base href | `/ngx-parrecrivains/` (requis au build) |
-| Output build | `docs/` (configuré dans `angular.json`) |
-| Backend | Aucun autorisé |
-| Langue du code produit | Français pour tout ce qui est créé dans ce repo |
-| Langue de l'interface | Multilingue — fr (défaut) + en minimum, via fichiers `assets/i18n/` |
-| Simulation données | JSON `assets/mock/`, `HttpInterceptor`, services in-memory |
-| Librairie couverte | `ngx-parrecrivains` v0.1–v0.4 |
-
-**Composants à couvrir (v0.1 à v0.4) :**
-- `LiseuseManuscritComponent` — liseuse de manuscrits avec PDF/Google Docs
-- `MotsPipe` / `WordsPipe` — décompte de mots fr/en/cr
-- `TempsLectureService` — estimation du temps de lecture
-- `isbnValidator` / `validerIsbn` — validateur ISBN-10/13
-
-## Structure des Branches Git
-
-```
-main          → démo complète, lib installée, composants fonctionnels
-tuto-depart   → scaffold pédagogique : Angular vide + instructions d'installation
-```
-
-Ces deux branches partagent le même commit de base initial et divergent intentionnellement.
-Aucune fusion entre elles n'est autorisée.
-
-## Gouvernance
-
-Cette constitution PRIME sur toutes les autres pratiques et conventions du projet. Toute
-décision de développement doit être vérifiée contre ces principes avant d'être mise en œuvre.
-
-**Procédure d'amendement :**
-1. Identifier le principe ou la contrainte à modifier avec justification
-2. Incrémenter la version selon les règles sémantiques ci-dessous
-3. Mettre à jour la date `Last Amended`
-4. Propager les changements aux templates dépendants si nécessaire
-
-**Politique de versionnement sémantique :**
-- MAJOR : suppression ou redéfinition incompatible d'un principe existant
-- MINOR : ajout d'un nouveau principe ou section avec contenu substantiel
-- PATCH : clarification, reformulation, correction typographique
-
-**Révision de conformité :** chaque nouvelle page de démo doit être vérifiée contre le
-Principe I (cinq éléments obligatoires) avant d'être considérée comme complète.
-
-**Version**: 1.1.0 | **Ratifiée**: 2026-06-03 | **Last Amended**: 2026-06-03
+**Version** : 2.0.0 | **Ratifiée** : 2026-07-02 | **Last Amended** : 2026-07-02

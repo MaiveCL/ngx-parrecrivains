@@ -6,6 +6,32 @@
   },
   "newProjectRoot": "projects",
   "projects": {
+    "ngx-parrecrivains": {
+      "projectType": "library",
+      "root": "projects/ngx-parrecrivains",
+      "sourceRoot": "projects/ngx-parrecrivains/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/ngx-parrecrivains/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/ngx-parrecrivains/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "tsConfig": "projects/ngx-parrecrivains/tsconfig.spec.json"
+          }
+        }
+      }
+    },
     "src": {
       "projectType": "application",
       "schematics": {

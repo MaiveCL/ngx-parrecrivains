@@ -1,0 +1,40 @@
+{
+  "liseuse": {
+    "panneau": {
+      "titre": "Informations",
+      "fermer": "Fermer le panneau",
+      "infos": "Informations"
+    },
+    "controles": {
+      "parametres": "Paramètres de lecture",
+      "mode_nuit": "Mode nuit",
+      "taille_police": "Taille de police",
+      "interligne": "Interligne",
+      "largeur_colonne": "Largeur de colonne",
+      "luminosite": "Luminosité",
+      "contraste": "Contraste",
+      "sepia": "Sépia",
+      "superposition": "Superposition",
+      "couleur_superposition": "Couleur de superposition",
+      "noir": "Noir",
+      "blanc": "Blanc",
+      "zoom": "Zoom",
+      "plein_ecran": "Plein écran",
+      "quitter_plein_ecran": "Quitter le plein écran",
+      "pagination": "Pagination",
+      "precedent": "Page précédente",
+      "suivant": "Page suivante"
+    },
+    "info": {
+      "mots": "mots",
+      "temps_estime": "Temps de lecture estimé",
+      "temps_actif": "Temps de lecture actif",
+      "progression": "Progression"
+    },
+    "erreur": {
+      "format_non_supporte": "Format non supporté",
+      "contenu_vide": "Aucun manuscrit",
+      "acces_prive": "Document privé ou inaccessible"
+    }
+  }
+}

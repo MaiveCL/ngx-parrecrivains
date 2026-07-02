@@ -78,6 +78,37 @@
 - What happens when [boundary condition]?
 - How does system handle [error scenario]?
 
+## API Publique *(pour un élément de bibliothèque)*
+
+<!--
+  OPTIONNEL — Remplir uniquement pour un composant, pipe, service ou validator publié dans la lib.
+  Pour un élément purement interne, supprimer cette section.
+-->
+
+### Sélecteur / nom d'export
+
+```
+[sélecteur CSS ou nom de la fonction/classe]
+```
+
+### Inputs
+
+| Input | Type | Requis | Défaut | Description |
+|---|---|---|---|---|
+| `[nom]` | `[type]` | ✅ / — | `[valeur]` | [description] |
+
+### Outputs
+
+| Output | Type | Description |
+|---|---|---|
+| `[nom]` | `[type]` | [description] |
+
+### Types / interfaces exportés
+
+- `[NomType]` — [description courte]
+
+---
+
 ## Requirements *(mandatory)*
 
 <!--

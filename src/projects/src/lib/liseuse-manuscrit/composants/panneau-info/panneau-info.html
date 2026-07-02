@@ -1,0 +1,39 @@
+@if (titre()) {
+  <div class="info-ligne" data-testid="titre">
+    <span class="info-valeur">{{ titre() }}</span>
+  </div>
+}
+
+@if (auteur()) {
+  <div class="info-ligne" data-testid="auteur">
+    <span class="info-valeur">{{ auteur() }}</span>
+  </div>
+}
+
+<div class="info-ligne" data-testid="mots">
+  <span class="info-valeur">{{ totalMots() }} {{ t('liseuse.info.mots') }}</span>
+</div>
+
+@if (progressionPourcent() > 0) {
+  <div class="info-ligne" data-testid="progression">
+    <span class="info-label">{{ t('liseuse.info.progression') }}</span>
+    <div class="barre-progression" role="progressbar" [attr.aria-valuenow]="progressionPourcent()" aria-valuemin="0" aria-valuemax="100">
+      <div class="barre-remplie" [style.width.%]="progressionPourcent()"></div>
+    </div>
+    <span class="info-valeur">{{ progressionPourcent() }}%</span>
+  </div>
+}
+
+@if (estimatedReadingTime() !== undefined) {
+  <div class="info-ligne" data-testid="temps-estime">
+    <span class="info-label">{{ t('liseuse.info.temps_estime') }}</span>
+    <span class="info-valeur">{{ estimatedReadingTime() }}</span>
+  </div>
+}
+
+@if (tempsLectureActif() > 0) {
+  <div class="info-ligne" data-testid="temps-actif">
+    <span class="info-label">{{ t('liseuse.info.temps_actif') }}</span>
+    <span class="info-valeur">{{ tempsFormate() }}</span>
+  </div>
+}

@@ -1,0 +1,29 @@
+@if (estOptimise()) {
+  <div
+    class="zone-optimisee"
+    [style]="styleZone()"
+  >
+    @if (estTexteBreut()) {
+      <div class="texte-brut">{{ contenuTexte() }}</div>
+    } @else {
+      <div [innerHTML]="contenuHtml()"></div>
+    }
+  </div>
+} @else {
+  @if (estPdf()) {
+    <embed
+      [src]="urlPdf()"
+      type="application/pdf"
+      class="vue-native"
+    />
+  } @else {
+    <iframe
+      [src]="urlSafe()"
+      class="vue-native"
+      [style.zoom]="config().niveauZoom"
+      sandbox="allow-scripts allow-forms allow-popups"
+      (error)="onErreurIframe()"
+    ></iframe>
+  }
+}
+<!-- Quand allow-same-origin et allow-scripts sont utilisés ensemble, c'est fortement déconseillé car ça permet au document embarqué de retirer l'attribut sandbox lui-même — ce qui le rend aussi peu sécurisé que sans sandbox du tout.  -->

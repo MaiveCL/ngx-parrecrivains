@@ -1,0 +1,40 @@
+{
+  "liseuse": {
+    "panneau": {
+      "titre": "Tipahikewin",
+      "fermer": "Kiskapihtaw",
+      "infos": "Tipahikewin"
+    },
+    "controles": {
+      "parametres": "Masinahikewin-âpacihtâwin",
+      "mode_nuit": "Tipiskawi-mode",
+      "taille_police": "Masinahikewin-ohpikihtâwin",
+      "interligne": "Nistam-askîwin",
+      "largeur_colonne": "Akohp-tîpahikan",
+      "luminosite": "Wâsêskwan",
+      "contraste": "Kontrast",
+      "sepia": "Sepia",
+      "superposition": "Ohci-asiwatew",
+      "couleur_superposition": "Ihkwêwâpahcikewin",
+      "noir": "Asinîwâw",
+      "blanc": "Wâpiskisiw",
+      "zoom": "Zoom",
+      "plein_ecran": "Misiwê-wâpahcikêwin",
+      "quitter_plein_ecran": "Nîkân-wâpahcikêwin",
+      "pagination": "Masinahikanis-tipahikewin",
+      "precedent": "Nîkânihk masinahikanis",
+      "suivant": "Otâkosîhk masinahikanis"
+    },
+    "info": {
+      "mots": "nêhiyaw-pîkiskwêwina",
+      "temps_estime": "Kîsikohci-pîhcîwin",
+      "temps_actif": "Nîhtâwikiwin-âpatisiwin",
+      "progression": "Nakatohkêwin"
+    },
+    "erreur": {
+      "format_non_supporte": "Namôya nisitohtâkwan",
+      "contenu_vide": "Namôya masinahikan",
+      "acces_prive": "Kîhci-masinahikan"
+    }
+  }
+}

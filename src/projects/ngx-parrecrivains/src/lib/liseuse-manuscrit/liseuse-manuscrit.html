@@ -1,0 +1,44 @@
+@if (erreurActive()) {
+  <div class="erreur-liseuse" role="alert">
+    <span class="erreur-icone" aria-hidden="true">⚠</span>
+    <span class="erreur-message">{{ t(erreurActive()!.messageI18nKey) }}</span>
+  </div>
+} @else {
+
+  <ngx-barre-controles
+    [config]="configCourante()"
+    [modeOptimise]="modeAffichage() === 'optimise'"
+    [pageActuelle]="pageActuelle()"
+    [totalPages]="totalPages()"
+    [langue]="langueActive()"
+    [titre]="titre()"
+    [auteur]="auteur()"
+    [totalMots]="totalMots()"
+    [progressionPourcent]="progressionPourcent()"
+    [tempsLectureActif]="tempsLectureActif()"
+    [estimatedReadingTime]="estimatedReadingTime()"
+    (changerConfig)="onChangerConfig($event)"
+    (changerPage)="onChangerPage($event)"
+    (panneauChange)="onPanneauChange($event)"
+  />
+
+  <!-- filter sur .zone-contenu uniquement : la superposition-rgba est indépendante
+       (elle applique une couleur de calque, pas un filtre CSS — les deux effets sont
+       intentionnellement séparés pour permettre un réglage fin). -->
+  <div class="zone-contenu" [style.filter]="cssFiltre()">
+    <ngx-zone-lecture
+      [contenu]="contenu()"
+      (erreurIframe)="onErreurIframe()"
+      (pageChangee)="onPageChangee($event)"
+      (totalMotsChange)="totalMots.set($event)"
+    />
+  </div>
+
+  <div
+    class="superposition-rgba"
+    aria-hidden="true"
+    [style.backgroundColor]="couleurSuperposition()"
+    [style.opacity]="configCourante().superpositionOpacite"
+  ></div>
+
+}

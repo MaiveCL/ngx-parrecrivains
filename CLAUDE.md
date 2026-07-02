@@ -4,67 +4,62 @@
 
 **Je suis le Claude du repo `ngx-parrecrivains`** (`/home/maiveBOX/ngx-parrecrivains`).
 
-Ce repo est le **site de démonstration et documentation** de la lib — pas la lib elle-même.
-
-Il existe un **deuxième repo séparé** : `/home/maiveBOX/parrecrivains` — c'est là que la librairie est développée et publiée sur npm, et que l'application principale Angular + Rails vit. Il a son propre Claude distinct.
+Ce repo contient **la source de la lib** ET **l'app de test/tutoriel**. L'application principale Angular + Rails est dans le repo séparé `parrecrivains` (`/home/maiveBOX/parrecrivains`), qui utilise la lib via npm.
 
 En début de conversation, me présenter ainsi :
-> "Je suis le Claude de **ngx-parrecrivains** (site de démo/doc). Le développement de la lib est dans le repo `parrecrivains`."
+> "Je suis le Claude de **ngx-parrecrivains** (lib source + app test/tutoriel)."
 
 ---
 
+## Ce que ce repo contient
 
-## Ce que ce repo EST
+- **La lib source** (`src/projects/ngx-parrecrivains/`) — publiée sur npm
+- **Une app Angular** (`src/src/`) — sert à la fois de test local et de tutoriel/démo, selon le mode de build
 
-Ce repository est le **site de démonstration officiel** et la **documentation interactive** de la librairie Angular npm `ngx-parrecrivains`.
+---
 
-Il sert exclusivement à :
-- Démontrer chaque composant et validator de la librairie en live
-- Fournir des exemples reproductibles (copy-paste ready)
-- Guider les développeurs via des pages "quickstart"
-- Présenter les cas d'erreurs et de validation typiques
+## Deux modes de build — même app, comportement différent
 
-## Ce que ce repo N'EST PAS
+Il est **impossible** dans un seul build Angular d'avoir certaines pages qui utilisent la lib locale et d'autres qui utilisent la lib npm. Toutes les pages utilisent la même résolution au moment de la compilation.
 
-Ce repo **ne contient pas** la librairie `ngx-parrecrivains` elle-même. La librairie est développée et publiée séparément sur npm. Ce repo ne contient que des **exemples d'utilisation**.
+La solution : deux tsconfig, deux usages.
+
+### Mode test local (`ng serve`)
+- `tsconfig.json` contient le path alias : `"ngx-parrecrivains": ["./dist/ngx-parrecrivains"]`
+- TOUTES les pages (test + tutoriel) utilisent la lib locale buildée
+- Workflow : `ng build ngx-parrecrivains --watch` dans un terminal, `ng serve` dans un autre
+- Ngrok peut exposer ce serveur au public pour valider avant de publier
+
+### Mode démo déployée (`ng build --ts-config=tsconfig.demo.json`)
+- `tsconfig.demo.json` n'a pas de path alias → résolution depuis `node_modules` (npm publié)
+- TOUTES les pages utilisent la lib publiée
+- Résultat déployé sur GitHub Pages
+
+### ⚠️ Règle critique
+Ne jamais builder pour GitHub Pages avec `tsconfig.json` (qui a le path alias) — le dist local n'existe pas sur le serveur de build et le déploiement échouerait.
 
 ---
 
 ## Structure du repository
 
 ```
-ngx-parrecrivains/          ← racine du repo Git
-├── CLAUDE.md               ← ce fichier (constitution)
-├── README.md
-├── docs/                   ← build GitHub Pages (généré)
-└── src/                    ← workspace Angular CLI
-    ├── angular.json
-    ├── package.json
-    ├── .claude/
-    │   └── CLAUDE.md       ← conventions de code Angular
-    └── src/                ← sources de l'application
-        ├── main.ts
-        ├── styles.scss
-        ├── index.html
-        ├── app/
-        │   ├── app.ts
-        │   ├── app.config.ts
-        │   ├── app.routes.ts
-        │   ├── demos/          ← pages de démonstration par feature
-        │   │   ├── isbn/
-        │   │   ├── validators/
-        │   │   └── forms/
-        │   ├── guides/         ← pages textuelles (quickstart, installation)
-        │   │   ├── installation/
-        │   │   └── quickstart/
-        │   └── shared/         ← composants, services, interceptors partagés
-        │       ├── mock-api/
-        │       └── services/
-        └── assets/
-            └── mock/           ← fichiers JSON simulant des données de test
+ngx-parrecrivains/                ← racine du repo Git
+├── CLAUDE.md                     ← ce fichier
+├── docs/                         ← documentation MkDocs (à migrer depuis parrecrivains)
+├── specs/                        ← specs SpecKit (à migrer depuis parrecrivains)
+└── src/                          ← workspace Angular CLI
+    ├── angular.json              ← 2 projets : lib + app
+    ├── tsconfig.json             ← path alias → lib locale (dev/test)
+    ├── tsconfig.demo.json        ← sans path alias → npm publié (déploiement)
+    ├── projects/
+    │   └── ngx-parrecrivains/    ← source de la lib
+    └── src/                      ← app test/tutoriel
+        └── app/
+            ├── tests/            ← pages de test (validées avec lib locale)
+            └── demos/            ← pages tutoriel (fonctionnent dans les 2 modes)
 ```
 
-> **Note :** Le projet Angular CLI réside dans `src/`. Pour toute commande Angular (`ng`, `npm`), se placer dans `/home/maiveBOX/ngx-parrecrivains/src/`.
+> **Note :** Pour toute commande Angular (`ng`, `npm`), se placer dans `/home/maiveBOX/ngx-parrecrivains/src/`.
 
 ---
 

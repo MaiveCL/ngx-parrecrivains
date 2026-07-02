@@ -1,0 +1,39 @@
+{
+  "name": "ngx-parrecrivains",
+  "version": "0.4.1",
+  "description": "Angular library for the literary industry — manuscript reader, word count pipes, reading time estimation, ISBN validator (fr/en/cr), i18n and PDF/Google Docs support.",
+  "author": "Marie-Ève Bouchard <maive_@hotmail.com>",
+  "homepage": "https://parrecrivains.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MaiveCL/ngx-parrecrivains.git"
+  },
+  "bugs": {
+    "email": "maive_@hotmail.com"
+  },
+  "keywords": [
+    "angular",
+    "angular-library",
+    "literary",
+    "manuscript",
+    "reading",
+    "quebec",
+    "i18n",
+    "cree",
+    "pdf",
+    "google-docs",
+    "isbn",
+    "validator",
+    "français"
+  ],
+  "peerDependencies": {
+    "@angular/common": "^21.2.0",
+    "@angular/core": "^21.2.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false,
+  "license": "MIT",
+  "readme": "README.md"
+}

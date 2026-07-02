@@ -1,0 +1,40 @@
+{
+  "liseuse": {
+    "panneau": {
+      "titre": "Information",
+      "fermer": "Close panel",
+      "infos": "Information"
+    },
+    "controles": {
+      "parametres": "Reading settings",
+      "mode_nuit": "Night mode",
+      "taille_police": "Font size",
+      "interligne": "Line spacing",
+      "largeur_colonne": "Column width",
+      "luminosite": "Brightness",
+      "contraste": "Contrast",
+      "sepia": "Sepia",
+      "superposition": "Overlay",
+      "couleur_superposition": "Overlay color",
+      "noir": "Black",
+      "blanc": "White",
+      "zoom": "Zoom",
+      "plein_ecran": "Full screen",
+      "quitter_plein_ecran": "Exit full screen",
+      "pagination": "Pagination",
+      "precedent": "Previous page",
+      "suivant": "Next page"
+    },
+    "info": {
+      "mots": "words",
+      "temps_estime": "Estimated reading time",
+      "temps_actif": "Active reading time",
+      "progression": "Progress"
+    },
+    "erreur": {
+      "format_non_supporte": "Unsupported format",
+      "contenu_vide": "No manuscript",
+      "acces_prive": "Private or inaccessible document"
+    }
+  }
+}

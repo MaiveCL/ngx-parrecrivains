@@ -1,0 +1,39 @@
+:host {
+  display: block;
+  padding: 1rem;
+}
+
+.info-ligne {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.info-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.6;
+}
+
+.info-valeur {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.barre-progression {
+  height: 4px;
+  background: currentColor;
+  opacity: 0.15;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.barre-remplie {
+  height: 100%;
+  background: currentColor;
+  opacity: 1;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
