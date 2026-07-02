@@ -5,6 +5,7 @@
 // export * from './lib/ngx-parrecrivains'; // export par défaut, ce composant est aussi factice.
 // export * from './lib/boite-texte/boite-texte'; // composant factice — référence flux lib → app
 
+export { VERSION } from './lib/version';
 export * from './lib/liseuse-manuscrit/liseuse-manuscrit';
 export * from './lib/mots/mots.pipe';
 export * from './lib/temps-lecture/temps-lecture.service';

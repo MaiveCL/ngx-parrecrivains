@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
+import { version } from 'ngx-parrecrivains/package.json';
 
 interface LienTest {
   path:  string;
@@ -15,6 +16,8 @@ interface LienTest {
 })
 export class TESTMenuComponent {
   private readonly router = inject(Router);
+
+  readonly version = version;
 
   readonly liens: LienTest[] = this.router.config
     .filter(route => typeof route.path === 'string' && route.path.startsWith('tests/'))
