@@ -8,6 +8,19 @@ Versionnage : [Semantic Versioning](https://semver.org/lang/fr/)
 
 ---
 
+## [0.4.2] — 2026-07-02
+
+### Ajouté
+
+**`VERSION`** — constante exportée de type `Version` (Angular) indiquant la version de la librairie installée.
+
+```typescript
+import { VERSION } from 'ngx-parrecrivains';
+console.log(VERSION.full); // '0.4.2'
+```
+
+---
+
 ## [0.4.1] — 2026-06-04
 
 ### Corrigé
@@ -208,7 +221,7 @@ Intégration optionnelle avec `@ngx-translate/core` via `TRANSLATE_SERVICE_TOKEN
 
 ## [Unreleased]
 
-Aucune modification en cours.
+_Aucune modification en cours._
 
 ---
 ---
@@ -222,6 +235,19 @@ Aucune modification en cours.
 All notable changes are documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 Versioning: [Semantic Versioning](https://semver.org/)
+
+---
+
+## [0.4.2] — 2026-07-02
+
+### Added
+
+**`VERSION`** — exported constant of type `Version` (Angular) indicating the installed library version.
+
+```typescript
+import { VERSION } from 'ngx-parrecrivains';
+console.log(VERSION.full); // '0.4.2'
+```
 
 ---
 
@@ -425,5 +451,5 @@ Optional integration with `@ngx-translate/core` via `TRANSLATE_SERVICE_TOKEN`.
 
 ## [Unreleased]
 
-No changes in progress.
+_No changes in progress._
 

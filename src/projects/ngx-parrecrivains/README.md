@@ -397,6 +397,7 @@ import {
   TRANSLATE_SERVICE_TOKEN,
   ISBN_ERREURS,
   VITESSE_LECTURE_DEFAUT,
+  VERSION,
 } from 'ngx-parrecrivains';
 ```
 
@@ -815,6 +816,7 @@ import {
   TRANSLATE_SERVICE_TOKEN,
   ISBN_ERREURS,
   VITESSE_LECTURE_DEFAUT,
+  VERSION,
 } from 'ngx-parrecrivains';
 ```
 

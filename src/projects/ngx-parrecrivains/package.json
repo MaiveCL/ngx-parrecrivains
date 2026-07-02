@@ -1,6 +1,6 @@
 {
   "name": "ngx-parrecrivains",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Angular library for the literary industry — manuscript reader, word count pipes, reading time estimation, ISBN validator (fr/en/cr), i18n and PDF/Google Docs support.",
   "author": "Marie-Ève Bouchard <maive_@hotmail.com>",
   "homepage": "https://parrecrivains.com",

@@ -40,9 +40,14 @@ cd /home/maiveBOX/ngx-parrecrivains/src && clear && npx ng build --ts-config=tsc
 
 ## Publication npm
 
-<!-- Depuis parrecrivains — build de la lib source (pas depuis ce repo) -->
-cd /home/maiveBOX/parrecrivains/src/frontend && clear && npx ng build ngx-parrecrivains
-cd /home/maiveBOX/parrecrivains/src/frontend/dist/ngx-parrecrivains && npm login && npm publish
+<!-- 1. Bumper la version dans deux fichiers (même valeur) :
+     - projects/ngx-parrecrivains/package.json → "version"
+     - projects/ngx-parrecrivains/src/lib/version.ts → new Version('x.x.x')
+-->
+
+<!-- 2. Builder et publier -->
+cd /home/maiveBOX/ngx-parrecrivains/src && clear && npx ng build ngx-parrecrivains
+cd /home/maiveBOX/ngx-parrecrivains/src/dist/ngx-parrecrivains && npm login && npm publish
 
 <!-- Première publication seulement : ajouter --access public -->
 
