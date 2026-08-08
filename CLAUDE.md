@@ -122,6 +122,17 @@ Ce repo utilise le mode **fichiers statiques** (branch `main`, dossier `docs/`) 
 
 ---
 
+## Sécurité des dépendances npm
+
+Quand `npm install`/`npm update` signale des scripts d'installation non couverts par `allowScripts`
+(`npm warn allow-scripts N packages have install scripts not yet covered`), suivre
+[`verification_securite_dependances.md`](verification_securite_dependances.md) — obligatoire avant
+tout `npm approve-scripts`.
+
+**Règle non-négociable : jamais `npm approve-scripts --all`.** Un paquet à la fois, après vérification.
+
+---
+
 ## Objectif utilisateur final
 
 **Pour un développeur externe :**
