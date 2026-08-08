@@ -1,4 +1,4 @@
-# ngx-parrecrivains — Site de démonstration / Demo site
+# ngx-parrecrivains
 
 [Français](#français) · [English](#english)
 
@@ -6,29 +6,83 @@
 
 ## Français
 
-**Site de démonstration et documentation interactive** de la librairie Angular [`ngx-parrecrivains`](https://www.npmjs.com/package/ngx-parrecrivains).
+**Librairie Angular pour le milieu littéraire** — lecteur de manuscrit, pipes de comptage de mots,
+estimation du temps de lecture, validateur ISBN (fr/en/cr), i18n et support PDF/Google Docs —
+**et son site de démonstration / tutoriel interactif**.
 
+📦 **Sur npm** : [`ngx-parrecrivains`](https://www.npmjs.com/package/ngx-parrecrivains)
 🌐 **Site en ligne** : [https://maivecl.github.io/ngx-parrecrivains/](https://maivecl.github.io/ngx-parrecrivains/)
 
-### À propos
+### Ce que contient ce repo
 
-Ce repository contient le site de démo de la librairie — pas la librairie elle-même. Il propose :
+Ce repo contient **à la fois la source de la librairie et son site de démo/tutoriel** — ce n'est
+plus seulement un site de démo pointant vers une librairie hébergée ailleurs. La librairie a été
+migrée ici depuis le monorepo `parrecrivains` (branche `transfertLib`, fusionnée dans `main`).
 
-- Une démonstration interactive de chaque composant, pipe, service et validator
-- Des snippets de code copy-paste prêts à l'emploi
-- Une documentation intégrée bilingue (fr/en)
-- Un tutoriel guidé pour intégrer la librairie dans un projet Angular existant
+```
+ngx-parrecrivains/
+├── docs/                          ← build statique servi par GitHub Pages
+├── specs/                         ← specs SpecKit (lib + app)
+└── src/                           ← workspace Angular CLI
+    ├── angular.json               ← 2 projets : lib + app
+    ├── tsconfig.json              ← path alias vers la lib locale (dev/test)
+    ├── tsconfig.demo.json         ← sans path alias, résout depuis npm (déploiement)
+    ├── projects/ngx-parrecrivains/← source de la lib, publiée sur npm
+    └── src/app/                   ← app de démo/tutoriel
+        ├── tests/                 ← pages de test (validées avec la lib locale)
+        └── demos/                 ← pages tutoriel (fonctionnent avec la lib locale ou npm)
+```
 
-### Deux branches pédagogiques
+L'app de démo sert deux rôles selon comment elle est buildée :
+
+| Mode | Commande | Résolution de `ngx-parrecrivains` |
+|---|---|---|
+| Test local | `npx ng serve` (utilise `tsconfig.json`) | Lib locale buildée (`dist/ngx-parrecrivains/`) |
+| Démo déployée | `npx ng build --ts-config=tsconfig.demo.json` | Lib publiée sur npm |
+
+Il est impossible d'avoir, dans un seul build, certaines pages sur la lib locale et d'autres sur
+la lib npm — la résolution se fait au complet à la compilation. D'où les deux `tsconfig`.
+
+⚠️ Ne jamais builder pour GitHub Pages avec `tsconfig.json` (path alias) — `dist/` n'existe pas
+sur un environnement propre et le déploiement échouerait silencieusement en résolvant du vide.
+
+### Travailler sur la lib en local
+
+```bash
+git clone https://github.com/MaiveCL/ngx-parrecrivains.git
+cd ngx-parrecrivains/src
+npm install
+
+# Terminal 1 — rebuild la lib à chaque changement
+npx ng build ngx-parrecrivains --watch
+
+# Terminal 2 — sert l'app avec la lib locale (path alias)
+npx ng serve
+```
+
+→ App : [http://localhost:4200/ngx-parrecrivains/](http://localhost:4200/ngx-parrecrivains/)
+→ Pages de test : [http://localhost:4200/ngx-parrecrivains/tests/](http://localhost:4200/ngx-parrecrivains/tests/)
+
+`ng` n'est pas installé globalement — toujours utiliser `npx ng`. Commandes détaillées
+(publication npm, déploiement GitHub Pages, ngrok) dans [`cmd.md`](cmd.md).
+
+### Déploiement
+
+Le site est buildé avec `tsconfig.demo.json` (résolution npm) et le résultat est commité dans
+`docs/`, servi directement par GitHub Pages depuis `main` — pas de GitHub Actions, pour rester
+sans limite de déploiements et sans configuration sur ce projet solo.
+
+### Branches
 
 | Branche | Contenu |
 |---|---|
-| `main` | Démo complète — librairie installée, tous les composants fonctionnels |
-| `tuto-depart` | Scaffold pédagogique — librairie non installée, éléments à compléter |
+| `main` | Lib source + démo complète — tous les composants fonctionnels |
+| `tuto-depart` | Scaffold pédagogique — lib non installée, éléments à compléter |
 
-La branche `tuto-depart` sert de point de départ pour un exercice guidé : l'utilisateur installe la librairie et complète les intégrations manquantes en suivant les instructions du site.
+`tuto-depart` sert de point de départ à un exercice guidé : l'utilisateur installe la librairie
+et complète les intégrations manquantes en suivant les instructions du site.
 
-### Contenu de la librairie couvert
+### Contenu de la librairie
 
 | Élément | Type | Version |
 |---|---|---|
@@ -37,44 +91,87 @@ La branche `tuto-depart` sert de point de départ pour un exercice guidé : l'ut
 | `TempsLectureService` | Service | v0.3.x |
 | `isbnValidator` · `validerIsbn` | Validator | v0.4.x |
 
-### Lancer le site en local
+---
+
+## English
+
+**Angular library for the literary industry** — manuscript reader, word-count pipes, reading
+time estimation, ISBN validator (fr/en/cr), i18n and PDF/Google Docs support — **and its
+interactive demo/tutorial site**.
+
+📦 **On npm**: [`ngx-parrecrivains`](https://www.npmjs.com/package/ngx-parrecrivains)
+🌐 **Live site**: [https://maivecl.github.io/ngx-parrecrivains/](https://maivecl.github.io/ngx-parrecrivains/)
+
+### What this repo contains
+
+This repo contains **both the library source and its demo/tutorial site** — it's no longer just
+a demo site pointing at a library hosted elsewhere. The library was migrated here from the
+`parrecrivains` monorepo (`transfertLib` branch, merged into `main`).
+
+```
+ngx-parrecrivains/
+├── docs/                          ← static build served by GitHub Pages
+├── specs/                         ← SpecKit specs (lib + app)
+└── src/                           ← Angular CLI workspace
+    ├── angular.json               ← 2 projects: lib + app
+    ├── tsconfig.json              ← path alias to the local lib (dev/test)
+    ├── tsconfig.demo.json         ← no path alias, resolves from npm (deployment)
+    ├── projects/ngx-parrecrivains/← library source, published to npm
+    └── src/app/                   ← demo/tutorial app
+        ├── tests/                 ← test pages (validated against the local lib)
+        └── demos/                 ← tutorial pages (work with the local lib or npm)
+```
+
+The demo app plays two roles depending on how it's built:
+
+| Mode | Command | `ngx-parrecrivains` resolves to |
+|---|---|---|
+| Local testing | `npx ng serve` (uses `tsconfig.json`) | Local lib build (`dist/ngx-parrecrivains/`) |
+| Deployed demo | `npx ng build --ts-config=tsconfig.demo.json` | Library published on npm |
+
+A single build can't mix pages resolving to the local lib with pages resolving to the npm lib —
+resolution happens repo-wide at compile time. Hence the two `tsconfig` files.
+
+⚠️ Never build for GitHub Pages with `tsconfig.json` (path alias) — `dist/` doesn't exist in a
+clean environment, and the deploy would silently resolve to nothing.
+
+### Working on the library locally
 
 ```bash
 git clone https://github.com/MaiveCL/ngx-parrecrivains.git
 cd ngx-parrecrivains/src
 npm install
+
+# Terminal 1 — rebuild the lib on every change
+npx ng build ngx-parrecrivains --watch
+
+# Terminal 2 — serve the app against the local lib (path alias)
 npx ng serve
 ```
 
-→ Ouvrir [http://localhost:4200](http://localhost:4200)
+→ App: [http://localhost:4200/ngx-parrecrivains/](http://localhost:4200/ngx-parrecrivains/)
+→ Test pages: [http://localhost:4200/ngx-parrecrivains/tests/](http://localhost:4200/ngx-parrecrivains/tests/)
 
----
+`ng` isn't installed globally — always use `npx ng`. Detailed commands (npm publishing, GitHub
+Pages deployment, ngrok) live in [`cmd.md`](cmd.md).
 
-## English
+### Deployment
 
-**Interactive demo site and documentation** for the Angular library [`ngx-parrecrivains`](https://www.npmjs.com/package/ngx-parrecrivains).
+The site is built with `tsconfig.demo.json` (npm resolution) and the result is committed to
+`docs/`, served directly by GitHub Pages from `main` — no GitHub Actions, to stay free of
+deployment limits and config overhead on this solo project.
 
-🌐 **Live site**: [https://maivecl.github.io/ngx-parrecrivains/](https://maivecl.github.io/ngx-parrecrivains/)
-
-### About
-
-This repository contains the demo site for the library — not the library itself. It provides:
-
-- An interactive demonstration of each component, pipe, service and validator
-- Copy-paste ready code snippets
-- Integrated bilingual documentation (fr/en)
-- A guided tutorial for integrating the library into an existing Angular project
-
-### Two pedagogical branches
+### Branches
 
 | Branch | Content |
 |---|---|
-| `main` | Complete demo — library installed, all components functional |
+| `main` | Library source + complete demo — all components functional |
 | `tuto-depart` | Pedagogical scaffold — library not installed, elements to complete |
 
-The `tuto-depart` branch serves as a starting point for a guided exercise: the user installs the library and completes the missing integrations by following the site's instructions.
+`tuto-depart` serves as a starting point for a guided exercise: the user installs the library
+and completes the missing integrations by following the site's instructions.
 
-### Library contents covered
+### Library contents
 
 | Element | Type | Version |
 |---|---|---|
@@ -83,17 +180,6 @@ The `tuto-depart` branch serves as a starting point for a guided exercise: the u
 | `TempsLectureService` | Service | v0.3.x |
 | `isbnValidator` · `validerIsbn` | Validator | v0.4.x |
 
-### Run locally
-
-```bash
-git clone https://github.com/MaiveCL/ngx-parrecrivains.git
-cd ngx-parrecrivains/src
-npm install
-npx ng serve
-```
-
-→ Open [http://localhost:4200](http://localhost:4200)
-
 ---
 
-MIT © 2026 [parrecrivains](https://parrecrivains.com)
+MIT © 2026 [- Maive - Marie-Ève Bouchard](https://parrecrivains.com)
