@@ -6,7 +6,7 @@
   "nav.tuto.temps": "TempsLecture",
   "nav.tuto.liseuse": "Liseuse",
   "nav.tutos": "Tutoriels",
-
+  "nav.tests": "Tests",
   "commun.slot.placeholder": "← Le composant apparaîtra ici après intégration",
   "commun.slot.succes": "✅ Voici votre composant — intégration réussie !",
   "commun.integration.titre": "Comment intégrer",
@@ -28,7 +28,6 @@
   "commun.info.props": "Propriétés",
   "commun.info.version": "Version",
   "commun.info.type": "Type",
-
   "accueil.titre": "Tutoriel ngx-parrecrivains",
   "accueil.description": "Ce site vous guide dans l'intégration de la librairie Angular ngx-parrecrivains dans votre propre projet.",
   "accueil.fait.titre": "Déjà fait dans cette branche",
@@ -42,7 +41,6 @@
   "accueil.afaire.etape4": "Lancer le serveur de développement",
   "accueil.navigation.titre": "Choisissez un composant à intégrer",
   "accueil.navigation.description": "Chaque page vous guide pas à pas dans l'intégration d'un élément de la librairie.",
-
   "tuto.isbn.titre": "isbnValidator / validerIsbn",
   "tuto.isbn.version": "v0.4.0",
   "tuto.isbn.type": "Validateur de formulaire réactif",
@@ -67,7 +65,6 @@
   "tuto.isbn.probleme.3.symptome": "Erreur TypeScript : Cannot find module 'ngx-parrecrivains'",
   "tuto.isbn.probleme.3.cause": "La librairie n'est pas installée",
   "tuto.isbn.probleme.3.solution": "Exécuter : npm install ngx-parrecrivains",
-
   "tuto.mots.titre": "MotsPipe / WordsPipe",
   "tuto.mots.version": "v0.2.0",
   "tuto.mots.type": "Pipe Angular",
@@ -91,7 +88,6 @@
   "tuto.mots.probleme.3.symptome": "J'ai besoin d'une langue non supportée (ex. portugais, espagnol…)",
   "tuto.mots.probleme.3.cause": "Seuls fr, en et cr ont des règles intégrées — les autres langues nécessitent des formes personnalisées",
   "tuto.mots.probleme.3.solution": "Utiliser les paramètres singulier/pluriel : {{ 1234 | mots:'pt':'palavra':'palavras' }}",
-
   "tuto.temps.titre": "TempsLectureService",
   "tuto.temps.version": "v0.3.0",
   "tuto.temps.type": "Service Angular",
@@ -114,7 +110,6 @@
   "tuto.temps.probleme.3.symptome": "Erreur TypeScript : Cannot find module 'ngx-parrecrivains'",
   "tuto.temps.probleme.3.cause": "La librairie n'est pas installée",
   "tuto.temps.probleme.3.solution": "Exécuter : npm install ngx-parrecrivains",
-
   "tuto.liseuse.titre": "LiseuseManuscritComponent",
   "tuto.liseuse.version": "v0.1.0",
   "tuto.liseuse.type": "Composant Angular",
@@ -145,7 +140,6 @@
   "tuto.liseuse.probleme.4.symptome": "L'iframe (Google Docs, PDF) n'occupe pas toute la hauteur du composant",
   "tuto.liseuse.probleme.4.cause": "display: block sur ngx-liseuse-manuscrit écrase le display: flex interne du composant et casse sa chaîne flex",
   "tuto.liseuse.probleme.4.solution": "Ne jamais surcharger la propriété display sur ngx-liseuse-manuscrit — utiliser uniquement height, width et autres propriétés sans toucher à display",
-
   "commun.col.cle": "Clé",
   "commun.col.valeur": "Valeur",
   "commun.col.quand": "Déclenchée quand",
@@ -161,7 +155,6 @@
   "commun.col.payload": "Payload",
   "commun.col.constante": "Constante",
   "commun.optionnel": "—",
-
   "tuto.isbn.table.caption": "Clés d'erreur",
   "tuto.isbn.table.erreur.format.desc": "Longueur ≠ 10/13, caractères invalides, tirets",
   "tuto.isbn.table.erreur.prefixe.desc": "ISBN-13 sans préfixe 978 ou 979",
@@ -173,7 +166,6 @@
   "tuto.isbn.erreur.checksum": "Ce numéro ISBN est incorrect (chiffre de contrôle invalide).",
   "tuto.isbn.erreur.coherence": "Format incohérent avec l'année de publication.",
   "tuto.isbn.test.resultat.hint": "(Aucune erreur ISBN affichée ? → isbnValidator() manquant dans le FormControl)",
-
   "tuto.mots.table.signature": "Signature : {{ valeur | mots: langue : singulier : pluriel }}",
   "tuto.mots.param.valeur.nom": "valeur",
   "tuto.mots.param.valeur.desc": "Nombre de mots (null → 0)",
@@ -183,13 +175,11 @@
   "tuto.mots.param.singulier.desc": "Forme custom singulier (prioritaire sur la table intégrée)",
   "tuto.mots.param.pluriel.nom": "pluriel",
   "tuto.mots.param.pluriel.desc": "Forme custom pluriel",
-
   "tuto.temps.table.caption.methodes": "Méthodes",
   "tuto.temps.table.caption.constantes": "Constante exportée",
   "tuto.temps.methode.estimer.desc": "Retourne le temps estimé en secondes.",
   "tuto.temps.methode.formater.desc": "Retourne une chaîne affichable — \"5 min\", \"1 h 05 min\"",
   "tuto.temps.constante.vitesse.desc": "Vitesse adulte en mots/min — surcharger via vitesseMots si nécessaire",
-
   "tuto.liseuse.table.caption.inputs": "Inputs",
   "tuto.liseuse.table.caption.outputs": "Outputs",
   "tuto.liseuse.input.contenu.desc": "Contenu à afficher (texte, HTML, PDF, URL Google Docs)",

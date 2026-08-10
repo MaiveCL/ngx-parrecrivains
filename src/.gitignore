@@ -42,3 +42,6 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# Garde-fou des scripts npm — posé à la main à la création du compte (voir README)
+.npmrc

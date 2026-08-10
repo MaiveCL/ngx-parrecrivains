@@ -75,7 +75,22 @@
                   "maximumError": "16kB"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "tsConfig": "tsconfig.demo.json",
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.demo.ts"
+                }
+              ]
+            },
+            "test-public": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.test-public.ts"
+                }
+              ]
             },
             "development": {
               "optimization": false,
@@ -90,6 +105,9 @@
           "configurations": {
             "production": {
               "buildTarget": "src:build:production"
+            },
+            "test-public": {
+              "buildTarget": "src:build:test-public"
             },
             "development": {
               "buildTarget": "src:build:development"

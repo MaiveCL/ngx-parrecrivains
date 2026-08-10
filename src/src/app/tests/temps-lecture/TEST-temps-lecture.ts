@@ -1,7 +1,6 @@
-// FICHIER TEMPORAIRE — SUPPRIMER AVANT PUBLICATION
 // Sert uniquement à tester visuellement TempsLectureService (ngx-parrecrivains)
 
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { TempsLectureService, VITESSE_LECTURE_DEFAUT } from 'ngx-parrecrivains';
 
 @Component({
@@ -12,7 +11,7 @@ import { TempsLectureService, VITESSE_LECTURE_DEFAUT } from 'ngx-parrecrivains';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TESTTempsLectureComponent {
-  private readonly tempsLecture = new TempsLectureService();
+  private readonly tempsLecture = inject(TempsLectureService);
 
   readonly vitesseDefaut = VITESSE_LECTURE_DEFAUT;
 

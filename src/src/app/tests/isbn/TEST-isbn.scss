@@ -1,27 +1,8 @@
-// FICHIER TEMPORAIRE — SUPPRIMER AVANT PUBLICATION
-
 :host {
   display: flex;
   flex-direction: column;
   height: 100%;
   background: #12121c;
-}
-
-.test-banniere {
-  background: #c0392b;
-  color: #fff;
-  padding: 0.4rem 1rem;
-  font-size: 0.8rem;
-  text-align: center;
-  flex-shrink: 0;
-  letter-spacing: 0.02em;
-
-  code {
-    background: rgba(255 255 255 / 0.2);
-    padding: 0.1em 0.4em;
-    border-radius: 3px;
-    font-size: 0.9em;
-  }
 }
 
 .test-grille {

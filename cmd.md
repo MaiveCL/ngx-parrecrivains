@@ -1,65 +1,76 @@
 # Commandes rapides — ngx-parrecrivains
 
-## Test local — lib locale (avant publication npm)
+================================================
 
-Résout `ngx-parrecrivains` via path alias → `dist/ngx-parrecrivains/` (build local)
+## Builder la lib locale (préalable à tout test local)
+```bash
+cd ~/ngx-parrecrivains/src && clear && npx ng build ngx-parrecrivains --watch
+```
+```bash
+ls ~/ngx-parrecrivains/src/dist/ngx-parrecrivains/
+```
 
-<!-- 1. Builder la lib en mode watch -->
-cd /home/maiveBOX/ngx-parrecrivains/src && clear && npx ng build ngx-parrecrivains --watch
+================================================
 
-<!-- 2. Servir l'app (dans un 2e terminal) -->
-cd /home/maiveBOX/ngx-parrecrivains/src && clear && npx ng serve
+## Test local privé
+```bash
+cd ~/ngx-parrecrivains/src && clear && npx ng serve
+```
+http://localhost:4200/ngx-parrecrivains/
+http://localhost:4200/ngx-parrecrivains/tests/
 
-<!-- Visiter : http://localhost:4200/ngx-parrecrivains/ -->
-<!-- Pages de test : http://localhost:4200/ngx-parrecrivains/tests/ -->
+## Test public local
+```bash
+cd ~/ngx-parrecrivains/src && clear && npx ng serve --configuration=test-public
+```
+http://localhost:4200/ngx-parrecrivains/
+http://localhost:4200/ngx-parrecrivains/tests/
 
-<!-- NGROK — exposer le test local au public pour valider en communauté avant de publier -->
-clear && npx ngrok http 4200
+## Test public temporaire — GitHub Pages (lib locale)
+```bash
+cd ~/ngx-parrecrivains/src && clear && npx ng build ngx-parrecrivains
+cd ~/ngx-parrecrivains/src && npx ng build --configuration=test-public && cp ../docs/index.html ../docs/404.html
+git add ../docs && git commit -m "..." && git push
+```
+https://MaiveCL.github.io/ngx-parrecrivains/
 
----
-
-## Test version publiée — GitHub Pages
-
-Résout `ngx-parrecrivains` via npm (tsconfig.demo.json, paths vide)
-Nécessite que la version soit publiée sur npm ET que le repo soit sur main.
-
-<!-- 1. Vérifier la version npm installée vs publiée -->
-cd /home/maiveBOX/ngx-parrecrivains/src && npm show ngx-parrecrivains version
-
-<!-- 2. Mettre à jour si besoin -->
-npm install ngx-parrecrivains@latest
-
-###### Build GitHub Pages -->
-cd /home/maiveBOX/ngx-parrecrivains/src && clear && npx ng build --ts-config=tsconfig.demo.json && cp ../docs/index.html ../docs/404.html
-<!-- git add ../docs && git commit -m "..." && git push -->
-
-<!-- Visiter : https://MaiveCL.github.io/ngx-parrecrivains/ -->
-<!-- menu tests : https://MaiveCL.github.io/ngx-parrecrivains/tests -->
-
----
+## Retour au site officiel
+```bash
+cd ~/ngx-parrecrivains/src && npx ng build && cp ../docs/index.html ../docs/404.html
+git add ../docs && git commit -m "..." && git push
+```
+https://MaiveCL.github.io/ngx-parrecrivains/
+https://MaiveCL.github.io/ngx-parrecrivains/tests
 
 ## Publication npm
+```bash
+cd ~/ngx-parrecrivains/src && clear && npx ng build ngx-parrecrivains
+cd ~/ngx-parrecrivains/src/dist/ngx-parrecrivains && npm login && npm publish
+```
+### Première publication seulement : 
+```bash
+cd ~/ngx-parrecrivains/src/dist/ngx-parrecrivains && npm login && npm publish --access public
+```
 
-<!-- 1. Bumper la version dans deux fichiers (même valeur) :
-     - projects/ngx-parrecrivains/package.json → "version"
-     - projects/ngx-parrecrivains/src/lib/version.ts → new Version('x.x.x')
--->
+## Versions
+```bash
+cd ~/ngx-parrecrivains/src && npm show ngx-parrecrivains version && npm ls ngx-parrecrivains
+cd ~/ngx-parrecrivains/src && npm install ngx-parrecrivains@latest
+cd ~/ngx-parrecrivains/src && npm install ngx-parrecrivains@0.4.2
+```
 
-<!-- 2. Builder et publier -->
-cd /home/maiveBOX/ngx-parrecrivains/src && clear && npx ng build ngx-parrecrivains
-cd /home/maiveBOX/ngx-parrecrivains/src/dist/ngx-parrecrivains && npm login && npm publish
-
-<!-- Première publication seulement : ajouter --access public -->
+## Divers
+```bash
+cd ~/ngx-parrecrivains/src && npm ci
+pkill -f "ng build"; pkill -f "ng serve"
+```
 
 ---
 
-## Divers
+## Notes de référence
 
-<!-- Vérifier version installée localement -->
-cd /home/maiveBOX/ngx-parrecrivains/src && npm show ngx-parrecrivains version
-
-<!-- Installer une version spécifique -->
-npm install ngx-parrecrivains@0.4.2
-
-<!-- Tuer les processus ng -->
-pkill -f "ng build"; pkill -f "ng serve"
+- Bump de version = **deux** fichiers, même valeur : `projects/ngx-parrecrivains/package.json` et `projects/ngx-parrecrivains/src/lib/version.ts`.
+- Repli silencieux : sans `dist/ngx-parrecrivains/`, c'est la version npm qui est servie, sans aucun avertissement.
+- `ng build` écrit toujours dans `docs/`. Build de contrôle : `--output-path=/tmp/verif`.
+- Sur GitHub Pages, une route profonde répond HTTP 404 tout en s'affichant correctement — normal.
+- `ng` n'est pas installé globalement : toujours `npx ng`.

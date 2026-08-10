@@ -4,6 +4,47 @@ Tâches futures pour la lib et l'app test/tutoriel.
 
 ---
 
+## 🔒 Protéger `tuto-depart` contre l'écrasement — À FAIRE
+
+**Objectif exact** : empêcher qu'on **écrase** la branche avec une autre branche.
+**Pas** empêcher de travailler dessus, **pas** empêcher un étudiant de commiter sur son propre clone.
+
+Un clone d'étudiant ne peut rien atteindre ici : ses commits restent chez lui, seule une pull request
+mergée par Maive touche ce dépôt. Rien à protéger de ce côté.
+
+### Étape 1 — GitHub, côté serveur (bloque l'écrasement, laisse le travail passer)
+
+1. github.com/MaiveCL/ngx-parrecrivains → **Settings** → **Branches**
+2. **Add branch ruleset**
+3. Nom : `protection tuto-depart` · Target branches → **Include by pattern** → `tuto-depart`
+4. Cocher **uniquement** :
+   - [x] **Block force pushes** — empêche d'écraser l'historique avec une autre branche
+   - [x] **Restrict deletions** — empêche la suppression de la branche
+5. Ne **pas** cocher : *Lock branch* (rendrait la branche lecture seule), *Restrict updates*
+   (bloquerait les commits normaux), *Require a pull request* (bloquerait les pushes directs)
+6. Enforcement status → **Active** → Create
+
+Tient depuis n'importe quelle machine et n'importe quel clone, contrairement à un hook.
+
+### Étape 2 — Hook git local (bloque le merge accidentel)
+
+C'est le scénario réaliste : un `git merge main` lancé par distraction alors qu'on est sur
+`tuto-depart`. GitHub ne peut pas le distinguer d'un commit normal — seul un hook le voit.
+
+Écrire `.git/hooks/pre-merge-commit`, exécutable, qui refuse tout merge quand la branche courante
+est `tuto-depart`, avec un message rappelant pourquoi (voir `CLAUDE.md` § tuto-depart).
+
+⚠️ Un hook **ne survit pas à un `git clone`** — à reposer sur chaque machine de travail. C'est
+acceptable : le risque est sur la machine de Maive, pas chez les étudiants. Noter la procédure de
+repose dans `cmd.md` si elle devient récurrente.
+
+### Étape 3 — Vérifier que ça marche
+
+Sur une copie jetable du repo : se placer sur `tuto-depart`, tenter `git merge main` → doit être
+refusé. Tenter un commit normal + push → doit passer.
+
+---
+
 ## App tutoriel — mise aux normes des conventions Angular
 
 Le code Angular du site tutoriel (`src/src/`) ne respectait pas les conventions de parrecrivains
@@ -24,13 +65,12 @@ au moment du transfert. Vérifié par grep sur `src/src/app` — la plupart des 
 ## Pages de test — corrections post-transfert
 
 Copiées depuis `parrecrivains` dans `src/src/app/tests/`. Fonctionnent avec `ng serve` (path alias).
-À corriger avant que les pages de test soient considérées comme "propres" :
 
-- [ ] Supprimer les commentaires "FICHIER TEMPORAIRE — SUPPRIMER AVANT PUBLICATION" (présents dans `tests/liseuse`, `tests/pipe-mots`, `tests/isbn`, `tests/temps-lecture` — `.ts`, `.html`, `.scss`) — ces pages sont permanentes dans ce repo
-- [ ] Supprimer les bannières rouges "⚠ PAGE DE TEST… À supprimer avant publication" dans les HTML (mêmes 4 dossiers) — même raison
-- [ ] `TEST-temps-lecture.ts:15` : `new TempsLectureService()` bypass Angular DI — remplacer par `inject(TempsLectureService)` (le service est déjà `providedIn: 'root'`)
+- [x] Supprimer les commentaires "FICHIER TEMPORAIRE — SUPPRIMER AVANT PUBLICATION" — ces pages sont permanentes dans ce repo
+- [x] Supprimer les bannières rouges "⚠ PAGE DE TEST… À supprimer avant publication" dans les HTML
+- [x] `TEST-temps-lecture.ts` : `new TempsLectureService()` remplacé par `inject(TempsLectureService)`
+- [x] Lien vers les pages de test dans la nav — toujours visible, en fin de nav, séparé des tutoriels (clé i18n `nav.tests`)
 - [ ] Ajouter les pages de test incomplètes manquantes (cas d'utilisation supplémentaires — voir BACKLOG parrecrivains)
-- [ ] Ajouter un lien vers les pages de test depuis la nav de l'app (visible seulement en mode dev ? ou toujours visible ?)
 
 ---
 

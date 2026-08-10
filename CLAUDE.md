@@ -18,25 +18,60 @@ En début de conversation, me présenter ainsi :
 
 ---
 
-## Deux modes de build — même app, comportement différent
+## Trois états de build — même app, trois apparences
 
 Il est **impossible** dans un seul build Angular d'avoir certaines pages qui utilisent la lib locale et d'autres qui utilisent la lib npm. Toutes les pages utilisent la même résolution au moment de la compilation.
 
-La solution : deux tsconfig, deux usages.
+La solution : deux tsconfig, trois configurations, et un bandeau qui dit toujours laquelle est active.
 
-### Mode test local (`ng serve`)
-- `tsconfig.json` contient le path alias : `"ngx-parrecrivains": ["./dist/ngx-parrecrivains"]`
-- TOUTES les pages (test + tutoriel) utilisent la lib locale buildée
-- Workflow : `npx ng build ngx-parrecrivains --watch` dans un terminal, `npx ng serve` dans un autre
-- Ngrok peut exposer ce serveur au public pour valider avant de publier
+| Configuration | Commande | Lib résolue | Bandeau |
+|---|---|---|---|
+| `development` | `npx ng serve` (défaut) | locale (`dist/`) | gris — TEST LOCAL |
+| `test-public` | `npx ng serve --configuration=test-public` ou `npx ng build --configuration=test-public` | locale (`dist/`) | orange — TEST PUBLIC |
+| `production` | `npx ng build` (défaut) | npm (`node_modules`) | vert — SITE OFFICIEL |
 
-### Mode démo déployée (`npx ng build --ts-config=tsconfig.demo.json`)
-- `tsconfig.demo.json` n'a pas de path alias → résolution depuis `node_modules` (npm publié)
-- TOUTES les pages utilisent la lib publiée
-- Résultat déployé sur GitHub Pages
+- Le texte du bandeau vient de `src/environments/environment*.ts`, échangés par `fileReplacements` dans `angular.json`.
+- **`test-public` ne redéfinit pas `tsConfig`** : il hérite de `tsconfig.app.json` et garde donc le path alias vers la lib locale. Lui donner `tsconfig.demo.json` détruirait sa raison d'être.
+- `production` est épinglée sur `tsconfig.demo.json` (`paths: {}`) et reste le **défaut** de `ng build` : un build de déploiement ne peut pas embarquer la lib locale par accident. `test-public` exige le flag explicite.
+- Le composant `shared/bandeau/` est monté dans le shell (`app.ts`), frère de `<router-outlet />` : présent sur toutes les routes, y compris `/tests/`.
+- **Le port n'est jamais un indicateur.** Les deux variantes locales tournent sur 4200. Seul le bandeau fait foi.
+- **Ngrok n'est plus utilisé dans ce repo** — `test-public` le remplace. Ngrok ne sert plus qu'au repo `parrecrivains`.
 
-### ⚠️ Règle critique
-Ne jamais builder pour GitHub Pages avec `tsconfig.json` (qui a le path alias) — le dist local n'existe pas sur le serveur de build et le déploiement échouerait.
+### ⚠️ Trois pièges vérifiés
+- **`ng build` écrit toujours dans `docs/`.** Pour un build de contrôle, ajouter `--output-path=/tmp/verif`, sinon le site publié est écrasé. Le build n'émet pas `404.html` : le regénérer avec `cp ../docs/index.html ../docs/404.html`.
+- **Le repli du path alias est silencieux.** Si `dist/ngx-parrecrivains/` n'existe pas, TypeScript retombe sur `node_modules` sans avertissement et `ng serve` sert la version npm publiée — les modifications locales de la lib deviennent invisibles. Toujours builder la lib avant de servir.
+- **`ng serve` lancé par un agent n'est pas visible depuis VS Code.** Angular écoute par défaut sur `localhost`, qui résout en `[::1]` (IPv6) sur cette machine. Le forwarding **manuel** de VS Code compose `127.0.0.1` (IPv4) et tourne en boucle sans jamais répondre. Quand Maive lance le serveur elle-même, VS Code lit `/proc/net/tcp6` et forwarde correctement — le piège ne touche donc que les serveurs lancés par un agent. Toujours ajouter `--host 127.0.0.1` dans ce cas.
+
+---
+
+## ⛔ Branche `tuto-depart` — NE JAMAIS MERGER
+
+Deux branches coexistent et **ne doivent jamais être mergées, ni dans un sens ni dans l'autre** (constitution § T-VI) :
+
+| Branche | Rôle |
+|---|---|
+| `main` | Démo complète — lib installée, tous les composants fonctionnels. C'est la **solution** de l'exercice. |
+| `tuto-depart` | Scaffold pédagogique — lib PAS installée, intégrations retirées. C'est l'**énoncé**. |
+
+**Pourquoi un merge la détruit :** le code que l'étudiant doit écrire lui-même est précisément ce qui a été retiré de `tuto-depart`. Merger `main` dedans le réinjecte automatiquement — l'exercice cesse d'exister à l'instant même. Il n'y a aucune façon de « synchroniser » les deux branches sans annuler le travail pédagogique.
+
+**Norme de maintenance :** `tuto-depart` a été créée avant le `main` actuel et se maintient **à la main, séparément**. Aucune procédure automatique n'existe et il ne faut pas en inventer une. Toute mise à jour est une reprise manuelle, fichier par fichier, décidée par Maive.
+
+**Ce que `tuto-depart` contient :** uniquement les sections de chaque composant avec leur procédure d'intégration, l'intégration elle-même retirée. L'étudiant voit une boîte vide (`SlotComponent`, déjà codé : ⬚ pointillés → ✅ vert une fois `integre` à `true`) et la remplit en suivant les étapes de la page.
+
+**Ce que `tuto-depart` ne contient pas** — et ne doit pas recevoir :
+- pages de test (`src/src/app/tests/`)
+- fichiers de la lib locale (`src/projects/`, `dist/`)
+- bandeau d'environnement et `src/environments/` — **aucune** notion de lib locale / npm / test public ici ; un seul objectif, une version minimaliste propre du repo pour qu'un étudiant teste le code
+
+**Règle critique déjà documentée** (`specs/001-tuto-interactif/plan.md`) : le TypeScript des pages de tuto n'importe **rien** de `ngx-parrecrivains`. Les snippets montrant les imports sont des chaînes affichées par `<app-snippet>`, pas du code exécuté.
+
+**État au 2026-08-10 :** `tuto-depart` a 18 commits de retard sur `main`, dernier alignement le 2026-06-04, donc antérieur à la migration du 2 juillet. Elle est considérée comme une preuve de concept ; les normes ci-dessus valent pour sa future refonte. Deux chemins suspects y traînent, à vérifier le jour où on y retournera : `src/src/src/app/...` (trois `src` imbriqués) et un `src/src/tsconfig.json` égaré.
+
+**Aucune protection technique n'est en place** — l'interdiction n'est aujourd'hui que documentaire.
+Procédure complète à appliquer dans `BACKLOG.md` § « Protéger `tuto-depart` contre l'écrasement ».
+Le but y est précisé : bloquer l'**écrasement** de la branche, pas le travail dessus, et surtout pas
+les commits d'un étudiant sur son propre clone.
 
 ---
 
@@ -102,10 +137,13 @@ Toutes les données sont simulées côté frontend. Approches autorisées :
 ## Déploiement — GitHub Pages
 
 ```bash
-# Build pour GitHub Pages (lib publiée via tsconfig.demo.json, pas de path alias)
-npx ng build --ts-config=tsconfig.demo.json
+# Site officiel — lib npm publiée. La configuration production est le défaut, aucun flag requis.
+npx ng build && cp ../docs/index.html ../docs/404.html
 # Puis commiter docs/ et pousser sur main
 ```
+
+Le `--ts-config=tsconfig.demo.json` d'autrefois est obsolète : la configuration `production`
+l'épingle déjà dans `angular.json`. Toutes les commandes courantes sont dans `cmd.md`.
 
 Le résultat du build est placé dans `docs/` (configuré dans `angular.json` → `outputPath`).
 GitHub Pages sert ce dossier directement depuis la branche `main`.
@@ -129,7 +167,12 @@ Quand `npm install`/`npm update` signale des scripts d'installation non couverts
 [`verification_securite_dependances.md`](verification_securite_dependances.md) — obligatoire avant
 tout `npm approve-scripts`.
 
-**Règle non-négociable : jamais `npm approve-scripts --all`.** Un paquet à la fois, après vérification.
+**Règle non-négociable : jamais `npm approve-scripts --all` ni `--dangerously-allow-all-scripts`.**
+Un paquet à la fois, après vérification.
+
+À savoir : `allowScripts` seul ne bloque rien — npm exécute le script puis avertit. Le garde-fou
+n'est effectif qu'avec `strict-allow-scripts=true` dans `src/.npmrc`, fichier **non versionné**
+posé par root à la création du compte de travail.
 
 ---
 

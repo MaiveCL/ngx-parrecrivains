@@ -1,0 +1,52 @@
+.bandeau {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.75rem;
+  padding: 0.4rem 1rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.35);
+  font-size: 0.8rem;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.bandeau__etiquette {
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+.bandeau__detail {
+  opacity: 0.85;
+}
+
+// Une couleur par variant — c'est le seul indicateur de la source de la lib,
+// le port du serveur ne doit jamais servir à distinguer les trois états.
+.bandeau--local {
+  background: #313244;
+  color: #cdd6f4;
+}
+
+.bandeau--test-public {
+  background: #f9a825;
+  color: #11111b;
+}
+
+.bandeau--officiel {
+  background: #2e7d32;
+  color: #ffffff;
+}
+
+@media (max-width: 768px) {
+  .bandeau {
+    font-size: 0.75rem;
+  }
+}

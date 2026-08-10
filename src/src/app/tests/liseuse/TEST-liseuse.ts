@@ -1,4 +1,3 @@
-// FICHIER TEMPORAIRE — SUPPRIMER AVANT PUBLICATION
 // Sert uniquement à tester visuellement LiseuseManuscritComponent (ngx-parrecrivains)
 
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';

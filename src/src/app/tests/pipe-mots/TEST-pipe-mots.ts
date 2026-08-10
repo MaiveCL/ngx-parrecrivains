@@ -1,4 +1,3 @@
-// FICHIER TEMPORAIRE — SUPPRIMER AVANT PUBLICATION
 // Sert uniquement à tester visuellement MotsPipe / WordsPipe (ngx-parrecrivains)
 
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
