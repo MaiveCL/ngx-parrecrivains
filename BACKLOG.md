@@ -45,6 +45,38 @@ refusé. Tenter un commit normal + push → doit passer.
 
 ---
 
+## Refonte de `tuto-depart` — plus tard
+
+La branche actuelle est une **preuve de concept**. Les normes à respecter pour sa refonte sont dans
+`CLAUDE.md` § tuto-depart (jamais de merge, maintenance manuelle, pas de bandeau ni d'environnements,
+pas de pages de test, pas de fichiers de lib locale).
+
+État constaté le 2026-08-10 :
+
+- 18 commits de retard sur `main`, dernier alignement le 2026-06-04 — donc **antérieur** à la
+  migration du 2 juillet. Ni source de la lib, ni `tsconfig.demo.json`, ni
+  `verification_securite_dependances.md`.
+- Deux chemins suspects à vérifier le jour où on y retourne :
+  `src/src/src/app/shared/mock/isbn-corpus.json` (trois `src` imbriqués) et un `src/src/tsconfig.json`
+  égaré. Ressemblent à des dérapages de copie.
+
+Piste non tranchée, à explorer avant de refondre : un bac à sable en ligne (aperçu + code côte à côte),
+éventuellement **combiné** à la copie de dépôt plutôt qu'en remplacement — celle-ci laisse l'étudiant
+fouiller un projet complet et fonctionnel, ce qui a sa valeur propre.
+
+---
+
+## Broutilles
+
+- [ ] `NG8113` à chaque build : `SlotComponent` est importé dans
+      `src/src/app/tutos/liseuse/tuto-liseuse.ts:65` mais absent de son template. Retirer l'import
+      — ou l'utiliser, si le slot manque à cette page.
+- [ ] Le flux `test-public` → `docs/` → GitHub Pages n'a **jamais été exercé en vrai** : le build et
+      le bandeau sont vérifiés localement, mais rien n'a encore été publié dans cet état. La première
+      utilisation réelle sera aussi le test du flux.
+
+---
+
 ## App tutoriel — mise aux normes des conventions Angular
 
 Le code Angular du site tutoriel (`src/src/`) ne respectait pas les conventions de parrecrivains
