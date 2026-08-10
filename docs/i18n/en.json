@@ -6,7 +6,7 @@
   "nav.tuto.temps": "ReadingTime",
   "nav.tuto.liseuse": "Reader",
   "nav.tutos": "Tutorials",
-
+  "nav.tests": "Tests",
   "commun.slot.placeholder": "← The component will appear here after integration",
   "commun.slot.succes": "✅ Here is your component — integration successful!",
   "commun.integration.titre": "How to integrate",
@@ -28,7 +28,6 @@
   "commun.info.props": "Properties",
   "commun.info.version": "Version",
   "commun.info.type": "Type",
-
   "accueil.titre": "ngx-parrecrivains tutorial",
   "accueil.description": "This site guides you through integrating the ngx-parrecrivains Angular library into your own project.",
   "accueil.fait.titre": "Already done in this branch",
@@ -42,7 +41,6 @@
   "accueil.afaire.etape4": "Start the development server",
   "accueil.navigation.titre": "Choose a component to integrate",
   "accueil.navigation.description": "Each page guides you step by step through integrating one element of the library.",
-
   "tuto.isbn.titre": "isbnValidator / validerIsbn",
   "tuto.isbn.version": "v0.4.0",
   "tuto.isbn.type": "Reactive form validator",
@@ -67,7 +65,6 @@
   "tuto.isbn.probleme.3.symptome": "TypeScript error: Cannot find module 'ngx-parrecrivains'",
   "tuto.isbn.probleme.3.cause": "The library is not installed",
   "tuto.isbn.probleme.3.solution": "Run: npm install ngx-parrecrivains",
-
   "tuto.mots.titre": "MotsPipe / WordsPipe",
   "tuto.mots.version": "v0.2.0",
   "tuto.mots.type": "Angular Pipe",
@@ -91,7 +88,6 @@
   "tuto.mots.probleme.3.symptome": "I need an unsupported language (e.g. Portuguese, Spanish…)",
   "tuto.mots.probleme.3.cause": "Only fr, en and cr have built-in rules — other languages require custom forms",
   "tuto.mots.probleme.3.solution": "Use the singular/plural parameters: {{ 1234 | words:'pt':'palavra':'palavras' }}",
-
   "tuto.temps.titre": "TempsLectureService",
   "tuto.temps.version": "v0.3.0",
   "tuto.temps.type": "Angular Service",
@@ -114,7 +110,6 @@
   "tuto.temps.probleme.3.symptome": "TypeScript error: Cannot find module 'ngx-parrecrivains'",
   "tuto.temps.probleme.3.cause": "The library is not installed",
   "tuto.temps.probleme.3.solution": "Run: npm install ngx-parrecrivains",
-
   "tuto.liseuse.titre": "LiseuseManuscritComponent",
   "tuto.liseuse.version": "v0.1.0",
   "tuto.liseuse.type": "Angular Component",
@@ -145,7 +140,6 @@
   "tuto.liseuse.probleme.4.symptome": "The iframe (Google Docs, PDF) doesn't fill the full height of the component",
   "tuto.liseuse.probleme.4.cause": "display: block on ngx-liseuse-manuscrit overrides the component's internal display: flex and breaks its flex chain",
   "tuto.liseuse.probleme.4.solution": "Never override the display property on ngx-liseuse-manuscrit — only use height, width and other properties without touching display",
-
   "commun.col.cle": "Key",
   "commun.col.valeur": "Value",
   "commun.col.quand": "Triggered when",
@@ -161,7 +155,6 @@
   "commun.col.payload": "Payload",
   "commun.col.constante": "Constant",
   "commun.optionnel": "—",
-
   "tuto.isbn.table.caption": "Error keys",
   "tuto.isbn.table.erreur.format.desc": "Length ≠ 10/13, invalid characters, dashes",
   "tuto.isbn.table.erreur.prefixe.desc": "ISBN-13 without 978 or 979 prefix",
@@ -173,7 +166,6 @@
   "tuto.isbn.erreur.checksum": "This ISBN number is incorrect (invalid check digit).",
   "tuto.isbn.erreur.coherence": "Format inconsistent with the publication year.",
   "tuto.isbn.test.resultat.hint": "(No ISBN error shown? → isbnValidator() missing from the FormControl)",
-
   "tuto.mots.table.signature": "Signature: {{ value | words: language : singular : plural }}",
   "tuto.mots.param.valeur.nom": "value",
   "tuto.mots.param.valeur.desc": "Word count (null → 0)",
@@ -183,13 +175,11 @@
   "tuto.mots.param.singulier.desc": "Custom singular form (overrides built-in table)",
   "tuto.mots.param.pluriel.nom": "plural",
   "tuto.mots.param.pluriel.desc": "Custom plural form",
-
   "tuto.temps.table.caption.methodes": "Methods",
   "tuto.temps.table.caption.constantes": "Exported constant",
   "tuto.temps.methode.estimer.desc": "Returns estimated time in seconds.",
   "tuto.temps.methode.formater.desc": "Returns a display-ready string — \"5 min\", \"1 h 05 min\"",
   "tuto.temps.constante.vitesse.desc": "Adult reading speed in words/min — override via vitesseMots if needed",
-
   "tuto.liseuse.table.caption.inputs": "Inputs",
   "tuto.liseuse.table.caption.outputs": "Outputs",
   "tuto.liseuse.input.contenu.desc": "Content to display (text, HTML, PDF, Google Docs URL)",

@@ -76,6 +76,12 @@ Copiées depuis `parrecrivains` dans `src/src/app/tests/`. Fonctionnent avec `ng
 
 ## UX — Pied de page contact anti-spam
 
+⚠️ Depuis le 2026-08-10, le bandeau d'environnement occupe le bas de l'écran en `position: fixed`.
+Un pied de page contact viendrait s'empiler dessus. À trancher au moment de le construire : soit le
+contact entre dans le bandeau, soit le bandeau remonte en haut de page, soit le pied de page défile
+normalement sous le bandeau. Ne pas ajouter un deuxième élément fixe en bas sans y penser.
+
+
 Ajouter un pied de page invitant les visiteurs à contacter Maive pour des commentaires ou problèmes.
 Le courriel doit être protégé contre les bots (pas d'adresse en clair dans le HTML).
 
