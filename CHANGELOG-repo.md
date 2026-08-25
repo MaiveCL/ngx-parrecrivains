@@ -12,6 +12,21 @@ Les entrées antérieures au 2026-08-10 sont des rétro-rapports approximatifs r
 
 ---
 
+## 2026-08-25 — `dist/` d'un build `--watch` invalide pour `npm publish`
+
+Découvert en publiant la 0.4.3 : `npm publish` a échoué avec `"version" was cleaned and set to
+"0.0.0-watch"`. Le `dist/ngx-parrecrivains/` avait été écrit par un `ng build --watch` (préalable
+documenté au test local dans `cmd.md`), qui timbre un `version` placeholder plutôt que la vraie
+version. Arrêter le watch ne corrige pas `dist/` — son dernier résultat reste sur disque.
+
+Un agent avait auparavant jugé `dist/` « à jour » via `find -newer` (aucune source plus récente que le
+build) — vérification insuffisante : le fichier écrit par le watch a une date plus récente que les
+sources, donc « paraît » frais, même s'il contient un placeholder invalide. Ajouté aux pièges vérifiés
+de `CLAUDE.md` : toujours rebuilder en one-shot immédiatement avant `npm publish`, jamais se fier à une
+comparaison de dates.
+
+---
+
 ## 2026-08-25 — Vérification visuelle avant publication : rôle réservé à Maive
 
 Ajouté à `CLAUDE.md` après qu'un agent a tenté de lancer un navigateur headless (`chromium-cli`) pour

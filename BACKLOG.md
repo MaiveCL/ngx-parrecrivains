@@ -176,7 +176,7 @@ fouiller un projet complet et fonctionnel, ce qui a sa valeur propre.
 
 ---
 
-## Compatibilité Angular antérieure — clarifier et documenter
+## Compatibilité Angular antérieure — clarifier et documenter — ✅ TERMINÉ (publié 2026-08-25)
 
 Constaté le 2026-08-25 en creusant pourquoi `parrecrivains` (passé à Angular 22) ne peut pas installer
 la lib publiée (`peerDependencies: ^21.2.0`) : la promesse actuelle de compatibilité (« 21+ ») était une
@@ -210,12 +210,18 @@ plancher technique.
       `tuto-temps-lecture`), avec lien vers `angular.dev/reference/releases`. Nouvelles clés i18n
       FR/EN seulement — les tutoriels n'ont pas de `cr.json` au niveau app (contrairement à la lib
       elle-même, qui expose fr/en/cr pour l'UI interne de la liseuse).
+- [x] Publiée sur npm le 2026-08-25 — confirmé via `npm view ngx-parrecrivains version`
+      (→ `0.4.3`) et `npm view ngx-parrecrivains peerDependencies`
+      (→ `"^20.0.0 || ^21.0.0 || ^22.0.0"`). Piège rencontré et documenté au passage (voir
+      `CLAUDE.md` § pièges et `CHANGELOG-repo.md` 2026-08-25) : un `dist/` laissé par un
+      `ng build --watch` timbre `0.0.0-watch` au lieu de la vraie version — rebuild one-shot
+      obligatoire juste avant `npm publish`.
 - [ ] Étendre la convention pour les futurs éléments : chaque nouvelle spec SpecKit doit documenter le
       plancher Angular réel des API utilisées, pour que ce tableau reste à jour sans reprendre un audit
       complet à chaque fois.
-- [ ] `parrecrivains` : une fois `0.4.3` publiée sur npm, refaire `npm install ngx-parrecrivains` sans
-      `--legacy-peer-deps` (Phase 8 de `parrecrivains/BACKLOG.md`) — devrait passer directement vu
-      qu'Angular 22 est maintenant dans la plage `peerDependencies`.
+- [ ] Suite côté `parrecrivains` : Phase 8 de `parrecrivains/BACKLOG.md` (brancher l'app sur la lib
+      publiée) — maintenant déblocable sans `--legacy-peer-deps`, `0.4.3` étant compatible Angular 22.
+      Détail de la tâche gardé uniquement là-bas pour ne pas la faire diverger à deux endroits.
 
 ---
 

@@ -37,10 +37,11 @@ La solution : deux tsconfig, trois configurations, et un bandeau qui dit toujour
 - **Le port n'est jamais un indicateur.** Les deux variantes locales tournent sur 4200. Seul le bandeau fait foi.
 - **Ngrok n'est plus utilisé dans ce repo** — `test-public` le remplace. Ngrok ne sert plus qu'au repo `parrecrivains`.
 
-### ⚠️ Trois pièges vérifiés
+### ⚠️ Quatre pièges vérifiés
 - **`ng build` écrit toujours dans `docs/`.** Pour un build de contrôle, ajouter `--output-path=/tmp/verif`, sinon le site publié est écrasé. Le build n'émet pas `404.html` : le regénérer avec `cp ../docs/index.html ../docs/404.html`.
 - **Le repli du path alias est silencieux.** Si `dist/ngx-parrecrivains/` n'existe pas, TypeScript retombe sur `node_modules` sans avertissement et `ng serve` sert la version npm publiée — les modifications locales de la lib deviennent invisibles. Toujours builder la lib avant de servir.
 - **`ng serve` lancé par un agent n'est pas visible depuis VS Code.** Angular écoute par défaut sur `localhost`, qui résout en `[::1]` (IPv6) sur cette machine. Le forwarding **manuel** de VS Code compose `127.0.0.1` (IPv4) et tourne en boucle sans jamais répondre. Quand Maive lance le serveur elle-même, VS Code lit `/proc/net/tcp6` et forwarde correctement — le piège ne touche donc que les serveurs lancés par un agent. Toujours ajouter `--host 127.0.0.1` dans ce cas.
+- **Un build `--watch` laisse une trace même après son arrêt.** `ng build ngx-parrecrivains --watch` (préalable documenté à `ng serve`, voir `cmd.md`) timbre `dist/ngx-parrecrivains/package.json` avec un `version` placeholder (`0.0.0-watch`) au lieu de la vraie version — `npm publish` le refuse (« prerelease »). Arrêter le watch ne répare rien : son dernier résultat reste sur disque. Comparer les dates de fichiers (`find -newer`) ne détecte PAS ce cas — le fichier écrit par le watch est bel et bien plus récent que les sources, donc « paraît » à jour. La seule vérification fiable avant `npm publish` : rebuild one-shot (`ng build ngx-parrecrivains`, sans `--watch`) immédiatement avant, puis `grep version dist/ngx-parrecrivains/package.json` pour confirmer le numéro attendu.
 
 ### 🚫 Vérification visuelle avant publication — jamais par l'agent
 
