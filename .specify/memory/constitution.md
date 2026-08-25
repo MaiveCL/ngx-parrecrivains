@@ -146,7 +146,7 @@ Tout écart entre spec et implémentation DOIT déclencher une mise à jour des 
 | Fichiers | `.ts` + `.html` + `.scss` séparés | Template ou styles inline dans `@Component` |
 | Réactivité | `signal()`, `computed()`, `effect()`, `linkedSignal()` | Dupliquer l'état ; `mutate()` |
 | Zoneless | Aucun import `zone.js`, aucun `NgZone` | `NgZone`, `ApplicationRef.tick()`, `zone.js` |
-| Standalone | Ne PAS écrire `standalone: true` (défaut v20+) | `NgModule`, `HttpClientModule` |
+| Standalone | Écrire `standalone: true` explicitement — n'est le défaut implicite que depuis Angular 20 ; l'omettre fixe le plancher de compatibilité de la lib à 20+ au lieu de 21+ officiellement promis. Vérifié le 2026-08-25 : build réel réussi en Angular 20 une fois explicite. Exception à la convention générale de terseness, volontaire. | `NgModule`, `HttpClientModule` |
 | Nommage | Français pour tout ce qu'on crée | Anglais pour les APIs externes |
 | Gestures mobiles | CSS `touch-action` | `preventDefault()` sur touch/wheel |
 | Blob URLs | `effect()` avec variable dédiée par type de blob | `computed()` pour créer des Blob URLs |

@@ -10,7 +10,7 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 ## Angular Best Practices
 
 - Always use standalone components over NgModules
-- Must NOT set `standalone: true` inside Angular decorators. It's the default in Angular v20+.
+- MUST set `standalone: true` explicitly inside Angular decorators. It's only the implicit default since Angular v20 — omitting it silently raises the lib's real compatibility floor to 20+ instead of the officially promised 21+. Exception to the general terseness convention, deliberate — see `.specify/memory/constitution.md` § L-VII.
 - Use signals for state management
 - Implement lazy loading for feature routes
 - Do NOT use the `@HostBinding` and `@HostListener` decorators. Put host bindings inside the `host` object of the `@Component` or `@Directive` decorator instead

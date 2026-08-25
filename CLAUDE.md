@@ -42,6 +42,12 @@ La solution : deux tsconfig, trois configurations, et un bandeau qui dit toujour
 - **Le repli du path alias est silencieux.** Si `dist/ngx-parrecrivains/` n'existe pas, TypeScript retombe sur `node_modules` sans avertissement et `ng serve` sert la version npm publiée — les modifications locales de la lib deviennent invisibles. Toujours builder la lib avant de servir.
 - **`ng serve` lancé par un agent n'est pas visible depuis VS Code.** Angular écoute par défaut sur `localhost`, qui résout en `[::1]` (IPv6) sur cette machine. Le forwarding **manuel** de VS Code compose `127.0.0.1` (IPv4) et tourne en boucle sans jamais répondre. Quand Maive lance le serveur elle-même, VS Code lit `/proc/net/tcp6` et forwarde correctement — le piège ne touche donc que les serveurs lancés par un agent. Toujours ajouter `--host 127.0.0.1` dans ce cas.
 
+### 🚫 Vérification visuelle avant publication — jamais par l'agent
+
+La validation visuelle documentée en `T-I` (« Test local | `ng serve` | ... | Valider avant publication ») est **toujours effectuée par Maive elle-même**, dans son propre navigateur. Ceci **remplace**, pour ce repo, l'instruction générique « démarre le serveur et utilise la fonctionnalité dans un navigateur avant de rapporter que c'est terminé » — elle ne s'applique pas ici.
+
+L'agent (Claude) ne doit **jamais** lancer de navigateur headless, de `chromium-cli`, ou capturer des captures d'écran pour juger visuellement du rendu avant une publication npm. Se limiter à ce qui est automatisable et objectif : `ng build` (compilation), `ng test` (suite de tests unitaires). Le jugement visuel/UX final revient à Maive, pas à l'agent — donner la commande (`npx ng serve`) et la checklist de ce qu'il faut regarder, puis attendre son retour.
+
 ---
 
 ## ⛔ Branche `tuto-depart` — NE JAMAIS MERGER

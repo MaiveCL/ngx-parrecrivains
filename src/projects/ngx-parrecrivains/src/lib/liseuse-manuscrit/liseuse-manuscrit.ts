@@ -32,6 +32,7 @@ import { BarreControlesComponent } from './composants/barre-controles/barre-cont
 
 @Component({
   selector: 'ngx-liseuse-manuscrit',
+  standalone: true, // explicite (défaut implicite seulement depuis Angular 20) — compatibilité descendante
   templateUrl: './liseuse-manuscrit.html',
   styleUrl: './liseuse-manuscrit.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

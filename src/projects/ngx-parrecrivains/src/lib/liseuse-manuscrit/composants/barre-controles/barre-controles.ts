@@ -7,6 +7,7 @@ import { PanneauInfoComponent } from '../panneau-info/panneau-info';
 
 @Component({
   selector: 'ngx-barre-controles',
+  standalone: true, // explicite (défaut implicite seulement depuis Angular 20) — compatibilité descendante
   templateUrl: './barre-controles.html',
   styleUrl: './barre-controles.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

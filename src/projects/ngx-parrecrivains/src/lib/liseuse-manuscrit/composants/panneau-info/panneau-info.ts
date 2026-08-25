@@ -6,6 +6,7 @@ import { TraductionService } from '../../services/traduction';
 
 @Component({
   selector: 'ngx-panneau-info',
+  standalone: true, // explicite (défaut implicite seulement depuis Angular 20) — compatibilité descendante
   templateUrl: './panneau-info.html',
   styleUrl: './panneau-info.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

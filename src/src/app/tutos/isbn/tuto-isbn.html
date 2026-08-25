@@ -9,6 +9,33 @@
     <p class="tuto-description">{{ langue.t('tuto.isbn.description') }}</p>
   </header>
 
+  <section class="tuto-section" aria-labelledby="titre-compat">
+    <h2 id="titre-compat">{{ langue.t('commun.compat.titre') }}</h2>
+    <dl>
+      <dt>{{ langue.t('commun.compat.plancher.label') }}</dt>
+      <dd>{{ langue.t('tuto.isbn.compat.plancher') }}</dd>
+      <dt>{{ langue.t('commun.compat.pourquoi.label') }}</dt>
+      <dd>{{ langue.t('tuto.isbn.compat.pourquoi') }}</dd>
+      <dt>{{ langue.t('commun.compat.verifie.label') }}</dt>
+      <dd>{{ langue.t('tuto.isbn.compat.verifie') }}</dd>
+    </dl>
+
+    <p>
+      <strong>{{ langue.t('commun.compat.promesse.titre') }} :</strong>
+      {{ langue.t('commun.compat.promesse.texte') }}
+    </p>
+
+    <p>{{ langue.t('commun.compat.legacy.titre') }}</p>
+    <p>{{ langue.t('commun.compat.legacy.texte') }}</p>
+    <app-snippet code="npm install ngx-parrecrivains --legacy-peer-deps" [label]="langue.t('commun.compat.legacy.snippet.label')" />
+
+    <p>
+      <a href="https://angular.dev/reference/releases" target="_blank" rel="noopener">
+        {{ langue.t('commun.compat.lien.label') }}
+      </a>
+    </p>
+  </section>
+
   <section class="tuto-section" aria-labelledby="titre-info">
     <h2 id="titre-info">{{ langue.t('commun.info.props') }}</h2>
 

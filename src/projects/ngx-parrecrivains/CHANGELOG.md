@@ -219,11 +219,27 @@ Intégration optionnelle avec `@ngx-translate/core` via `TRANSLATE_SERVICE_TOKEN
 
 ---
 
-## [Unreleased]
+## [0.4.3] — 2026-08-25
 
-_Aucune modification en cours._
+### Modifié
 
----
+**Compatibilité Angular élargie** — `peerDependencies` passe de `^21.2.0` à
+`"^20.0.0 || ^21.0.0 || ^22.0.0"`, alignée sur les trois majeures actuellement supportées par Angular
+(support actif + LTS, voir [angular.dev/reference/releases](https://angular.dev/reference/releases)).
+Pas une rupture d'API — élargissement de compatibilité en patch, conforme à la pratique qu'Angular
+applique lui-même à ses propres paquets.
+
+`standalone: true` déclaré explicitement sur les 5 composants et les 2 pipes de la lib
+(`LiseuseManuscritComponent`, `ZoneLectureComponent`, `PanneauInfoComponent`,
+`BarreControlesComponent`, `BoiteTexte`, `MotsPipe`, `WordsPipe`) — retire la dépendance au défaut
+implicite (Angular 20+) qui fixait artificiellement le plancher réel de la lib au-delà de ce que les
+autres API utilisées exigent. Vérifié par build réel réussi en Angular 19 et 20 (app fraîche,
+composant le plus exigeant intégré).
+
+README enrichi d'un tableau de compatibilité par élément (plancher réel, justification, méthode de
+vérification) et d'un guide pour installer un seul élément « léger » sur une version plus ancienne que
+la promesse officielle (`--legacy-peer-deps`). Même information ajoutée aux 4 pages tutoriel de l'app.
+
 ---
 
 ## 🇬🇧 English
@@ -449,7 +465,24 @@ Optional integration with `@ngx-translate/core` via `TRANSLATE_SERVICE_TOKEN`.
 
 ---
 
-## [Unreleased]
+## [0.4.3] — 2026-08-25
 
-_No changes in progress._
+### Changed
+
+**Widened Angular compatibility** — `peerDependencies` moves from `^21.2.0` to
+`"^20.0.0 || ^21.0.0 || ^22.0.0"`, aligned with the three majors Angular currently supports (active
+support + LTS, see [angular.dev/reference/releases](https://angular.dev/reference/releases)). Not a
+breaking change — a compatibility widening shipped as a patch, matching the practice Angular applies
+to its own packages.
+
+`standalone: true` declared explicitly on the lib's 5 components and 2 pipes
+(`LiseuseManuscritComponent`, `ZoneLectureComponent`, `PanneauInfoComponent`,
+`BarreControlesComponent`, `BoiteTexte`, `MotsPipe`, `WordsPipe`) — removes the dependency on the
+implicit default (Angular 20+) that was artificially raising the lib's real floor beyond what its
+other APIs require. Verified with a real successful build on Angular 19 and 20 (fresh app, most
+demanding component wired in).
+
+README enriched with a per-element compatibility table (real floor, rationale, verification method)
+and a guide for installing a single "light" element on a version older than the official promise
+(`--legacy-peer-deps`). Same information added to the app's 4 tutorial pages.
 

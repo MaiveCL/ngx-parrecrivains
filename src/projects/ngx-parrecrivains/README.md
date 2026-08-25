@@ -89,7 +89,54 @@ Each artifact was manually reviewed and corrected before moving to the next step
 npm install ngx-parrecrivains
 ```
 
-**Prérequis** : Angular 21+
+**Prérequis officiels** : Angular 20, 21 ou 22 (`peerDependencies`) — les trois versions actuellement
+supportées par Angular lui-même (support actif + LTS). Voir [« Pourquoi ces
+versions ? »](#pourquoi-ces-versions--fr) ci-dessous pour la logique derrière ce choix, et le tableau
+de compatibilité par élément si vous êtes sur une version plus ancienne.
+
+### Compatibilité Angular — en détail
+
+Cette lib suit la même politique de rétrocompatibilité qu'Angular applique à ses propres paquets :
+un élargissement de compatibilité (comme celui-ci) se fait en version mineure/patch, jamais besoin
+d'attendre une rupture majeure. Détails officiels : [Versioning and releases —
+angular.dev](https://angular.dev/reference/releases).
+
+#### Pourquoi ces versions ? {#pourquoi-ces-versions--fr}
+
+Angular ne garde que 3 versions majeures « vivantes » à la fois (1 an de support actif + 1 an de LTS
+chacune). `ngx-parrecrivains` aligne sa promesse officielle sur cette même fenêtre plutôt que de la
+figer arbitrairement — quand Angular fait passer une version en fin de vie, on réévalue ici aussi.
+
+#### Tableau de compatibilité par élément
+
+Le plancher technique réel n'est pas le même pour chaque élément — certains n'utilisent aucune API
+récente et fonctionneraient bien en-deçà de la promesse officielle ci-dessus.
+
+| Élément | Plancher réel | Pourquoi | Vérifié comment |
+|---|---|---|---|
+| `LiseuseManuscritComponent` | Angular 19 | Utilise `input()`/`output()` (stables depuis la 19), `signal()`/`computed()`/`effect()` (17), `inject()` (14) | **Build réel réussi** en Angular 19 et 20 (app fraîche, composant intégré) |
+| `MotsPipe` / `WordsPipe` | Angular 14 (estimé) | Aucune API récente — juste `standalone: true` explicite, qui existe depuis l'introduction des composants standalone | Audit du code seulement, pas rejoué en build |
+| `TempsLectureService` | Angular 6 (estimé) | `@Injectable({ providedIn: 'root' })` uniquement — aucune signal, aucun `inject()` | Audit du code seulement, pas rejoué en build |
+| `isbnValidator` / `validerIsbn` | Angular 2 (estimé) | Fonctions pures, zéro décorateur, zéro injection — dépend seulement des types `@angular/forms` | Audit du code seulement, pas rejoué en build |
+
+**« Vérifié comment » compte** : la ligne `LiseuseManuscritComponent` a été confirmée par un vrai
+`ng build` réussi dans une app Angular fraîche — pas juste déduite en lisant le code. Les autres lignes
+sont des estimations basées sur les API utilisées, plausibles mais jamais testées en pratique.
+
+#### Utiliser un seul élément sur une version plus ancienne que la promesse officielle
+
+Si vous êtes sur un Angular antérieur à 20 (mettons, la 16) et que vous avez seulement besoin d'un
+élément « léger » comme `isbnValidator` ou `TempsLectureService` — sans le reste de la lib en version
+plus récente — vous pouvez installer quand même :
+
+```bash
+npm install ngx-parrecrivains --legacy-peer-deps
+```
+
+Ça ignore l'avertissement de `peerDependencies` et installe normalement. C'est sécuritaire pour les
+éléments dont le plancher réel est bas (voir tableau ci-dessus), **mais pas garanti** pour
+`LiseuseManuscritComponent` en-dessous de la 19, qui n'a jamais été testé plus bas. Si votre projet
+utilise plusieurs éléments, testez chacun individuellement avant de vous fier au résultat.
 
 ### Utilisation rapide
 
@@ -508,7 +555,53 @@ MIT © 2026 [parrecrivains](https://parrecrivains.com)
 npm install ngx-parrecrivains
 ```
 
-**Requirements**: Angular 21+
+**Official requirements**: Angular 20, 21 or 22 (`peerDependencies`) — the three major versions
+currently supported by Angular itself (active support + LTS). See [Why these
+versions?](#why-these-versions--en) below for the reasoning, and the per-element compatibility table
+if you're on an older version.
+
+### Angular compatibility — in detail
+
+This lib follows the same backward-compatibility policy Angular applies to its own packages: a
+compatibility widening (like this one) ships as a minor/patch, never waiting for a breaking major.
+Official details: [Versioning and releases — angular.dev](https://angular.dev/reference/releases).
+
+#### Why these versions? {#why-these-versions--en}
+
+Angular only keeps 3 major versions "alive" at any time (1 year of active support + 1 year of LTS
+each). `ngx-parrecrivains` aligns its official promise on that same window instead of freezing it
+arbitrarily — when Angular retires a version, we re-evaluate here too.
+
+#### Per-element compatibility table
+
+The real technical floor isn't the same for every element — some use no recent API at all and would
+work well below the official promise above.
+
+| Element | Real floor | Why | Verified how |
+|---|---|---|---|
+| `LiseuseManuscritComponent` | Angular 19 | Uses `input()`/`output()` (stable since 19), `signal()`/`computed()`/`effect()` (17), `inject()` (14) | **Real build succeeded** on Angular 19 and 20 (fresh app, component wired in) |
+| `MotsPipe` / `WordsPipe` | Angular 14 (estimated) | No recent API — just explicit `standalone: true`, which has existed since standalone components were introduced | Code audit only, not build-tested |
+| `TempsLectureService` | Angular 6 (estimated) | `@Injectable({ providedIn: 'root' })` only — no signals, no `inject()` | Code audit only, not build-tested |
+| `isbnValidator` / `validerIsbn` | Angular 2 (estimated) | Pure functions, zero decorators, zero injection — depends only on `@angular/forms` types | Code audit only, not build-tested |
+
+**"Verified how" matters**: the `LiseuseManuscritComponent` row was confirmed by an actual successful
+`ng build` in a fresh Angular app — not just deduced by reading the code. The other rows are estimates
+based on the APIs used, plausible but never tested in practice.
+
+#### Using a single element on a version older than the official promise
+
+If you're on an Angular version older than 20 (say, 16) and only need a "light" element like
+`isbnValidator` or `TempsLectureService` — without the rest of the lib requiring a newer version — you
+can still install:
+
+```bash
+npm install ngx-parrecrivains --legacy-peer-deps
+```
+
+This bypasses the `peerDependencies` warning and installs normally. It's safe for elements with a low
+real floor (see table above), **but not guaranteed** for `LiseuseManuscritComponent` below 19, which
+has never been tested lower. If your project uses several elements, test each one individually before
+relying on the result.
 
 ### Quick start
 

@@ -25,7 +25,7 @@ const LOCALES: Record<string, string> = {
 };
 
 // @Pipe({ name: 'mots' }) — enregistre le pipe sous le sélecteur `| mots` dans les templates
-@Pipe({ name: 'mots' })
+@Pipe({ name: 'mots', standalone: true }) // standalone explicite (défaut implicite seulement depuis Angular 20)
 export class MotsPipe implements PipeTransform {
 
   // transform() est la seule méthode requise par l'interface PipeTransform
@@ -61,7 +61,7 @@ export class MotsPipe implements PipeTransform {
 
 // Alias anglophone — classe vide qui hérite tout de MotsPipe, sélecteur différent (`| words`)
 // doc: héritage de pipe => https://angular.dev/guide/pipes/transform-data
-@Pipe({ name: 'words' })
+@Pipe({ name: 'words', standalone: true })
 export class WordsPipe extends MotsPipe { }
 
 // ─── Helpers ────────────────────────────────────────────────────────────────

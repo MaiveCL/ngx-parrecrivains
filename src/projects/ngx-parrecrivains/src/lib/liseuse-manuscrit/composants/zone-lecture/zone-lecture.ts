@@ -21,6 +21,7 @@ import { FormatContenu } from '../../../types/liseuse.types';
 
 @Component({
   selector: 'ngx-zone-lecture',
+  standalone: true, // explicite (défaut implicite seulement depuis Angular 20) — compatibilité descendante
   templateUrl: './zone-lecture.html',
   styleUrl: './zone-lecture.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

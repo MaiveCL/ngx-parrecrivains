@@ -12,6 +12,20 @@ Les entrées antérieures au 2026-08-10 sont des rétro-rapports approximatifs r
 
 ---
 
+## 2026-08-25 — Vérification visuelle avant publication : rôle réservé à Maive
+
+Ajouté à `CLAUDE.md` après qu'un agent a tenté de lancer un navigateur headless (`chromium-cli`) pour
+juger lui-même du rendu visuel avant la publication de la 0.4.3 — un réflexe issu d'une instruction
+générique (« teste dans un navigateur avant de dire que c'est fini »), pas d'une lecture attentive du
+flux `T-I` de la constitution, qui réserve déjà cette étape à Maive elle-même.
+
+Règle ajoutée : l'agent ne lance jamais de navigateur headless ni ne capture d'écran pour juger d'un
+rendu avant publication. Il se limite à ce qui est automatisable et objectif (`ng build`, `ng test`) et
+donne la commande + une checklist ; le jugement visuel final reste humain. Cette règle prime sur le
+comportement par défaut de l'agent pour ce repo précisément.
+
+---
+
 ## 2026-08-10 — Trois états de build distingués par un bandeau visuel
 
 Ajout d'une troisième configuration de build, `test-public`, pour exposer publiquement la lib
