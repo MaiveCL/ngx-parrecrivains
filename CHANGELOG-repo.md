@@ -12,6 +12,21 @@ Les entrées antérieures au 2026-08-10 sont des rétro-rapports approximatifs r
 
 ---
 
+## 2026-08-25 — La promesse "Angular 21+" n'était pas un vrai plancher
+
+En creusant pourquoi `parrecrivains` (passé à Angular 22) ne pouvait pas installer la lib publiée
+(`peerDependencies: ^21.2.0`), découvert que "21+" était juste la version du workspace au moment
+du développement — jamais un plancher technique vérifié. Audit des imports + tests réels sur
+Angular 19/20 : le vrai plancher était 19, fixé uniquement par `standalone: true` implicite
+(depuis déclaré explicitement dans toute la lib). `peerDependencies` élargi à `20/21/22` en 0.4.3
+(patch, pas une rupture). Détails techniques dans
+`src/projects/ngx-parrecrivains/CHANGELOG.md` [0.4.3].
+
+Leçon retenue : ne plus promettre un plancher Angular sans l'avoir vérifié par un build réel —
+d'où l'item backlog pour documenter le plancher réel de chaque future spec SpecKit.
+
+---
+
 ## 2026-08-25 — `dist/` d'un build `--watch` invalide pour `npm publish`
 
 Découvert en publiant la 0.4.3 : `npm publish` a échoué avec `"version" was cleaned and set to

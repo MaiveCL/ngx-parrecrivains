@@ -178,50 +178,19 @@ fouiller un projet complet et fonctionnel, ce qui a sa valeur propre.
 
 ## Compatibilité Angular antérieure — clarifier et documenter — ✅ TERMINÉ (publié 2026-08-25)
 
-Constaté le 2026-08-25 en creusant pourquoi `parrecrivains` (passé à Angular 22) ne peut pas installer
-la lib publiée (`peerDependencies: ^21.2.0`) : la promesse actuelle de compatibilité (« 21+ ») était une
-valeur unique choisie par convenance (version du workspace au moment du développement), pas le vrai
-plancher technique.
+Décision et détails techniques dans `CHANGELOG-repo.md` (2026-08-25) et
+`src/projects/ngx-parrecrivains/CHANGELOG.md` [0.4.3] — pas répétés ici.
 
-- [x] Audit des imports `@angular/core` dans les 15 fichiers de la lib — plancher réel identifié :
-      **Angular 20**, fixé par la dépendance implicite au `standalone: true` par défaut, pas par
-      `signal()`/`input()`/`output()` (stables depuis 17/19) ni `inject()` (stable depuis 14).
-- [x] `standalone: true` ajouté explicitement aux 5 composants de la lib (`liseuse-manuscrit.ts`,
-      `panneau-info.ts`, `barre-controles.ts`, `zone-lecture.ts`, `boite-texte.ts`) — retire la
-      dépendance au défaut implicite v20+, plancher théorique redescend à ce que les autres API exigent.
-- [x] Convention corrigée aux deux endroits qui la documentaient (`constitution.md` § L-VII et
-      `src/.claude/CLAUDE.md`) — sinon la génération de code future aurait dérivé vers l'ancienne règle.
-- [x] Test réel effectué le 2026-08-25 : lib rebuild, `npm pack`, installée avec `--legacy-peer-deps`
-      dans une app Angular 20 fraîche (`ng new` v20.3.34), `LiseuseManuscritComponent` (composant le plus
-      exigeant : signaux, `input.required()`, `output()`, `afterNextRender()`) intégré et `ng build`
-      **réussi sans erreur ni avertissement**. Confirme l'audit — pas juste une lecture de code.
-- [x] Test réel en Angular 19 (en plus du 20) : `LiseuseManuscritComponent` intégré, `ng build` réussi
-      sans erreur — le vrai plancher confirmé est **19**, pas 20. `MotsPipe`/`WordsPipe` avaient le même
-      problème de `standalone` implicite que les composants — corrigé aussi.
-- [x] Version bumpée à `0.4.3` (patch, pas une rupture d'API — cohérent avec la pratique officielle
-      d'Angular pour ses propres peerDependencies) + `peerDependencies` élargi à
-      `"^20.0.0 || ^21.0.0 || ^22.0.0"` (les 3 majeures actuellement actives/LTS chez Angular — la 19,
-      confirmée fonctionnelle, est délibérément laissée hors de la promesse officielle car déjà EOL
-      chez Angular lui-même). Règle le blocage de la Phase 8 dans `parrecrivains/BACKLOG.md`.
-- [x] Tableau de compatibilité par élément ajouté au README (FR + EN) : plancher réel, justification,
-      méthode de vérification (build réel vs. audit de code) pour chacun des 4 éléments publics. Guide
-      `--legacy-peer-deps` ajouté pour utiliser un seul élément « léger » sur une version plus ancienne.
-- [x] Même contenu ajouté aux 4 pages tutoriel de l'app (`tuto-liseuse`, `tuto-isbn`, `tuto-mots`,
-      `tuto-temps-lecture`), avec lien vers `angular.dev/reference/releases`. Nouvelles clés i18n
-      FR/EN seulement — les tutoriels n'ont pas de `cr.json` au niveau app (contrairement à la lib
-      elle-même, qui expose fr/en/cr pour l'UI interne de la liseuse).
-- [x] Publiée sur npm le 2026-08-25 — confirmé via `npm view ngx-parrecrivains version`
-      (→ `0.4.3`) et `npm view ngx-parrecrivains peerDependencies`
-      (→ `"^20.0.0 || ^21.0.0 || ^22.0.0"`). Piège rencontré et documenté au passage (voir
-      `CLAUDE.md` § pièges et `CHANGELOG-repo.md` 2026-08-25) : un `dist/` laissé par un
-      `ng build --watch` timbre `0.0.0-watch` au lieu de la vraie version — rebuild one-shot
-      obligatoire juste avant `npm publish`.
 - [ ] Étendre la convention pour les futurs éléments : chaque nouvelle spec SpecKit doit documenter le
       plancher Angular réel des API utilisées, pour que ce tableau reste à jour sans reprendre un audit
       complet à chaque fois.
 - [ ] Suite côté `parrecrivains` : Phase 8 de `parrecrivains/BACKLOG.md` (brancher l'app sur la lib
       publiée) — maintenant déblocable sans `--legacy-peer-deps`, `0.4.3` étant compatible Angular 22.
       Détail de la tâche gardé uniquement là-bas pour ne pas la faire diverger à deux endroits.
+- [ ] **Incohérence trouvée le 2026-08-26** : `constitution.md` § L-VII et `src/.claude/CLAUDE.md`
+      justifient encore la règle `standalone: true` explicite par "au lieu de 21+ officiellement
+      promis" — mais la promesse finalement publiée est 20/21/22, pas seulement 21+. Corriger le
+      texte des deux fichiers pour refléter l'état final plutôt que l'état intermédiaire de l'audit.
 
 ---
 
@@ -283,29 +252,171 @@ cause) — deux caractères différents, ne pas confondre en corrigeant.
 ## App tutoriel — mise aux normes des conventions Angular
 
 Le code Angular du site tutoriel (`src/src/`) ne respectait pas les conventions de parrecrivains
-au moment du transfert. Vérifié par grep sur `src/src/app` — la plupart des points sont réglés :
+au moment du transfert. Confirmé réglé (grep sur `src/src/app`, reconfirmé le 2026-08-26) :
+`inject()` partout, `input()`/`output()`, `@if`/`@for`/`@switch`, pas de template inline hors
+petits composants partagés, pas de `ngClass`/`ngStyle`, pas de `standalone: true` explicite,
+`private readonly` sur les services injectés (sauf signaux exposés au template, volontairement).
 
-- [x] `inject()` partout — aucune injection par constructeur restante (seuls des `constructor()` sans paramètre subsistent, ex. lifecycle hook dans `LangueService`)
-- [x] `input()`, `output()` — aucun `@Input()` / `@Output()` restant
-- [x] `@if`, `@for`, `@switch` — aucun `*ngIf` / `*ngFor` / `*ngSwitch` restant
-- [x] Templates inline — aucun dans `tests/` ni `demos/`. Les 3 restants (`app.ts`, `shared/snippet`, `shared/slot`) sont des petits composants partagés, conformes à la convention `src/.claude/CLAUDE.md` ("Prefer inline templates for small components")
-- [x] Pas de `ngClass` / `ngStyle` — aucune occurrence restante
-- [x] Pas de `standalone: true` explicite — aucune occurrence restante
-- [x] `private readonly` sur les services injectés — respecté, à l'exception assumée des signaux de service exposés directement aux templates (ex. `readonly langue = inject(LangueService)`), volontairement non `private` car lus depuis le HTML
 - [ ] `signal()`, `computed()` — pas d'audit systématique de la duplication d'état, à revérifier
-- [ ] Nommage en français — pas d'audit systématique, à revérifier
+- [ ] Nommage en français — pas d'audit systématique, à revérifier. Contre-exemple trouvé le
+      2026-08-26 : `accueil.ts:104` a une méthode `toggleEtape()` (nom anglais)
 
 ---
 
 ## Pages de test — corrections post-transfert
 
 Copiées depuis `parrecrivains` dans `src/src/app/tests/`. Fonctionnent avec `ng serve` (path alias).
+Nettoyage post-transfert confirmé fait (reconfirmé le 2026-08-26) : bannières "à supprimer avant
+publication" retirées (ces pages sont permanentes ici), DI par `inject()` plutôt que `new`, lien
+nav ajouté (clé i18n `nav.tests`).
 
-- [x] Supprimer les commentaires "FICHIER TEMPORAIRE — SUPPRIMER AVANT PUBLICATION" — ces pages sont permanentes dans ce repo
-- [x] Supprimer les bannières rouges "⚠ PAGE DE TEST… À supprimer avant publication" dans les HTML
-- [x] `TEST-temps-lecture.ts` : `new TempsLectureService()` remplacé par `inject(TempsLectureService)`
-- [x] Lien vers les pages de test dans la nav — toujours visible, en fin de nav, séparé des tutoriels (clé i18n `nav.tests`)
 - [ ] Ajouter les pages de test incomplètes manquantes (cas d'utilisation supplémentaires — voir BACKLOG parrecrivains)
+
+---
+
+## révision flux SpecKit complet (v0.1.0–v0.4.0)
+
+Les 4 premiers éléments de la lib ont été produits avec un flux SpecKit réduit (sans `clarify`,
+`checklist`, `analyze`) dans le cadre d'un MVP de 7 jours. Maintenant que le flux complet est
+obligatoire, faire une passe de révision sur chaque élément.
+
+Pour chaque spec existante (`specs/001` à `specs/004`) :
+- [ ] `/speckit-clarify` — identifier les ambiguïtés résiduelles dans la spec
+- [ ] `/speckit-checklist` — valider la qualité de la spec
+- [ ] `/speckit-analyze` — vérifier la cohérence entre spec, plan et tasks
+
+Ordre suggéré : commencer par `001-manuscript-reader` (le plus complexe) puis
+`004-validator-isbn` (le plus récent).
+
+Transféré depuis `parrecrivains/BACKLOG.md` le 2026-08-26 — les specs 001-004 vivent maintenant
+ici (migration Phase 4 de `parrecrivains` complétée), la copie côté `parrecrivains` sera
+supprimée à la Phase 9 du transfert de lib.
+
+---
+
+## prochaines versions
+
+### V2 — `FormatContenuService` — supprimer le fallback extension
+Actuellement `_detecterFichier()` vérifie le MIME d'abord, puis l'extension en fallback.
+Le fallback extension peut être trompé par un fichier renommé (virus.exe → virus.pdf).
+En V2 : se fier uniquement au MIME et retourner `'inconnu'` si vide.
+
+Cas où le MIME est vide aujourd'hui (raisons du fallback) :
+- Glisser-déposer sur Linux — le bureau ne fournit pas toujours le MIME
+- Formats rares (ODT, RTF, EPUB) moins bien reconnus selon l'OS et navigateur
+- `new File([contenu], 'fichier.pdf')` créé sans type explicite → `type: ""`
+- Certains navigateurs mobiles
+
+En V2 : documenter clairement que seuls les fichiers avec MIME reconnu sont acceptés.
+
+### v0.5.0 — `normaliserIsbn()` + Pipe `| isbn` + `IsbnLookupService`
+**`normaliserIsbn()`** — retire tirets, espaces, préfixe textuel "ISBN" avant de passer au validator.
+**Pipe `| isbn`** — formate pour l'affichage : `9782764633291` → `ISBN 978-2-7646-3329-1`.
+**Synchronisation back/front** — ajouter checksum dans Rails (côté `parrecrivains`), vérifier
+stockage chiffres purs, partager jeux de tests canoniques.
+
+### v0.5.0 — IsbnLookupService
+Complément du validator ISBN (v0.4.0).
+Appel à l'API Open Library (gratuite, sans clé, zéro CORS) pour vérifier
+qu'un ISBN correspond bien au titre et à l'auteur déclarés.
+Utile aussi pour pré-remplir un formulaire à partir d'un ISBN scanné.
+
+- API : `GET https://openlibrary.org/isbn/{isbn}.json`
+- Type : `AsyncValidatorFn` ou service séparé avec `HttpClient`
+- Séparation claire : validator local (checksum, synchrone) vs lookup (réseau, asynchrone)
+
+- Le backend (`parrecrivains`) devrait toujours utiliser la vérification API pour valider un ISBN.
+
+### V2 — `formater()` multilingue dans `TempsLectureService`
+Ajouter un paramètre `langue?: string` pour supporter des abréviations localisées
+(cri et autres langues des Premières Nations).
+Actuellement "h" et "min" sont universels — suffisant pour fr/en/cr en V1.
+Voir `temps-lecture.service.ts` TODO-REVIEW.
+
+Transféré depuis `parrecrivains/BACKLOG.md` le 2026-08-26. Un item obsolète a été retiré au
+passage : l'ancienne exigence "prochaine publication doit être 0.5.0 à cause du bump Angular 22"
+a été invalidée par l'audit du 2026-08-25 (voir `ngx-parrecrivains — Compatibilité Angular
+antérieure` ci-dessus) — la 0.4.3 a finalement couvert Angular 22 en patch, pas en bump mineur.
+
+---
+
+## dette technique — composants lib
+
+### `LiseuseManuscritComponent` — import inutilisé
+Avertissement au build de la lib (constaté le 2026-08-07, préexistant, sans lien avec Angular 22) :
+`NG8113: PanneauInfoComponent is not used within the template of LiseuseManuscritComponent`
+— `liseuse-manuscrit.ts` ligne 38. Soit le composant doit être utilisé dans le template,
+soit l'import doit être retiré du tableau `imports`.
+
+### `ZoneLectureComponent` — `totalMotsExterne`
+Ajouter `totalMotsExterne = input<number | undefined>(undefined)` et
+`totalMotsEffectif = computed(() => this.totalMotsExterne() ?? this.totalMots())`.
+Permet à l'app hôte de fournir le wordcount depuis une BD ou une API externe
+(ex. Google Docs API) au lieu de le calculer localement.
+Même pattern que `estimatedReadingTime`.
+Voir `zone-lecture.ts` ligne ~72.
+
+### `ZoneLectureComponent` — performance `DOMParser`
+`new DOMParser()` est instancié à chaque recalcul du `computed totalMots`.
+Surveiller les performances sur mobile avec de grands manuscrits (200 000 mots).
+Si des ralentissements sont observés : extraire `private readonly _parser = new DOMParser()`
+au niveau classe.
+Voir `zone-lecture.ts` ligne ~80.
+
+### `ZoneLectureComponent` — `addEventListener` natif
+`touchend` et `wheel` utilisent `addEventListener` natif avec `{ passive: false }`
+car Angular host bindings ne supportent pas cette option.
+Solution future : CSS `touch-action` (voir CLAUDE.md conventions).
+Voir `zone-lecture.ts` ligne ~181.
+
+### `ChronomètreLectureService` — `tempsActif` readonly
+`tempsActif` est exposé en `WritableSignal` public pour que les tests puissent
+le manipuler directement (`svc.tempsActif.set(5)`).
+Idéalement : `readonly tempsActifLecture = tempsActif.asReadonly()` exposé publiquement,
+signal WritableSignal privé.
+Voir `chronometre-lecture.ts` ligne ~7.
+
+### `ZoneLectureComponent` — chaîne flex incomplète
+Le fix 0.4.1 (`:host` en `flex`, `.vue-native` en `flex: 1`) est partiel.
+`.zone-contenu` utilise `flex: 1` mais n'établit pas de contexte flex pour ses enfants —
+`height: 100%` en chaîne reste fragile dans certains contextes hôtes.
+Fix complet : ajouter `display: flex; flex-direction: column; min-height: 0` sur `.zone-contenu`
+dans `liseuse-manuscrit.scss`.
+
+Confirmé toujours d'actualité le 2026-08-26 : `liseuse-manuscrit.scss:40` n'a encore que
+`flex: 1; overflow: hidden; min-width: 0;`. Transféré depuis `parrecrivains/BACKLOG.md`.
+Note : la source d'origine "notes futur.md" citée dans ce repo n'existe pas ici (fichier resté
+côté `parrecrivains`) — référence retirée, le contenu de l'item reste vérifié indépendamment.
+
+---
+
+## responsive
+
+### `BarreControlesComponent` — grille mobile
+Sur téléphone en portrait, le panneau ⚙ affiche 3 colonnes — trop serré.
+Cible : 1 colonne en portrait, 2 colonnes en paysage.
+Media query sur la largeur du panneau (`container-type: inline-size` ou `@media`).
+Source : observation visuelle jour 4–6. Transféré depuis `parrecrivains/BACKLOG.md` le 2026-08-26.
+
+---
+
+## composants futurs
+
+### `ngx-editeur-manuscrit`
+Édition de manuscrit avec Google Docs en mode natif.
+Séparé intentionnellement de `ngx-liseuse-manuscrit` pour isoler les restrictions de sécurité côté lecture.
+Idée seule, rien à vérifier dans le code. Note : la source d'origine "notes futur.md" citée dans
+ce repo n'existe pas ici (fichier resté côté `parrecrivains`) — référence retirée.
+
+### Composants visuels à thématique littéraire
+Idées de composants futurs pour enrichir la lib :
+- **`ngx-fiche-manuscrit`** — carte d'identité d'un manuscrit (titre, auteur, genre, statut, résumé)
+- **`ngx-carte-auteur`** — profil visuel d'un auteur (bio courte, genres, liens)
+- **Lettrines à collectionner** — lettrines décoratives illustrées, collectionnable par auteur/livre (exploite le background design graphique)
+- **Certifications de compétences** — badge/composant visuel pour les certifications dans le milieu littéraire
+
+Source : `travaux/Proposition_formelle.md` (repo `parrecrivains`) — piste explorée.
+Transféré depuis `parrecrivains/BACKLOG.md` le 2026-08-26.
 
 ---
 
