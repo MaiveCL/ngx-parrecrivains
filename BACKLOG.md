@@ -236,6 +236,60 @@ du séparateur de milliers U+202F (`Intl.NumberFormat`), qui lui était déjà c
 
 ---
 
+## Outillage dev — détecter le repli silencieux sur la lib npm
+
+Constaté et documenté dans `cmd.md` (§ piège) : en configuration `development` (le `ng serve` par
+défaut), si `dist/ngx-parrecrivains/` n'existe pas ou plus, TypeScript retombe silencieusement sur
+`node_modules` (la version npm publiée) au lieu de la source locale. Question posée par Maive le
+2026-08-26 : le bandeau (`environment.ts`) peut-il détecter ça et avertir correctement ?
+
+**Correction du 2026-08-26** : première réponse trop catégorique ("le bandeau ne peut pas
+vérifier"). En fait si, à condition de comparer contre une source externe (le vrai registre npm),
+pas en essayant de ré-inspecter après coup le module déjà résolu dans le navigateur (ça, c'est
+effectivement figé au moment du build et invérifiable a posteriori côté client).
+
+**Ce qui existe déjà, inutilisé** : la lib exporte `VERSION` (`public-api.ts` →
+`lib/version.ts`, un `Version` Angular contenant `'0.4.3'`) — mais l'app tutoriel ne l'importe
+nulle part aujourd'hui (`grep` vide dans `src/src/app`).
+
+**Solution en deux couches** :
+1. **Garde-fou avant le build** (déterministe) : script Node (même esprit que
+   `scripts/enforce-npm-ci.js` côté `parrecrivains`) qui vérifie l'existence de
+   `dist/ngx-parrecrivains/package.json` et refuse de démarrer (message clair, sortie non nulle)
+   si absent, branché en `prestart`/`prebuild` sur `ng serve`/`ng build` par défaut
+   (`development` uniquement — pas `production`, qui doit justement utiliser npm).
+2. **Horodatage de build comparé au registre npm réel** (fiable à 100%, décidé par Maive le
+   2026-08-26). Comparer juste `VERSION` (semver, "0.4.3") ne suffit pas — deux builds peuvent
+   partager le même numéro de version si rien n'a été rebumpé, donnant une fausse impression de
+   correspondance sûre. Il faut un identifiant qui change **à chaque build**, peu importe le
+   semver — l'équivalent d'un numéro de build CI. Décision : horodatage plutôt qu'un compteur
+   incrémental (même garantie, pas de fichier d'état à maintenir, aucun risque de conflit git —
+   le temps avance tout seul). Provenance npm/Sigstore écartée : exigerait de publier via GitHub
+   Actions, contraire au choix déjà fait d'éviter GitHub Actions sur ce repo.
+
+   Tamponner `new Date().toISOString()` dans `dist/ngx-parrecrivains/package.json` à chaque build
+   (`postbuild` ou hook `ng-packagr`) — un build local sera toujours postérieur au build qui a
+   servi à la dernière publication npm, sauf si rien n'a été rebuildé depuis (dans ce cas les deux
+   horodatages sont strictement égaux — une correspondance ici est une **preuve positive** que
+   c'est exactement le même build, pas une coïncidence possible comme avec le semver seul).
+
+   Le bandeau (ou le script de garde-fou avant serve) compare l'horodatage du build résolu
+   localement à celui publié sur le registre npm (`https://registry.npmjs.org/ngx-parrecrivains/latest`,
+   CORS ouvert pour les paquets publics — ou `npm view ngx-parrecrivains buildTimestamp` si stocké
+   comme champ custom du `package.json`) : identique → c'est vraiment la même version testée,
+   différent (plus récent en local) → changements locaux non publiés confirmés, sans ambiguïté.
+
+- [ ] Écrire `scripts/check-dist-local.js` — vérifie `dist/ngx-parrecrivains/package.json`,
+      message d'erreur explicite si absent (`npx ng build ngx-parrecrivains` à lancer d'abord)
+- [ ] Brancher ce script sur `ng serve`/`ng build` par défaut (`development`) sans l'appliquer à
+      `production`/`test-public`
+- [ ] Ajouter un horodatage de build (`buildTimestamp`) au `package.json` de la lib à chaque
+      build — via un script `postbuild` ou un hook `ng-packagr`
+- [ ] Faire importer cet horodatage par le composant bandeau, comparer contre le registre npm réel
+      (fetch ou script), afficher le résultat de façon non ambiguë en mode `development`
+
+---
+
 ## Broutilles
 
 - [ ] Le flux `test-public` → `docs/` → GitHub Pages n'a **jamais été exercé en vrai** : le build et
