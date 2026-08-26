@@ -12,7 +12,6 @@ import {
 import { LiseuseManuscritComponent } from 'ngx-parrecrivains';
 import { LangueService } from '../../shared/services/langue.service';
 import { SnippetComponent } from '../../shared/snippet/snippet';
-import { SlotComponent } from '../../shared/slot/slot';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // TUTO LiseuseManuscritComponent — version complétée (main)
@@ -62,7 +61,7 @@ const URL_GDOCS = 'https://docs.google.com/document/d/10hqwXRGYZ_GEtnxNM0CSCg7jv
   selector: 'app-tuto-liseuse',
   changeDetection: ChangeDetectionStrategy.OnPush,
   // ✅ Tuto — étape 3 : LiseuseManuscritComponent ajouté dans imports[]
-  imports: [LiseuseManuscritComponent, SnippetComponent, SlotComponent],
+  imports: [LiseuseManuscritComponent, SnippetComponent],
   templateUrl: './tuto-liseuse.html',
   styleUrl: './tuto-liseuse.scss',
 })

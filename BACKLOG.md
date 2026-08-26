@@ -187,11 +187,6 @@ Décision et détails techniques dans `CHANGELOG-repo.md` (2026-08-25) et
 - [ ] Suite côté `parrecrivains` : Phase 8 de `parrecrivains/BACKLOG.md` (brancher l'app sur la lib
       publiée) — maintenant déblocable sans `--legacy-peer-deps`, `0.4.3` étant compatible Angular 22.
       Détail de la tâche gardé uniquement là-bas pour ne pas la faire diverger à deux endroits.
-- [ ] **Incohérence trouvée le 2026-08-26** : `constitution.md` § L-VII et `src/.claude/CLAUDE.md`
-      justifient encore la règle `standalone: true` explicite par "au lieu de 21+ officiellement
-      promis" — mais la promesse finalement publiée est 20/21/22, pas seulement 21+. Corriger le
-      texte des deux fichiers pour refléter l'état final plutôt que l'état intermédiaire de l'audit.
-
 ---
 
 ## i18n app tutoriel — restructurer en JSON imbriqué
@@ -218,21 +213,12 @@ dedans — pour pouvoir clore cette dernière avant d'en commencer une nouvelle.
 
 ## Bug préexistant — tests `MotsPipe`/`WordsPipe` (espace insécable)
 
-Constaté le 2026-08-25 en lançant `ng test ngx-parrecrivains` (jamais fait depuis la migration,
-apparemment) : 21 tests échouent sur 161 (140 passent), tous dans `mots.pipe.spec.ts`. Confirmé non lié
-aux changements du jour (`standalone: true`) via `git stash` + retest sur le `HEAD` d'avant — même
-résultat, donc préexistant.
+Corrigé le 2026-08-26 : les assertions de `mots.pipe.spec.ts` comparaient avec un espace normal
+U+0020 là où `mots.pipe.ts` insère un espace insécable U+00A0 entre le nombre et le mot — distinct
+du séparateur de milliers U+202F (`Intl.NumberFormat`), qui lui était déjà correct.
+`ng test ngx-parrecrivains` : 161/161 passent.
 
-Cause probable : `mots.pipe.ts` insère un espace insécable **U+00A0** entre le nombre et le mot
-(`.replace(' ', '\u00A0')`, empêche le retour à la ligne) — mais les assertions de `mots.pipe.spec.ts`
-comparent avec un espace normal **U+0020**. Visuellement identiques dans un terminal/diff, différents en
-égalité stricte. À distinguer du séparateur de milliers **U+202F** documenté dans
-`specs/002-pipe-mots/spec.md` (celui-là vient de `Intl.NumberFormat` et n'est probablement pas en
-cause) — deux caractères différents, ne pas confondre en corrigeant.
-
-- [ ] Corriger les assertions de `mots.pipe.spec.ts` pour utiliser `\u00A0` là où le résultat attendu
-      contient la jointure nombre+mot
-- [ ] Une fois corrigé, faire tourner `ng test ngx-parrecrivains` avant chaque publication npm future —
+- [ ] Faire tourner `ng test ngx-parrecrivains` avant chaque publication npm future —
       ce n'était documenté nulle part comme étape obligatoire, seul `ng serve` (validation visuelle)
       l'était dans la constitution (`T-I`)
 
@@ -240,9 +226,6 @@ cause) — deux caractères différents, ne pas confondre en corrigeant.
 
 ## Broutilles
 
-- [ ] `NG8113` à chaque build : `SlotComponent` est importé dans
-      `src/src/app/tutos/liseuse/tuto-liseuse.ts:65` mais absent de son template. Retirer l'import
-      — ou l'utiliser, si le slot manque à cette page.
 - [ ] Le flux `test-public` → `docs/` → GitHub Pages n'a **jamais été exercé en vrai** : le build et
       le bandeau sont vérifiés localement, mais rien n'a encore été publié dans cet état. La première
       utilisation réelle sera aussi le test du flux.
@@ -342,12 +325,6 @@ antérieure` ci-dessus) — la 0.4.3 a finalement couvert Angular 22 en patch, p
 
 ## dette technique — composants lib
 
-### `LiseuseManuscritComponent` — import inutilisé
-Avertissement au build de la lib (constaté le 2026-08-07, préexistant, sans lien avec Angular 22) :
-`NG8113: PanneauInfoComponent is not used within the template of LiseuseManuscritComponent`
-— `liseuse-manuscrit.ts` ligne 38. Soit le composant doit être utilisé dans le template,
-soit l'import doit être retiré du tableau `imports`.
-
 ### `ZoneLectureComponent` — `totalMotsExterne`
 Ajouter `totalMotsExterne = input<number | undefined>(undefined)` et
 `totalMotsEffectif = computed(() => this.totalMotsExterne() ?? this.totalMots())`.
@@ -355,13 +332,6 @@ Permet à l'app hôte de fournir le wordcount depuis une BD ou une API externe
 (ex. Google Docs API) au lieu de le calculer localement.
 Même pattern que `estimatedReadingTime`.
 Voir `zone-lecture.ts` ligne ~72.
-
-### `ZoneLectureComponent` — performance `DOMParser`
-`new DOMParser()` est instancié à chaque recalcul du `computed totalMots`.
-Surveiller les performances sur mobile avec de grands manuscrits (200 000 mots).
-Si des ralentissements sont observés : extraire `private readonly _parser = new DOMParser()`
-au niveau classe.
-Voir `zone-lecture.ts` ligne ~80.
 
 ### `ZoneLectureComponent` — `addEventListener` natif
 `touchend` et `wheel` utilisent `addEventListener` natif avec `{ passive: false }`
@@ -377,28 +347,53 @@ signal WritableSignal privé.
 Voir `chronometre-lecture.ts` ligne ~7.
 
 ### `ZoneLectureComponent` — chaîne flex incomplète
-Le fix 0.4.1 (`:host` en `flex`, `.vue-native` en `flex: 1`) est partiel.
-`.zone-contenu` utilise `flex: 1` mais n'établit pas de contexte flex pour ses enfants —
-`height: 100%` en chaîne reste fragile dans certains contextes hôtes.
-Fix complet : ajouter `display: flex; flex-direction: column; min-height: 0` sur `.zone-contenu`
-dans `liseuse-manuscrit.scss`.
+Le fix 0.4.1 (`:host` en `flex`, `.vue-native` en `flex: 1`) est partiel. `.zone-contenu`
+(`liseuse-manuscrit.scss`) utilise `flex: 1` mais n'établit pas de contexte flex pour ses
+enfants — `height: 100%` en chaîne (utilisé par `ngx-zone-lecture`) reste fragile dans certains
+contextes hôtes (si un ancêtre côté app hôte n'a pas de hauteur définie, toute la chaîne casse).
 
-Confirmé toujours d'actualité le 2026-08-26 : `liseuse-manuscrit.scss:40` n'a encore que
-`flex: 1; overflow: hidden; min-width: 0;`. Transféré depuis `parrecrivains/BACKLOG.md`.
-Note : la source d'origine "notes futur.md" citée dans ce repo n'existe pas ici (fichier resté
-côté `parrecrivains`) — référence retirée, le contenu de l'item reste vérifié indépendamment.
+**Tenté et annulé le 2026-08-26** : rendre `.zone-contenu` flex (`display: flex; flex-direction:
+column`) + `ngx-zone-lecture { flex: 1; min-height: 0; }` sur l'enfant, en théorie correct
+(confirmé sur MDN : `flex: 1` ignore la hauteur explicite de l'enfant et distribue tout l'espace
+disponible via `flex-grow`, sur l'axe main = hauteur ici puisque le parent est en colonne). En
+pratique : régression observée en mode plein écran (marge vide en bas de la liseuse sur fenêtre
+haute, disparaît en réduisant la hauteur). Annulé faute de pouvoir déboguer visuellement à
+l'aveugle (l'agent n'a pas accès à un navigateur pour ce repo — validation visuelle réservée à
+Maive). Pas un bug actif aujourd'hui — la chaîne `height: 100%` fonctionne dans les contextes
+hôtes testés (tuto, tests) ; c'est une fragilité pour des hôtes externes non testés. À reprendre
+uniquement avec Maive en direct (elle change le CSS, regarde le résultat, itère), pas en
+correctif isolé par l'agent.
 
 ---
 
 ## responsive
 
 ### `BarreControlesComponent` — grille mobile
-Sur téléphone en portrait, le panneau ⚙ affiche 3 colonnes — trop serré.
-Cible : 1 colonne en portrait, 2 colonnes en paysage.
-Media query sur la largeur du panneau (`container-type: inline-size` ou `@media`).
-Source : observation visuelle jour 4–6. Transféré depuis `parrecrivains/BACKLOG.md` le 2026-08-26.
+`.panneau` (le panneau ⚙) a une largeur fixe `min(300px, 88%)` — au-dessus de ~341px de largeur
+disponible, elle reste toujours à 300px pile, quelle que soit la fenêtre/l'orientation. La grille
+`.controles__grille` divise cette largeur en 3 colonnes (`repeat(3, 1fr)`), donc chaque bouton
+occupe ~1/3 de 300px, peu importe la taille de fenêtre — sauf sous ce seuil de 341px.
 
----
+Objectif (précisé par Maive le 2026-08-26) : les boutons ne doivent **jamais changer de taille**
+(taille fixe) — c'est le **nombre de colonnes** qui doit s'ajuster à l'espace réellement
+disponible, pas l'inverse.
+
+**Deux tentatives annulées le 2026-08-26** faute de pouvoir vérifier visuellement (validation
+réservée à Maive) :
+1. Media queries par orientation (1 colonne portrait / 2 paysage) — mauvaise interprétation de
+   l'objectif : divise la même largeur fixe en moins de colonnes → chaque bouton grossit, l'inverse
+   du but recherché.
+2. `grid-template-columns: repeat(auto-fit, minmax(85px, 1fr))` — en théorie aligné sur l'objectif
+   (colonnes de taille mini fixe, le nombre s'ajuste tout seul), mais Maive rapporte qu'à l'usage
+   rien ne change — cohérent avec le fait que `.panneau` reste presque toujours à 300px pile (voir
+   plus haut), donc le nombre de colonnes qui "tient" dans cette largeur ne varie jamais dans la
+   plage de test habituelle. Pour que `auto-fit` ait un effet visible, il faudrait que la largeur du
+   panneau lui-même varie — ce que `min(300px, 88%)` ne fait qu'en dessous de ~341px.
+
+À reprendre avec Maive en direct plutôt qu'en correctif isolé — la vraie question à trancher
+d'abord : est-ce que c'est `.panneau` (sa largeur fixe) ou `.controles__grille` (sa règle de
+colonnes) qui doit changer pour que l'ajustement soit visible dans les tailles de fenêtre
+courantes, pas seulement sous 341px ?
 
 ## composants futurs
 

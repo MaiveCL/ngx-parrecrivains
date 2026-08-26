@@ -32,6 +32,7 @@ export class ZoneLectureComponent implements OnDestroy {
   private readonly formatService = inject(FormatContenuService);
   private readonly configService = inject(ConfigLectureService);
   private readonly _el: HTMLElement = inject(ElementRef).nativeElement;
+  private readonly _parser = new DOMParser();
 
   // input.required = Angular 17+ — remplace @Input() obligatoire
   // doc: input() => https://angular.dev/guide/signals/inputs
@@ -90,14 +91,12 @@ export class ZoneLectureComponent implements OnDestroy {
   // et computed totalMotsEffectif = computed(() => this.totalMotsExterne() ?? this.totalMots())
   // Permet à l'app hôte de fournir le wordcount depuis une BD ou une API externe (ex. Google Docs API)
   // au lieu de le calculer localement — même pattern que estimatedReadingTime.
-  // TODO-REVIEW: new DOMParser() instancié à chaque recalcul — surveiller les performances
-  // sur mobile avec de grands manuscrits (200 000 mots = parsing DOM potentiellement 30–80 ms).
   // DOMParser parse le HTML en arbre DOM pour accéder au texte brut sans balises
   // doc: DOMParser => https://developer.mozilla.org/fr/docs/Web/API/DOMParser
   readonly totalMots = computed<number>(() => {
     const c = this.contenu();
     if (typeof c !== 'string') return 0;
-    const doc = new DOMParser().parseFromString(c, 'text/html');
+    const doc = this._parser.parseFromString(c, 'text/html');
     // textContent extrait le texte brut, split(/\s+/) découpe sur tout espace/retour ligne
     return doc.body.textContent?.trim().split(/\s+/).filter(Boolean).length ?? 0;
   });

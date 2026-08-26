@@ -122,7 +122,7 @@ Tout écart entre spec et implémentation DOIT déclencher une mise à jour des 
 
 | Contrainte | Valeur |
 |---|---|
-| Angular | 21+, Standalone uniquement, `ChangeDetectionStrategy.OnPush` |
+| Angular | 20/21/22 (peerDependencies, voir L-VII), Standalone uniquement, `ChangeDetectionStrategy.OnPush` |
 | TypeScript | Mode strict, aucun `any`, inférence de type préférée |
 | Dépendances directes | `tslib` uniquement — Angular et `@ngx-translate/core` sont `peerDependency` |
 | Formats d'écran | 320px+ / 768px+ / 1024px+ / 1920px+ (éléments visuels seulement) |
@@ -146,7 +146,7 @@ Tout écart entre spec et implémentation DOIT déclencher une mise à jour des 
 | Fichiers | `.ts` + `.html` + `.scss` séparés | Template ou styles inline dans `@Component` |
 | Réactivité | `signal()`, `computed()`, `effect()`, `linkedSignal()` | Dupliquer l'état ; `mutate()` |
 | Zoneless | Aucun import `zone.js`, aucun `NgZone` | `NgZone`, `ApplicationRef.tick()`, `zone.js` |
-| Standalone | Écrire `standalone: true` explicitement — n'est le défaut implicite que depuis Angular 20 ; l'omettre fixe le plancher de compatibilité de la lib à 20+ au lieu de 21+ officiellement promis. Vérifié le 2026-08-25 : build réel réussi en Angular 20 une fois explicite. Exception à la convention générale de terseness, volontaire. | `NgModule`, `HttpClientModule` |
+| Standalone | Écrire `standalone: true` explicitement — n'est le défaut implicite que depuis Angular 20 ; l'omettre fixe le plancher de compatibilité de la lib à 20+ au lieu du 20/21/22 officiellement promis. Vérifié le 2026-08-25 : build réel réussi en Angular 19 et 20 une fois explicite. Exception à la convention générale de terseness, volontaire. | `NgModule`, `HttpClientModule` |
 | Nommage | Français pour tout ce qu'on crée | Anglais pour les APIs externes |
 | Gestures mobiles | CSS `touch-action` | `preventDefault()` sur touch/wheel |
 | Blob URLs | `effect()` avec variable dédiée par type de blob | `computed()` pour créer des Blob URLs |

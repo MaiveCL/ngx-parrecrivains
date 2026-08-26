@@ -27,7 +27,6 @@ import { ConfigLectureService } from './services/config-lecture';
 import { TraductionService } from './services/traduction';
 import { ChronomètreLectureService } from './services/chronometre-lecture';
 import { ZoneLectureComponent } from './composants/zone-lecture/zone-lecture';
-import { PanneauInfoComponent } from './composants/panneau-info/panneau-info';
 import { BarreControlesComponent } from './composants/barre-controles/barre-controles';
 
 @Component({
@@ -36,7 +35,7 @@ import { BarreControlesComponent } from './composants/barre-controles/barre-cont
   templateUrl: './liseuse-manuscrit.html',
   styleUrl: './liseuse-manuscrit.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ZoneLectureComponent, PanneauInfoComponent, BarreControlesComponent],
+  imports: [ZoneLectureComponent, BarreControlesComponent],
   // providers ici (pas providedIn: 'root') = instances isolées par liseuse
   // => deux liseuses sur la même page ont chacune leur propre config et chronomètre indépendants
   // doc: providers au niveau composant => https://angular.dev/guide/di/hierarchical-dependency-injection

@@ -6,9 +6,6 @@
 ```bash
 cd ~/ngx-parrecrivains/src && clear && npx ng build ngx-parrecrivains --watch
 ```
-```bash
-ls ~/ngx-parrecrivains/src/dist/ngx-parrecrivains/
-```
 
 ================================================
 
@@ -17,14 +14,12 @@ ls ~/ngx-parrecrivains/src/dist/ngx-parrecrivains/
 cd ~/ngx-parrecrivains/src && clear && npx ng serve
 ```
 http://localhost:4200/ngx-parrecrivains/
-http://localhost:4200/ngx-parrecrivains/tests/
 
 ## Test public local
 ```bash
 cd ~/ngx-parrecrivains/src && clear && npx ng serve --configuration=test-public
 ```
 http://localhost:4200/ngx-parrecrivains/
-http://localhost:4200/ngx-parrecrivains/tests/
 
 ## Test public temporaire — GitHub Pages (lib locale)
 ```bash

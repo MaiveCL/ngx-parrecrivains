@@ -25,6 +25,9 @@ Angular 19/20 : le vrai plancher était 19, fixé uniquement par `standalone: tr
 Leçon retenue : ne plus promettre un plancher Angular sans l'avoir vérifié par un build réel —
 d'où l'item backlog pour documenter le plancher réel de chaque future spec SpecKit.
 
+Correctif du 2026-08-26 : `constitution.md` § L-VII et `src/.claude/CLAUDE.md` disaient encore
+« 21+ officiellement promis » — texte corrigé pour refléter la promesse finale (20/21/22).
+
 ---
 
 ## 2026-08-25 — `dist/` d'un build `--watch` invalide pour `npm publish`
