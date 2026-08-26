@@ -189,25 +189,37 @@ Décision et détails techniques dans `CHANGELOG-repo.md` (2026-08-25) et
       Détail de la tâche gardé uniquement là-bas pour ne pas la faire diverger à deux endroits.
 ---
 
-## i18n app tutoriel — restructurer en JSON imbriqué
+## i18n app tutoriel — adopter `ngx-translate` au lieu du `LangueService` maison
 
-Constaté le 2026-08-25 : `src/public/i18n/fr.json` et `en.json` (192 lignes chacun) utilisent des clés
-plates où le point fait partie du nom littéral (`"tuto.liseuse.titre": "..."`), plutôt qu'une hiérarchie
-JSON imbriquée (`{ "tuto": { "liseuse": { "titre": "..." } } }`). Vérifié sur `ngx-translate.org` :
-l'imbriqué est la convention **officielle et recommandée** par ngx-translate — leur doc déconseille
-explicitement de mélanger les deux styles. Les clés ajoutées aujourd'hui (`commun.compat.*`,
-`tuto.*.compat.*`) ont été faites en plat pour rester cohérentes avec l'existant — à reprendre en même
-temps que le reste.
+⚠️ **Prémisse d'origine invalidée le 2026-08-26**, puis tâche reformulée le même jour suite à une
+remarque de Maive. Cette tâche visait au départ juste à convertir `fr.json`/`en.json` en JSON
+imbriqué, en supposant que l'app utilisait déjà `@ngx-translate/core`. Faux : `LangueService`
+(`src/src/app/shared/services/langue.service.ts`) est un service maison à lecture plate directe
+(`traductions()[cle] ?? cle`) — convertir le JSON seul aurait cassé tous les appels `t()`.
 
-Volontairement traité comme une phase séparée de la compatibilité Angular ci-dessus, pas mélangé
-dedans — pour pouvoir clore cette dernière avant d'en commencer une nouvelle.
+**Constat de fond** : le service maison existe probablement parce que la règle "zéro dépendance
+directe" de la **lib** (`tslib` uniquement — voir `constitution.md` § L-VI, `@ngx-translate/core`
+en `peerDependency` optionnel via `TRANSLATE_SERVICE_TOKEN`) a été appliquée par erreur au **site
+de démo** aussi — alors que cette contrainte n'a aucune raison d'exister ici : l'app tutoriel n'est
+pas publiée comme paquet npm, rien ne l'empêche de dépendre directement de ce qu'elle veut.
 
-- [ ] Convertir `src/public/i18n/fr.json` et `en.json` en structure imbriquée
-- [ ] Aucun changement attendu côté appelant (`langue.t('tuto.liseuse.titre')`) — ngx-translate résout
-      les chemins pointés contre une hiérarchie imbriquée de la même façon qu'une clé plate ; à confirmer
-      quand même avec un test après la conversion
-- [ ] Vérifier si `LangueService` (ou l'équivalent) a une logique propre à lui qui suppose des clés
-      plates — sinon la conversion est purement mécanique côté JSON
+**Solution retenue** : adopter `@ngx-translate/core` dans l'app tutoriel plutôt que de réinventer
+un parcours de clés maison. Deux avantages d'un coup :
+- Résout la conversion en JSON imbriqué "gratuitement" (format natif de ngx-translate)
+- Système déjà éprouvé, déjà dans l'écosystème du projet (la lib le supporte déjà en option)
+
+Note : le service d'i18n **officiel Angular** (`@angular/localize`) ne convient PAS ici — il
+fonctionne par build séparé par langue (compilation), pas par changement de langue à la volée dans
+le navigateur, alors que la nav a un bouton "English" qui bascule en direct.
+
+- [ ] Installer `@ngx-translate/core` (+ `@ngx-translate/http-loader` si besoin de charger les JSON
+      via HTTP) dans `src/package.json` de l'app
+- [ ] Convertir `src/public/i18n/fr.json` et `en.json` en structure imbriquée (format natif ngx-translate)
+- [ ] Remplacer `LangueService` par `TranslateService` (ngx-translate) dans tous les points d'appel
+      (`langue.t('...')` → `translate.instant('...')` ou pipe `| translate`)
+- [ ] Supprimer `LangueService` une fois la migration terminée
+- [ ] Tester en vrai dans un navigateur (aucun moyen de vérifier par build/test automatisé que les
+      traductions s'affichent encore correctement à chaque page)
 
 ---
 
@@ -324,6 +336,21 @@ antérieure` ci-dessus) — la 0.4.3 a finalement couvert Angular 22 en patch, p
 ---
 
 ## dette technique — composants lib
+
+### `public/i18n/liseuse/*.json` — fichiers orphelins et désynchronisés
+Trouvé le 2026-08-26 en vérifiant le mécanisme de surcharge des traductions (`TraductionService`,
+`TRANSLATE_SERVICE_TOKEN` — celui-là fonctionne bien, confirmé). Les vraies traductions de la lib
+vivent dans une table codée en dur dans `traduction.ts`, **pas** dans
+`public/i18n/liseuse/{fr,en,cr}.json` :
+- Ces JSON ne sont référencés nulle part dans le code (`grep` vide)
+- Ils ne sont **pas publiés** dans le paquet npm (`ng-package.json` → `assets` ne liste que
+  `LICENSE` et `CHANGELOG.md`)
+- Ils ont dérivé de la vraie table : `parametres` manquant dans le JSON, `couleur_superposition`
+  dit "Couleur de superposition" dans le JSON contre "Couleur" dans `traduction.ts`
+
+À trancher : soit les supprimer (fichiers morts), soit clarifier leur rôle voulu (ex. modèle de
+départ à copier pour un hôte qui active la surcharge via `TRANSLATE_SERVICE_TOKEN`) et les
+resynchroniser avec `traduction.ts` dans ce cas, avec un README expliquant leur usage.
 
 ### `ZoneLectureComponent` — `totalMotsExterne`
 Ajouter `totalMotsExterne = input<number | undefined>(undefined)` et
